@@ -21,16 +21,22 @@ class App extends Component {
     return (
       <div className="page">
         <header className="header">
-          <div className="row">
-            <div className="right">
-              <button className="headerButton">Login</button>
-              <button className="headerButton">Register</button>
-            </div>
-          </div>
-          <div className="row">
-            <h1 className="headerTitle">Welcome to Matchery!</h1>
-          </div>
+          <img src={logo} className="logo" alt="logo" />
+          <h1 className="title">Welcome to Matchery!</h1>
         </header>
+
+        <p className="intro">
+          What came first, the chicken or the egg?
+        </p>
+
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            You wrote:
+            <input type="text" name="name" value={this.state.email} onChange={this.handleChange}/>
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+
       </div>
     );
   }

@@ -10,6 +10,9 @@ class App extends Component {
       password: "",
     };
   }
+  componentDidMount() {
+    document.body.style = "background:rgb(145,20,20);";
+  }
   handleChange = (event) => {
     this.setState({email: event.target.value});
   }
@@ -20,17 +23,18 @@ class App extends Component {
   render() {
     return (
       <div className="page">
-        <header className="header">
+        <div className="header">
           <div className="row">
-            <div className="right">
-              <button className="headerButton">Login</button>
-              <button className="headerButton">Register</button>
-            </div>
+            <button className="headerButton">Learn More</button>
           </div>
           <div className="row">
-            <h1 className="headerTitle">Welcome to Matchery!</h1>
+            <h1 className="headerTitle">Matchery</h1>
           </div>
-        </header>
+        </div>
+        <div className="content">
+          <form>
+          </form>
+        </div>
       </div>
     );
   }

@@ -33,16 +33,18 @@ class App extends Component {
         </div>
         <div className="content">
           <form>
-            <label>
-              Username:
-              <input type="text" name="username" />
-            </label>
-            <label>
-              Password:
+            <div className="centerRow">
+              <input className="usernameClass" type="text" name="username" />
+            </div>
+            <div className="centerRow">
               <input type="password" name="password" />
-            </label>
-            <input type="submit" value="Submit" />
-            <p>Sign Up</p>
+            </div>
+            <div className="centerRow">
+              <input type="submit" value="Submit" />
+            </div>
+            <div className="centerRow">
+              <p>Sign Up</p>
+            </div>
           </form>
         </div>
       </div>

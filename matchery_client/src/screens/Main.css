@@ -4,6 +4,10 @@
 .row {
   width: 100%;
 }
+.centerRow {
+  width: 100%;
+  text-align: center;
+}
 
 .header {
   background-color: rgb(105,15,15);
@@ -40,12 +44,16 @@
 }
 
 .content {
+  padding: 25px;
   background-color: #fff;
-  height: 200px;
-  width: 300px;
+  height: 150px;
+  width: 250px;
   box-shadow: 1px 1px 5px;
   margin: auto;
   margin-top: 8%;
+}
+.usernameClass {
+
 }
 
 @keyframes App-logo-spin {

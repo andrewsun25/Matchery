@@ -52,8 +52,51 @@
   margin: auto;
   margin-top: 8%;
 }
-.usernameClass {
-
+.inputClass {
+  width: 85%;
+  margin: 5px 0px 5px 0px;
+  padding: 5px 5px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid grey;
+}
+.inputClass:focus {
+  outline: 0;
+}
+.loginButton {
+  width: 90%;
+  margin: 15px 0px 0px 0px;
+  padding: 10px 0px;
+  font-weight: bold;
+  background-color: rgb(232,136,67);
+  border-radius: 0px;
+  border: none;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+}
+.group {
+  position:relative;
+}
+.loginButton:hover {
+  background-color: rgb(252,157,87);
+}
+.loginButton:focus {
+  outline: 0;
+}
+.signUpButton {
+  width: 90%;
+  margin: 10px 0px 0px 0px;
+  padding: 10px 0px;
+  font-weight: bold;
+  background-color: #fff;
+  border-radius: 0px;
+  border: none;
+}
+.signUpButton:focus {
+  outline: 0;
 }
 
 @keyframes App-logo-spin {

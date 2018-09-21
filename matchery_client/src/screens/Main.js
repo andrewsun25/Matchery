@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import './Main.css';
 import logo from './logo.svg';
 
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+} from 'react-router-dom';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +26,10 @@ class App extends Component {
     alert("A name was submitted: " + this.state.email);
     event.preventDefault();
   }
+  handleSignup = (event) => {
+    event.preventDefault();
+    alert("Test!");
+  }
   render() {
     return (
       <div className="page">
@@ -34,16 +44,16 @@ class App extends Component {
         <div className="content">
           <form>
             <div className="centerRow">
-              <input className="usernameClass" type="text" name="username" />
+              <input placeholder="Username" className="inputClass" type="text" name="username" />
             </div>
             <div className="centerRow">
-              <input type="password" name="password" />
+              <input placeholder="Password" className="inputClass" type="password" name="password" />
             </div>
             <div className="centerRow">
-              <input type="submit" value="Submit" />
+              <input className="loginButton" type="submit" value="Login" />
             </div>
             <div className="centerRow">
-              <p>Sign Up</p>
+              <button className="signUpButton" onClick={this.handleSignup}>Sign Up</button>
             </div>
           </form>
         </div>

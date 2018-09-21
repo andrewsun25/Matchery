@@ -2,35 +2,52 @@ import React, { Component } from 'react';
 import './Main.css';
 import logo from './logo.svg';
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-} from 'react-router-dom';
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      username: "",
       password: "",
+      showLogin: false,
+      showDashboard: false,
     };
+    /*
+    <div style={myStyle}>
+      {this.loginInstance}
+    </div>
+    */
+    this.loginInstance = (
+      <div className="loginBox">
+        <form>
+          <div className="centerRow">
+            <input placeholder="Username" className="loginInput" type="text" name="username" />
+          </div>
+          <div className="centerRow">
+            <input placeholder="Password" className="loginInput" type="password" name="password" />
+          </div>
+          <div className="centerRow">
+            <button className="loginButton" onClick={this.handleLogin}>Login</button>
+          </div>
+          <div className="centerRow">
+            <button className="signUpButton" onClick={this.handleSignUp}>Sign Up</button>
+          </div>
+        </form>
+      </div>
+    )
   }
   componentDidMount() {
     document.body.style = "background:rgb(145,20,20);";
   }
-  handleChange = (event) => {
-    this.setState({email: event.target.value});
-  }
-  handleSubmit = (event) => {
-    alert("A name was submitted: " + this.state.email);
+  handleLogin = (event) => {
     event.preventDefault();
+    this.setState({showLogin: false});
   }
-  handleSignup = (event) => {
+  handleSignUp = (event) => {
     event.preventDefault();
     alert("Test!");
   }
   render() {
+    const myStyle = this.state.showLogin ? {display:'block'} : {display:'none'};
     return (
       <div className="page">
         <div className="header">
@@ -41,21 +58,15 @@ class App extends Component {
             <h1 className="headerTitle">Matchery</h1>
           </div>
         </div>
-        <div className="content">
-          <form>
-            <div className="centerRow">
-              <input placeholder="Username" className="inputClass" type="text" name="username" />
+        <div className="candidateBox">
+          <div className="candidateBoxHeader">
+          </div>
+          <div className="candidateBoxBody">
+            <div className="candidateSideBar">
             </div>
-            <div className="centerRow">
-              <input placeholder="Password" className="inputClass" type="password" name="password" />
+            <div className="candidateMainSection">
             </div>
-            <div className="centerRow">
-              <input className="loginButton" type="submit" value="Login" />
-            </div>
-            <div className="centerRow">
-              <button className="signUpButton" onClick={this.handleSignup}>Sign Up</button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
     );

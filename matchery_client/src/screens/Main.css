@@ -43,7 +43,7 @@
   opacity: 0.75;
 }
 
-.content {
+.loginBox {
   padding: 25px;
   background-color: #fff;
   height: 150px;
@@ -52,7 +52,7 @@
   margin: auto;
   margin-top: 8%;
 }
-.inputClass {
+.loginInput {
   width: 85%;
   margin: 5px 0px 5px 0px;
   padding: 5px 5px;
@@ -60,9 +60,23 @@
   outline: 0;
   background: transparent;
   border-bottom: 1px solid grey;
+  -webkit-transition: 0.15s;
+  -moz-transition: 0.15s;
+  -o-transition: 0.15s;
+  transition: 0.15s;
 }
-.inputClass:focus {
+.loginInput:hover {
+  border-bottom: 1px solid black;
+}
+.loginInput:hover::-webkit-input-placeholder {
+  color: black;
+}
+.loginInput:focus {
+  border-bottom: 1px solid black;
   outline: 0;
+}
+.loginInput:focus::-webkit-input-placeholder {
+  color: black;
 }
 .loginButton {
   width: 90%;
@@ -76,9 +90,6 @@
   -moz-transition: 0.2s;
   -o-transition: 0.2s;
   transition: 0.2s;
-}
-.group {
-  position:relative;
 }
 .loginButton:hover {
   background-color: rgb(252,157,87);
@@ -95,11 +106,19 @@
   border-radius: 0px;
   border: none;
 }
+.signUpButton:hover {
+  text-decoration: underline;
+}
 .signUpButton:focus {
   outline: 0;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.candidateBox {
+  padding: 25px;
+  background-color: #fff;
+  height: 300px;
+  width: 500px;
+  box-shadow: 1px 1px 5px;
+  margin: auto;
+  margin-top: 8%;
 }

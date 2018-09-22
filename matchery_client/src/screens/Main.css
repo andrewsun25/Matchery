@@ -132,5 +132,32 @@
   font-weight: lighter;
 }
 .candidateBoxBody {
-  
+  width: 100%;
+}
+.candidateBoxBody:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.candidateSideBar {
+  width: 20%;
+  float: left;
+  height: 300px;
+  border-right: 1px solid black;
+}
+.candidateMainSection {
+  width: 80%;
+  height: 300px;
+}
+.candidateSideBarList {
+  list-style: none;
+  padding-left: 10%;
+  padding: 0;
+  margin: 10px;
+}
+.candidateMainSectionTitle {
+  margin: 0;
+  padding-top: 10px;
+  padding-left: 150px;
+  font-size: 20px;
 }

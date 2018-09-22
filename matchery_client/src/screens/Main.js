@@ -64,8 +64,15 @@ class App extends Component {
           </div>
           <div className="candidateBoxBody">
             <div className="candidateSideBar">
+              <ul className="candidateSideBarList">
+                <li>Preferences</li>
+                <li>Results</li>
+              </ul>
             </div>
             <div className="candidateMainSection">
+              <div className="">
+                <h2 className="candidateMainSectionTitle">Ranking - drag to reaarange</h2>
+              </div>
             </div>
           </div>
         </div>

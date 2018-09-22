@@ -60,6 +60,7 @@ class App extends Component {
         </div>
         <div className="candidateBox">
           <div className="candidateBoxHeader">
+            <h2 className="candidateBoxTitle">WashU Acappella Auditions 2018 - Candidate</h2>
           </div>
           <div className="candidateBoxBody">
             <div className="candidateSideBar">

@@ -114,11 +114,23 @@
 }
 
 .candidateBox {
-  padding: 25px;
   background-color: #fff;
-  height: 300px;
-  width: 500px;
+  height: 350px;
+  width: 600px;
   box-shadow: 1px 1px 5px;
   margin: auto;
-  margin-top: 8%;
+  margin-top: 6%;
+}
+.candidateBoxHeader {
+  background-color: rgb(204,204,204);
+  height: 50px;
+  line-height: 50px;
+  padding-left: 20px;
+}
+.candidateBoxTitle {
+  font-size: 18px;
+  font-weight: lighter;
+}
+.candidateBoxBody {
+  
 }

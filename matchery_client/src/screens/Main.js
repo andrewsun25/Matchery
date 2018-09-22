@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import List from './List';
+import Login from './Login';
 import './Main.css';
 import './Candidate.css';
 import './Login.css';
 import logo from './logo.svg';
+
+function handleLogin(event, value) {
+  event.preventDefault();
+  this.setState({showLogin: value});
+}
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +17,7 @@ class App extends Component {
     this.state = {
       username: "",
       password: "",
-      showLogin: false,
+      showLogin: true,
       showDashboard: false,
       groups: [
         "Mosaic Whispers",
@@ -20,40 +26,13 @@ class App extends Component {
         "Aristocats"
       ],
     };
-    /*
-    <div style={myStyle}>
-      {this.loginInstance}
-    </div>
-    */
-    this.loginInstance = (
-      <div className="loginBox">
-        <form>
-          <div className="centerRow">
-            <input placeholder="Username" className="loginInput" type="text" name="username" />
-          </div>
-          <div className="centerRow">
-            <input placeholder="Password" className="loginInput" type="password" name="password" />
-          </div>
-          <div className="centerRow">
-            <button className="loginButton" onClick={this.handleLogin}>Login</button>
-          </div>
-          <div className="centerRow">
-            <button className="signUpButton" onClick={this.handleSignUp}>Sign Up</button>
-          </div>
-        </form>
-      </div>
-    )
   }
   componentDidMount() {
     document.body.style = "background:rgb(145,20,20);";
   }
-  handleLogin = (event) => {
-    event.preventDefault();
+  parentHandleLogin = (e) => {
+    e.preventDefault();
     this.setState({showLogin: false});
-  }
-  handleSignUp = (event) => {
-    event.preventDefault();
-    alert("Test!");
   }
   render() {
     const myStyle = this.state.showLogin ? {display:'block'} : {display:'none'};
@@ -67,26 +46,8 @@ class App extends Component {
             <h1 className="headerTitle">Matchery</h1>
           </div>
         </div>
-        <div className="candidateBox">
-          <div className="candidateBoxHeader">
-            <h2 className="candidateBoxTitle">WashU Acappella Auditions 2018 - Candidate</h2>
-          </div>
-          <div className="candidateBoxBody">
-            <div className="candidateSideBar">
-              <ul className="candidateSideBarList">
-                <li>Preferences</li>
-                <li>Results</li>
-              </ul>
-            </div>
-            <div className="candidateMainSection">
-              <div className="">
-                <h2 className="candidateMainSectionTitle">Ranking - drag to reaarange</h2>
-                <div className="draggableList">
-                  <List colors={this.state.groups} />
-                </div>
-              </div>
-            </div>
-          </div>
+        <div style={myStyle}>
+          <Login parentHandleLogin={this.parentHandleLogin} />
         </div>
       </div>
     );

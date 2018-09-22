@@ -67,3 +67,8 @@
 .signUpButton:focus {
   outline: 0;
 }
+
+.centerRow {
+  width: 100%;
+  text-align: center;
+}

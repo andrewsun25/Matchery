@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import List from './List';
+import './Candidate.css';
 
 class Candidate extends React.Component {
   constructor(props) {
@@ -12,15 +13,6 @@ class Candidate extends React.Component {
         "Aristocats"
       ],
     }
-  }
-  handleChange = ({target}) => {
-    this.setState({[target.name]: target.value});
-  }
-  childHandleLogin = (e) => {
-    this.props.parentHandleLogin(e);
-  }
-  childHandleSignup = (e) => {
-    this.props.parentHandleSignup(e, this.state.username, this.state.password);
   }
   render() {
     return (

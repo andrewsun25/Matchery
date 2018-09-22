@@ -15,10 +15,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
       showLogin: true,
-      showDashboard: false,
+      showCandidate: false,
       groups: [
         "Mosaic Whispers",
         "Sensasions",
@@ -34,8 +32,13 @@ class App extends Component {
     e.preventDefault();
     this.setState({showLogin: false});
   }
+  parentHandleSignup = (e, username, password) => {
+    e.preventDefault();
+    alert("Sign up attempted with: " + username + " " + password);
+  }
   render() {
-    const myStyle = this.state.showLogin ? {display:'block'} : {display:'none'};
+    const showLogin = this.state.showLogin ? {display:'block'} : {display:'none'};
+    const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
     return (
       <div className="page">
         <div className="header">
@@ -46,8 +49,11 @@ class App extends Component {
             <h1 className="headerTitle">Matchery</h1>
           </div>
         </div>
-        <div style={myStyle}>
-          <Login parentHandleLogin={this.parentHandleLogin} />
+        <div style={showLogin}>
+          <Login
+            parentHandleLogin={this.parentHandleLogin}
+            parentHandleSignup={this.parentHandleSignup}
+          />
         </div>
       </div>
     );

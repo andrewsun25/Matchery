@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import List from './List';
-import Login from './Login';
-import './Main.css';
+import Login from './Login'; // Login component
+import Candidate from './Candidate';
+
+import './Main.css'; // Header and background styling
 import './Candidate.css';
 import './Login.css';
-import logo from './logo.svg';
 
-function handleLogin(event, value) {
-  event.preventDefault();
-  this.setState({showLogin: value});
-}
 
 class App extends Component {
   constructor(props) {
@@ -17,12 +13,6 @@ class App extends Component {
     this.state = {
       showLogin: true,
       showCandidate: false,
-      groups: [
-        "Mosaic Whispers",
-        "Sensasions",
-        "The Amateurs",
-        "Aristocats"
-      ],
     };
   }
   componentDidMount() {
@@ -30,7 +20,7 @@ class App extends Component {
   }
   parentHandleLogin = (e) => {
     e.preventDefault();
-    this.setState({showLogin: false});
+    this.setState({showLogin: false, showCandidate: true});
   }
   parentHandleSignup = (e, username, password) => {
     e.preventDefault();
@@ -54,6 +44,9 @@ class App extends Component {
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
           />
+        </div>
+        <div style={showCandidate}>
+          <Candidate />
         </div>
       </div>
     );

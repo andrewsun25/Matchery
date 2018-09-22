@@ -1,0 +1,71 @@
+.candidateBox {
+  background-color: #fff;
+  height: 350px;
+  width: 600px;
+  box-shadow: 1px 1px 5px;
+  margin: auto;
+  margin-top: 6%;
+}
+.candidateBoxHeader {
+  background-color: rgb(204,204,204);
+  height: 50px;
+  line-height: 50px;
+  padding-left: 20px;
+}
+.candidateBoxTitle {
+  font-size: 18px;
+  font-weight: lighter;
+}
+.candidateBoxBody {
+  width: 100%;
+}
+.candidateBoxBody:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.candidateSideBar {
+  width: 20%;
+  float: left;
+  height: 300px;
+  border-right: 1px solid black;
+}
+.candidateMainSection {
+  width: 80%;
+  height: 300px;
+}
+.candidateSideBarList {
+  list-style: none;
+  padding-left: 10%;
+  padding: 0;
+  margin: 10px;
+}
+.candidateMainSectionTitle {
+  margin: 0;
+  padding-top: 10px;
+  padding-left: 150px;
+  font-size: 20px;
+}
+
+
+.draggableList ul {
+  list-style: none;
+  margin:0;
+  padding:0;
+}
+.draggableList li {
+  margin-left: 30%;
+  padding: 10px 15px;
+  background:#eee;
+  &:hover {
+    background: darken(#eee, 5%);
+  }
+}
+.draggableList .placeholder {
+  background: rgb(255,240,120);
+  height: 20px;
+  &:before {
+    content: "Drop here";
+    color: rgb(225,210,90);
+  }
+}

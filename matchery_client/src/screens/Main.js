@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import List from './List';
 import './Main.css';
+import './Candidate.css';
+import './Login.css';
 import logo from './logo.svg';
 
 class App extends Component {
@@ -10,6 +13,12 @@ class App extends Component {
       password: "",
       showLogin: false,
       showDashboard: false,
+      groups: [
+        "Mosaic Whispers",
+        "Sensasions",
+        "The Amateurs",
+        "Aristocats"
+      ],
     };
     /*
     <div style={myStyle}>
@@ -72,6 +81,9 @@ class App extends Component {
             <div className="candidateMainSection">
               <div className="">
                 <h2 className="candidateMainSectionTitle">Ranking - drag to reaarange</h2>
+                <div className="draggableList">
+                  <List colors={this.state.groups} />
+                </div>
               </div>
             </div>
           </div>

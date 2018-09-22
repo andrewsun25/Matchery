@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './List.css';
 
 var lastIndex = 0;
 var placeholder = document.createElement("li");
@@ -9,12 +10,12 @@ class List extends React.Component {
     super(props);
     this.state = {...props};
   }
-  dragStart(e) {
+  dragStart = (e) => {
     this.dragged = e.currentTarget;
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', this.dragged);
   }
-  dragEnd(e) {
+  dragEnd = (e) => {
     this.dragged.style.display = 'block';
     this.dragged.parentNode.removeChild(placeholder);
 
@@ -41,22 +42,22 @@ class List extends React.Component {
           data-id={i}
           key={i}
           draggable='true'
-          onDragEnd={this.dragEnd.bind(this)}
-          onDragStart={this.dragStart.bind(this)}>{item}</li>
+          onDragEnd={this.dragEnd}
+          onDragStart={this.dragStart}>{item}</li>
       )
      });
 		return (
 			<ul onDragOver={this.dragOver.bind(this)}>
         {listItems}
         <li
-        data-id={lastIndex+1}
-        key={lastIndex+1}
-        draggable='false'
-        onDragEnd={this.dragEnd.bind(this)}
-        onDragStart={this.dragStart.bind(this)}></li>
+          data-id={lastIndex+1}
+          key={lastIndex+1}
+          draggable='false'
+          className='noHeight'
+          onDragEnd={this.dragEnd.bind(this)}
+          onDragStart={this.dragStart.bind(this)}></li>
       </ul>
 		)
 	}
 }
-
 export default List;

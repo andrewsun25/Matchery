@@ -1,0 +1,27 @@
+.draggableList ul {
+  list-style: none;
+  margin:0;
+  padding:0;
+}
+.draggableList li {
+  margin-left: 30%;
+  padding: 10px 15px;
+  background:#eee;
+}
+.draggableList li::selection {
+  background: #e5e5e5;
+}
+.draggableList .placeholder {
+  background: rgb(255,240,120) !important;
+  height: 20px;
+}
+.draggableList .placeholder:before {
+  color: rgb(225,210,90) !important;
+}
+.draggableList .noHeight{
+  background: #fff;
+}
+.draggableList .noHeight:hover {
+  background: #fff;
+  content: "";
+}

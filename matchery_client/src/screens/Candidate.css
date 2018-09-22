@@ -46,26 +46,3 @@
   padding-left: 150px;
   font-size: 20px;
 }
-
-
-.draggableList ul {
-  list-style: none;
-  margin:0;
-  padding:0;
-}
-.draggableList li {
-  margin-left: 30%;
-  padding: 10px 15px;
-  background:#eee;
-  &:hover {
-    background: darken(#eee, 5%);
-  }
-}
-.draggableList .placeholder {
-  background: rgb(255,240,120);
-  height: 20px;
-  &:before {
-    content: "Drop here";
-    color: rgb(225,210,90);
-  }
-}

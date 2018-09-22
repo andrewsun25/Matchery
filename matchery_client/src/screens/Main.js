@@ -15,8 +15,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { // Initialize screen states
-      showLogin: true,
-      showCandidate: false,
+      showLogin: false,
+      showCandidate: true,
     };
   }
 
@@ -39,7 +39,21 @@ class App extends Component {
   // handles the signup process
   parentHandleSignup = (e, username, password) => {
     e.preventDefault();
-    alert("Sign up attempted with: " + username + " " + password);
+    alert("Registration With: Username[" + username + "] Password[" + password + "]");
+  }
+
+  // This function is triggered when a
+  // user presses the Learn More button
+  handleLearnMore = (e) => {
+    e.preventDefault();
+    alert("Learn more!");
+  }
+
+  // This function is triggered when a
+  // user presses the My Account button
+  handleAccountDropDown = (e) => {
+    e.preventDefault();
+    alert("Account Drop Down!");
   }
 
   // Render the Main application
@@ -52,23 +66,32 @@ class App extends Component {
     // Return the app frame (header and background)
     return (
       <div>
-
         <div className="header">
-            <button className="headerButton">Learn More</button>
+            <div style={showLogin}>
+              <button
+                className="headerButton"
+                onClick={(e) => {this.handleLearnMore(e)}}>
+                Learn More
+              </button>
+            </div>
+            <div style={showCandidate}>
+              <button
+                className="headerButton"
+                onClick={(e) => {this.handleAccountDropDown(e)}}>
+                My Account
+              </button>
+            </div>
             <h1 className="headerTitle">Matchery</h1>
         </div>
-
         <div style={showLogin}>
           <Login
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
           />
         </div>
-
         <div style={showCandidate}>
           <Candidate />
         </div>
-
       </div>
     );
   }

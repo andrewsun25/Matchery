@@ -46,10 +46,9 @@ class Login extends React.Component {
 
     // Return the component frame
     return (
-      <div className="loginBox">
-      
+      <div className="login">
         <form>
-          <div className="centerRow">
+          <div className="loginRow">
             <input
               placeholder="Username"
               className="loginInput"
@@ -59,7 +58,7 @@ class Login extends React.Component {
               onChange={this.handleChange}
             />
           </div>
-          <div className="centerRow">
+          <div className="loginRow">
             <input
               placeholder="Password"
               className="loginInput"
@@ -69,16 +68,16 @@ class Login extends React.Component {
               onChange={this.handleChange}
             />
           </div>
-          <div className="centerRow">
+          <div className="loginRow">
             <button
               className="loginButton"
               onClick={(e) => {this.childHandleLogin(e)}}>
               Login
             </button>
           </div>
-          <div className="centerRow">
+          <div className="loginRow">
             <button
-              className="signUpButton"
+              className="signupButton"
               onClick={(e) => {this.childHandleSignup(e)}}>
               Sign Up
             </button>

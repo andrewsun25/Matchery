@@ -1,4 +1,4 @@
-.loginBox {
+.login {
   padding: 25px;
   background-color: #fff;
   height: 150px;
@@ -6,6 +6,10 @@
   box-shadow: 1px 1px 5px;
   margin: auto;
   margin-top: 8%;
+}
+.loginRow {
+  width: 100%;
+  text-align: center;
 }
 .loginInput {
   width: 85%;
@@ -52,7 +56,7 @@
 .loginButton:focus {
   outline: 0;
 }
-.signUpButton {
+.signupButton {
   width: 90%;
   margin: 10px 0px 0px 0px;
   padding: 10px 0px;
@@ -66,9 +70,4 @@
 }
 .signUpButton:focus {
   outline: 0;
-}
-
-.centerRow {
-  width: 100%;
-  text-align: center;
 }

@@ -15,8 +15,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { // Initialize screen states
-      showLogin: false,
-      showCandidate: true,
+      showLogin: true,
+      showCandidate: false,
     };
   }
 

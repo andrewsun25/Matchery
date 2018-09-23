@@ -1,12 +1,18 @@
+// IMPORT COMPONENTS
 import React, { Component } from 'react';
 import List from './List';
+
+// IMPORT STYLING
 import './Candidate.css';
 
+// COMPONENT CLASS
 class Candidate extends React.Component {
+
+  // Component constructor
   constructor(props) {
     super(props);
-    this.state = {
-      groups: [
+    this.state = { // Initialize groups
+      groups: [ // This is passed down to the List component
         "Mosaic Whispers",
         "Sensasions",
         "The Amateurs",
@@ -14,6 +20,8 @@ class Candidate extends React.Component {
       ],
     }
   }
+
+  // Render the component
   render() {
     return (
       <div className="candidateBox">
@@ -29,15 +37,20 @@ class Candidate extends React.Component {
           </div>
           <div className="candidateMainSection">
             <div className="">
-              <h2 className="candidateMainSectionTitle">Ranking - drag to reaarange</h2>
+              <h2 className="candidateMainSectionTitle">
+                Ranking&nbsp;
+                <span className="candidateMainSectionTitleSpan">
+                  - drag to reaarange
+                </span>
+              </h2>
               <div className="draggableList">
-                <List colors={this.state.groups} />
+                <List groups={this.state.groups} />
               </div>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 export default Candidate;

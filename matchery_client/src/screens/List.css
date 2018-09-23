@@ -8,10 +8,9 @@
   margin-left: 30%;
   transition: 0.2s;
   margin-bottom: 5px;
-  padding: 7px 15px;
-  background:tomato;
+  background:lightgrey;
+  padding: 1%;
 }
-
 .draggableList .isEnabled, .draggableList .dragging {
-  background:steelblue;
+  background:maroon;
 }

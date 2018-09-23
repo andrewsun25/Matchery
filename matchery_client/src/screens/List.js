@@ -1,20 +1,21 @@
+// IMPORT COMPONENTS
 import React, { Component } from 'react';
+
+// IMPORT STYLING
 import './List.css';
 
+// COMPONENT CLASS
 class List extends React.Component {
 
+  // Component constructor
   constructor(props) {
     super(props);
     this.state = {
       dragging: undefined,
-      list: [
-        'Mosaic Whispers',
-        'Sensasions',
-        'The Amateurs',
-        'Aristocats'
-      ],
+      list: this.props.groups, // Get from parent
     }
   }
+
 
   toggleSomething = (stateToToggle) => {
     this.setState({[stateToToggle]: !this.state[stateToToggle]});
@@ -27,22 +28,29 @@ class List extends React.Component {
     this.setState({state});
   }
 
-  dragStart = (ev) => {
-    this.dragged = Number(ev.currentTarget.dataset.id);
-    ev.dataTransfer.effectAllowed = 'move';
-    ev.dataTransfer.setData('text/html', null);
+  // This function is called when the user
+  // starts dragging on a list item.
+  dragStart = (group) => {
+    this.dragged = Number(group.currentTarget.dataset.id); // Read the data-xx attribute in the DOM element
+    group.dataTransfer.effectAllowed = 'move'; // Specifies effect allowed for a drag operation
+    group.dataTransfer.setData('text/html', null); // Set drag operation's drag data to data and type
   }
 
-  dragOver = (ev) => {
-    ev.preventDefault();
-    const items = this.state.list;
-    const over = ev.currentTarget;
+  // This function is called when the user drags
+  // a group over another group.
+  dragOver = (group) => {
+    group.preventDefault(); // Prevent page refresh
+    const items = this.state.list; // Get list of groups
+    const over = group.currentTarget; // Get group currently being overlapped
     const dragging = this.state.dragging;
     const from = isFinite(dragging) ? dragging : this.dragged;
     let to = Number(over.dataset.id);
     items.splice(to, 0, items.splice(from,1)[0]);
     this.sort(items, to);
   }
+
+  // This function is called when the user finishes
+  // dragging a group.
   dragEnd = (ev) => {
     this.sort(this.state.list, undefined);
   }

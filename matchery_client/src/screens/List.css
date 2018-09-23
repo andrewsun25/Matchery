@@ -6,24 +6,12 @@
 }
 .draggableList li {
   margin-left: 30%;
-  border: 3px solid white;
+  transition: 0.2s;
+  margin-bottom: 5px;
   padding: 7px 15px;
-  background:#eee;
+  background:tomato;
 }
-.draggableList li::selection {
-  background: #e5e5e5;
-}
-.draggableList .placeholder {
-  background: rgb(255,240,120) !important;
-  height: 20px;
-}
-.draggableList .placeholder:before {
-  color: rgb(225,210,90) !important;
-}
-.draggableList .noHeight{
-  background: #fff;
-}
-.draggableList .noHeight:hover {
-  background: #fff;
-  content: "";
+
+.draggableList .isEnabled, .draggableList .dragging {
+  background:steelblue;
 }

@@ -1,62 +1,73 @@
 import React, { Component } from 'react';
 import './List.css';
 
-var lastIndex = 0;
-var placeholder = document.createElement("li");
-placeholder.className = "placeholder";
-
 class List extends React.Component {
+
   constructor(props) {
     super(props);
-    this.state = {...props};
+    this.state = {
+      dragging: undefined,
+      list: [
+        'Mosaic Whispers',
+        'Sensasions',
+        'The Amateurs',
+        'Aristocats'
+      ],
+    }
   }
-  dragStart = (e) => {
-    this.dragged = e.currentTarget;
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.dragged);
-  }
-  dragEnd = (e) => {
-    this.dragged.style.display = 'block';
-    this.dragged.parentNode.removeChild(placeholder);
 
-    // update state
-    var data = this.state.colors;
-    var from = Number(this.dragged.dataset.id);
-    var to = Number(this.over.dataset.id);
-    if(from < to) to--;
-    data.splice(to, 0, data.splice(from, 1)[0]);
-    this.setState({colors: data});
+  toggleSomething = (stateToToggle) => {
+    this.setState({[stateToToggle]: !this.state[stateToToggle]});
   }
-  dragOver(e) {
-    e.preventDefault();
-    this.dragged.style.display = "none";
-    if(e.target.className === 'placeholder') return;
-    this.over = e.target;
-    e.target.parentNode.insertBefore(placeholder, e.target);
+
+  sort = (list, dragging) => {
+    const state = this.state;
+    state.list = list;
+    state.dragging = dragging;
+    this.setState({state});
   }
+
+  dragStart = (ev) => {
+    this.dragged = Number(ev.currentTarget.dataset.id);
+    ev.dataTransfer.effectAllowed = 'move';
+    ev.dataTransfer.setData('text/html', null);
+  }
+
+  dragOver = (ev) => {
+    ev.preventDefault();
+    const items = this.state.list;
+    const over = ev.currentTarget;
+    const dragging = this.state.dragging;
+    const from = isFinite(dragging) ? dragging : this.dragged;
+    let to = Number(over.dataset.id);
+    items.splice(to, 0, items.splice(from,1)[0]);
+    this.sort(items, to);
+  }
+  dragEnd = (ev) => {
+    this.sort(this.state.list, undefined);
+  }
+
 	render() {
-    var listItems = this.state.colors.map((item, i) => {
-      lastIndex = i;
-      return (
-        <li
-          data-id={i}
-          key={i}
-          draggable='true'
-          onDragEnd={this.dragEnd}
-          onDragStart={this.dragStart}>{item}</li>
-      )
-     });
 		return (
-			<ul onDragOver={this.dragOver.bind(this)}>
-        {listItems}
-        <li
-          data-id={lastIndex+1}
-          key={lastIndex+1}
-          draggable='false'
-          className='noHeight'
-          onDragEnd={this.dragEnd.bind(this)}
-          onDragStart={this.dragStart.bind(this)}></li>
-      </ul>
+      <div>
+        <ul className="columns">
+          {
+            this.state.list.map((item, i) => {
+              const dragging = (i == this.state.dragging) ? "dragging" : "";
+              return <li className={dragging}
+                data-id={i}
+                key={i}
+                onClick={() => this.toggleSomething(item)}
+                draggable="true"
+                onDragStart={this.dragStart}
+                onDragOver={this.dragOver}
+                onDragEnd={this.dragEnd}>
+                {item}
+              </li>;
+            })
+          }
+        </ul>
+      </div>
 		)
 	}
 }

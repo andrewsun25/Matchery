@@ -1,0 +1,12 @@
+/*------------ judge page ------------*/
+
+.area-action {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.area-section-heading {
+	display: flex;
+	align-items: center;
+}

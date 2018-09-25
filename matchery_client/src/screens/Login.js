@@ -46,46 +46,31 @@ class Login extends React.Component {
 
     // Return the component frame
     return (
-      <div className="login">
-        <form>
-          <div className="loginRow">
-            <input
-              placeholder="Username"
-              className="loginInput"
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleChange}
-            />
+
+      <div className="login-panel u-center-text">
+
+        <form className="auth-form">
+
+          <div className="auth-form__form-group">
+            <input type="text" className="auth-form__form-input" placeholder="Username" name="username" value={this.state.username} onChange={this.handleChange} required />
           </div>
-          <div className="loginRow">
-            <input
-              placeholder="Password"
-              className="loginInput"
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
+
+          <div className="auth-form__form-group u-margin-bottom-lg">
+            <input type="password" className="auth-form__form-input" placeholder="Password" name="password" value={this.state.password} onChange={this.handleChange} required />
           </div>
-          <div className="loginRow">
-            <button
-              className="loginButton"
-              onClick={(e) => {this.childHandleLogin(e)}}>
-              Login
-            </button>
+
+          <div className="auth-form__form-group u-margin-bottom-sm">
+            <input type="submit" className="auth-form__form-submit" value="Login" onClick={(e) => {this.childHandleLogin(e)}} />
           </div>
-          <div className="loginRow">
-            <button
-              className="signupButton"
-              onClick={(e) => {this.childHandleSignup(e)}}>
-              Sign Up
-            </button>
-          </div>
+
         </form>
 
+        <a className="login-panel__sign-up-link" onClick={(e) => {this.childHandleSignup(e)}}>Sign Up</a>
+
       </div>
+
     );
   }
 }
+
 export default Login;

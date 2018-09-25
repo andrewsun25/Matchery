@@ -1,73 +1,70 @@
-.login {
-  padding: 25px;
-  background-color: #fff;
-  height: 150px;
-  width: 250px;
-  box-shadow: 1px 1px 5px;
-  margin: auto;
-  margin-top: 8%;
-}
-.loginRow {
+/*------------ login-panel ------------*/
+
+.login-panel {
+  width: 40rem;
+  margin-top: 20rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3.5rem;
+  padding-bottom: 1.5rem;
+  background-color: #e0e0e0;
+  box-shadow: 0 0.5rem 0.8rem #000; }
+  .login-panel__sign-up-link, .login-panel__sign-up-link:link, .login-panel__sign-up-link:visited {
+    display: inline-block;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    width: 100%;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #222;
+    text-decoration: none;
+    transition: background-color .15s;
+    cursor: pointer; }
+  .login-panel__sign-up-link:hover {
+    background-color: #c7c7c7; }
+  .login-panel__sign-up-link:focus, .login-panel__sign-up-link:active {
+    outline: none;
+    color: #6f6f6f; }
+
+/*------------ auth-form ------------*/
+
+.auth-form__form-group:not(:last-child) {
+  margin-bottom: 1.2rem; }
+
+.auth-form__form-input {
   width: 100%;
-  text-align: center;
-}
-.loginInput {
-  width: 85%;
-  margin: 5px 0px 5px 0px;
-  padding: 5px 5px;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  border-bottom: 1px solid grey;
-  -webkit-transition: 0.15s;
-  -moz-transition: 0.15s;
-  -o-transition: 0.15s;
-  transition: 0.15s;
-}
-.loginInput:hover {
-  border-bottom: 1px solid black;
-}
-.loginInput:hover::-webkit-input-placeholder {
-  color: black;
-}
-.loginInput:focus {
-  border-bottom: 1px solid black;
-  outline: 0;
-}
-.loginInput:focus::-webkit-input-placeholder {
-  color: black;
-}
-.loginButton {
-  width: 90%;
-  margin: 15px 0px 0px 0px;
-  padding: 10px 0px;
-  font-weight: bold;
-  background-color: rgb(232,136,67);
-  border-radius: 0px;
+  padding: 1.2rem .5rem;
   border: none;
-  -webkit-transition: 0.2s;
-  -moz-transition: 0.2s;
-  -o-transition: 0.2s;
-  transition: 0.2s;
-}
-.loginButton:hover {
-  background-color: rgb(252,157,87);
-}
-.loginButton:focus {
-  outline: 0;
-}
-.signupButton {
-  width: 90%;
-  margin: 10px 0px 0px 0px;
-  padding: 10px 0px;
-  font-weight: bold;
-  background-color: #fff;
-  border-radius: 0px;
+  border-bottom: 0.1rem solid #aaa;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 400;
+  background-color: transparent; }
+  .auth-form__form-input:focus {
+    outline: none; }
+
+.auth-form__form-submit, .auth-form__form-submit:link, .auth-form__form-submit:visited {
+  width: 100%;
   border: none;
-}
-.signUpButton:hover {
-  text-decoration: underline;
-}
-.signUpButton:focus {
-  outline: 0;
-}
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 700;
+  background-color: #ea8839;
+  transition: background-color .15s;
+  cursor: pointer; }
+
+.auth-form__form-submit:hover {
+  background-color: #d96e17; }
+
+.auth-form__form-submit:focus, .auth-form__form-submit:active {
+  outline: none;
+  color: #6f6f6f; }
+
+.auth-form__form-submit--high-action, .auth-form__form-submit--high-action:link, .auth-form__form-submit--high-action:visited {
+  color: #fff;
+  background-color: #309000; }
+
+.auth-form__form-submit--high-action:hover {
+  background-color: #1f5d00; }

@@ -26,10 +26,18 @@ class App extends Component {
     };
   }
 
-  // This function is run once before any
-  // rendering is done
-  componentDidMount() {
-    // document.body.style = "background:rgb(145,20,20);";
+  // This function is triggered when a
+  // user presses the Learn More button
+  handleMyAccount = (e) => {
+    e.preventDefault();
+    alert("handleMyAccount!");
+  }
+
+  // This function is triggered when a
+  // user presses the Learn More button
+  handleLearnMore = (e) => {
+    e.preventDefault();
+    alert("handleLearnMore");
   }
 
   // This function is triggered by a child
@@ -47,20 +55,6 @@ class App extends Component {
     e.preventDefault();
     this.setState({showSignUp: true});
     alert("Registration With: Username[" + username + "] Password[" + password + "]");
-  }
-
-  // This function is triggered when a
-  // user presses the Learn More button
-  handleLearnMore = (e) => {
-    e.preventDefault();
-    alert("Learn more!");
-  }
-
-  // This function is triggered when a
-  // user presses the My Account button
-  handleAccountDropDown = (e) => {
-    e.preventDefault();
-    alert("Account Drop Down!");
   }
 
   parentHandleSelectEvent = (e) => {
@@ -87,7 +81,9 @@ class App extends Component {
             <div className="header__logo-box">
               Matchery
             </div>
-            <div className="header__my-account-box">
+            <div
+              onClick={(e) => {this.handleMyAccount(e)}}
+              className="header__my-account-box">
               My Account
               <ion-icon className="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
             </div>
@@ -121,34 +117,6 @@ class App extends Component {
         </div>
 
       </div>
-      // <div>
-        // <div className="header">
-        //     <div style={showLogin}>
-        //       <button
-        //         className="headerButton"
-        //         onClick={(e) => {this.handleLearnMore(e)}}>
-        //         Learn More
-        //       </button>
-        //     </div>
-        //     <div style={showCandidate}>
-        //       <button
-        //         className="headerButton"
-        //         onClick={(e) => {this.handleAccountDropDown(e)}}>
-        //         My Account
-        //       </button>
-        //     </div>
-        //     <h1 className="headerTitle">Matchery</h1>
-        // </div>
-      //   <div style={showLogin}>
-      //     <Login
-      //       parentHandleLogin={this.parentHandleLogin}
-      //       parentHandleSignup={this.parentHandleSignup}
-      //     />
-      //   </div>
-      //   <div style={showCandidate}>
-      //     <Candidate />
-      //   </div>
-      // </div>
     );
   }
 }

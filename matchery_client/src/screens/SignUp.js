@@ -16,6 +16,10 @@ class SignUp extends React.Component {
   	this.props.parentHandleSelectEvent(e);
   }
 
+  goBackToDefault = (e) => {
+    this.props.parentHandleExitSignup(e);
+  }
+
   // Render the component
   render() {
 
@@ -26,7 +30,9 @@ class SignUp extends React.Component {
 
         <div className="section-sign-up__panel">
 
-          <ion-icon class="section-sign-up__close-icon" name="close"></ion-icon>
+          <ion-icon
+            onClick={(e) => {this.goBackToDefault(e)}}
+            class="section-sign-up__close-icon" name="close"></ion-icon>
 
           <form className="auth-form">
 

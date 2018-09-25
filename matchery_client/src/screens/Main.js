@@ -57,6 +57,11 @@ class App extends Component {
     alert("Registration With: Username[" + username + "] Password[" + password + "]");
   }
 
+  parentHandleExitSignup = (e) => {
+    e.preventDefault();
+    this.setState({showSignUp: false});
+  }
+
   parentHandleSelectEvent = (e) => {
     e.preventDefault();
     this.setState({showDashboard: false, showJudgeEvent: true});
@@ -101,6 +106,7 @@ class App extends Component {
           <SignUp
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
+            parentHandleExitSignup={this.parentHandleExitSignup}
           />
         </div>
 

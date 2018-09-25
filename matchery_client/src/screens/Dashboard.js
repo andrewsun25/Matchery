@@ -41,7 +41,7 @@ class Dashboard extends React.Component {
 					<div className="panel">
 						<div className="panel__header">
 							<ion-icon className="panel__icon" name="time"></ion-icon>
-							<div className="panel__header-text">Recently Visited</div>							
+							<div class="panel__header-text">Recently Visited</div>							
 						</div>
 						<ul className="panel__content">
 							<li className="panel__content-item" onClick={(e) => {this.childHandleSelectEvent(e)}}>WashU Acappella Auditions 2018</li>
@@ -51,7 +51,7 @@ class Dashboard extends React.Component {
 
 					<div className="panel">
 						<div className="panel__header">
-							<ion-icon className="panel__icon" name="person"></ion-icon>
+							<ion-icon class="panel__icon" name="person"></ion-icon>
 							<div className="panel__header-text">Administrator for</div>
 						</div>
 						<ul className="panel__content">
@@ -61,7 +61,7 @@ class Dashboard extends React.Component {
 
 					<div className="panel">
 						<div className="panel__header">
-							<ion-icon className="panel__icon" name="thumbs-up"></ion-icon>
+							<ion-icon class="panel__icon" name="thumbs-up"></ion-icon>
 							<div className="panel__header-text">Judge for</div>
 						</div>
 						<ul className="panel__content">
@@ -72,7 +72,7 @@ class Dashboard extends React.Component {
 
 					<div className="panel">
 						<div className="panel__header">
-							<ion-icon className="panel__icon" name="microphone"></ion-icon>
+							<ion-icon class="panel__icon" name="microphone"></ion-icon>
 							<div className="panel__header-text">Candidate for</div>
 						</div>
 						<ul className="panel__content">

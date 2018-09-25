@@ -43,19 +43,19 @@ class JudgeEvent extends React.Component {
 								<div className="bar-group u-margin-bottom-md">
 									<div className="bar-group__bar">
 										1. Zhi Shen Yong
-										<ion-icon className="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
+										<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
 									</div>
 									<div className="bar-group__bar">
 										2. Andrew Sun
-										<ion-icon className="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
+										<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
 									</div>
 									<div className="bar-group__bar">
 										3. Shane Blair
-										<ion-icon className="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
+										<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
 									</div>
 									<div className="bar-group__bar">
 										4. William Leung
-										<ion-icon className="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
+										<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
 									</div>
 								</div>
 								<div className="area-action">
@@ -73,13 +73,13 @@ class JudgeEvent extends React.Component {
 								<div className="bar-group">
 									<div className="bar-group__bar">
 										John Doe
-										<ion-icon className="bar-group__icon bar-group__icon--leftmost" name="arrow-up"></ion-icon>
-										<ion-icon className="bar-group__icon" name="close"></ion-icon>
+										<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="arrow-up"></ion-icon>
+										<ion-icon class="bar-group__icon" name="close"></ion-icon>
 									</div>
 									<div className="bar-group__bar">
 										Jane Eyre
-										<ion-icon className="bar-group__icon bar-group__icon--leftmost" name="arrow-up"></ion-icon>
-										<ion-icon className="bar-group__icon" name="close"></ion-icon>
+										<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="arrow-up"></ion-icon>
+										<ion-icon class="bar-group__icon" name="close"></ion-icon>
 									</div>
 								</div>
 							</section>

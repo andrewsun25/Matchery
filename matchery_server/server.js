@@ -6,7 +6,7 @@ const path = require('path');
 const expressValidator = require('express-validator');
 const mongoose = require('mongoose');
 const app = express();
-const url = 'mongodb://localhost:27017/matchery';
+const url = 'mongodb+srv://client:fpLr30qu96hmxW3B@matcherydb-dyffe.mongodb.net/matchery?retryWrites=true';
 //=========================//
 
 const port = process.env.PORT || 5000;

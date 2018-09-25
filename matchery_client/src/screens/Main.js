@@ -85,7 +85,7 @@ class App extends Component {
               onClick={(e) => {this.handleMyAccount(e)}}
               className="header__my-account-box">
               My Account
-              <ion-icon className="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
+              <ion-icon class="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
             </div>
           </div>
         </header>

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import Dashboard from './Dashboard'; // Dashboard component
 import Login from './Login'; // Login component
+import SignUp from './SignUp'; // SignUp component
 import JudgeEvent from './JudgeEvent'; // JudgeEvent component
 import Candidate from './Candidate';
 
@@ -18,6 +19,7 @@ class App extends Component {
     super(props);
     this.state = { // Initialize screen states
       showLogin: true,
+      showSignUp: false,
       showDashboard: false,
       showJudgeEvent: false,
       showCandidate: false,
@@ -27,7 +29,7 @@ class App extends Component {
   // This function is run once before any
   // rendering is done
   componentDidMount() {
-    document.body.style = "background:rgb(145,20,20);";
+    // document.body.style = "background:rgb(145,20,20);";
   }
 
   // This function is triggered by a child
@@ -43,6 +45,7 @@ class App extends Component {
   // handles the signup process
   parentHandleSignup = (e, username, password) => {
     e.preventDefault();
+    this.setState({showSignUp: true});
     alert("Registration With: Username[" + username + "] Password[" + password + "]");
   }
 
@@ -70,6 +73,7 @@ class App extends Component {
 
     // Styling constants for showing different screens
     const showLogin = this.state.showLogin ? {display:'block'} : {display:'none'};
+    const showSignUp = this.state.showSignUp ? {display:'block'} : {display:'none'};
     const showDashboard = this.state.showDashboard ? {display:'block'} : {display:'none'};
     const showJudgeEvent = this.state.showJudgeEvent ? {display:'block'} : {display:'none'};
     const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
@@ -92,6 +96,13 @@ class App extends Component {
 
         <div style={showLogin}>
           <Login
+            parentHandleLogin={this.parentHandleLogin}
+            parentHandleSignup={this.parentHandleSignup}
+          />
+        </div>
+
+        <div style={showSignUp}>
+          <SignUp
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
           />

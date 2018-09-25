@@ -52,9 +52,9 @@ class App extends Component {
   // function in the Login component and
   // handles the signup process
   parentHandleSignup = (e, username, password) => {
-    e.preventDefault();
+    //e.preventDefault();
     this.setState({showSignUp: true});
-    alert("Registration With: Username[" + username + "] Password[" + password + "]");
+    //alert("Registration With: Username[" + username + "] Password[" + password + "]");
   }
 
   parentHandleExitSignup = (e) => {

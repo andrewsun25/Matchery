@@ -16,6 +16,11 @@ class Dashboard extends React.Component {
   	this.props.parentHandleSelectEvent(e);
   }
 
+  handleCreateEvent = (e) => {
+    e.preventDefault();
+    alert("handleCreateEvent");
+  }
+
   // Render the component
   render() {
 
@@ -27,7 +32,9 @@ class Dashboard extends React.Component {
 				<div className="dashboard-header-row u-margin-bottom-hg">
 					<h1 className="heading-primary u-color-white">Welcome, William</h1>
 					<button className="btn-create">
-						<div className="btn-create__text">
+						<div
+              onClick={(e) => {this.handleCreateEvent(e)}}
+              className="btn-create__text">
 							Create Event
 						</div>
 						<div className="btn-create__icon-box">
@@ -41,7 +48,7 @@ class Dashboard extends React.Component {
 					<div className="panel">
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="time"></ion-icon>
-							<div className="panel__header-text">Recently Visited</div>							
+							<div className="panel__header-text">Recently Visited</div>
 						</div>
 						<ul className="panel__content">
 							<li className="panel__content-item" onClick={(e) => {this.childHandleSelectEvent(e)}}>WashU Acappella Auditions 2018</li>

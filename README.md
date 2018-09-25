@@ -12,5 +12,6 @@
 ## How to Serve React + Express
 
 1. Have Node and Yarn installed
-2. Have Concurrently global dependency installed
-3. Run 'yarn dev'
+2. Install nodemon and concurrently globally ('npm install -g [package_name]')
+3. If bcrypt gives you problems, take a look at [this](https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions)
+4. Run 'yarn dev'

@@ -1,5 +1,6 @@
 // IMPORT COMPONENTS
 import React, { Component } from 'react';
+import 'whatwg-fetch';
 import Login from './Login'; // Login component
 import Candidate from './Candidate';
 
@@ -40,6 +41,26 @@ class App extends Component {
   parentHandleSignup = (e, username, password) => {
     e.preventDefault();
     alert("Registration With: Username[" + username + "] Password[" + password + "]");
+
+    //Insert in database
+    fetch('/api/account/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    }).then(res => res.json())
+      .then(json => {
+          console.log('json', json);
+          if (json.success) {
+            alert("success!");
+          } else {
+            alert("failed!");
+          }
+        });
   }
 
   // This function is triggered when a

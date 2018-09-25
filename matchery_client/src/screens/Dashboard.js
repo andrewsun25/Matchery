@@ -40,8 +40,8 @@ class Dashboard extends React.Component {
 
 					<div className="panel">
 						<div className="panel__header">
-							<ion-icon className="panel__icon" name="time"></ion-icon>
-							<div class="panel__header-text">Recently Visited</div>							
+							<ion-icon class="panel__icon" name="time"></ion-icon>
+							<div className="panel__header-text">Recently Visited</div>							
 						</div>
 						<ul className="panel__content">
 							<li className="panel__content-item" onClick={(e) => {this.childHandleSelectEvent(e)}}>WashU Acappella Auditions 2018</li>

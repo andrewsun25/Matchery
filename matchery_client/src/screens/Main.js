@@ -89,7 +89,7 @@ class App extends Component {
             </div>
             <div className="header__my-account-box">
               My Account
-              <ion-icon className="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
+              <ion-icon class="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
             </div>
           </div>
         </header>

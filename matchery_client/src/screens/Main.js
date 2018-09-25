@@ -1,6 +1,8 @@
 // IMPORT COMPONENTS
 import React, { Component } from 'react';
+import Dashboard from './Dashboard'; // Dashboard component
 import Login from './Login'; // Login component
+import JudgeEvent from './JudgeEvent'; // JudgeEvent component
 import Candidate from './Candidate';
 
 // IMPORT STYLING
@@ -16,6 +18,8 @@ class App extends Component {
     super(props);
     this.state = { // Initialize screen states
       showLogin: true,
+      showDashboard: false,
+      showJudgeEvent: false,
       showCandidate: false,
     };
   }
@@ -31,7 +35,7 @@ class App extends Component {
   // handles the login process
   parentHandleLogin = (e) => {
     e.preventDefault();
-    this.setState({showLogin: false, showCandidate: true});
+    this.setState({showLogin: false, showDashboard: true});
   }
 
   // This function is triggered by a child
@@ -56,43 +60,84 @@ class App extends Component {
     alert("Account Drop Down!");
   }
 
+  parentHandleSelectEvent = (e) => {
+    e.preventDefault();
+    this.setState({showDashboard: false, showJudgeEvent: true});
+  }
+
   // Render the Main application
   render() {
 
     // Styling constants for showing different screens
     const showLogin = this.state.showLogin ? {display:'block'} : {display:'none'};
+    const showDashboard = this.state.showDashboard ? {display:'block'} : {display:'none'};
+    const showJudgeEvent = this.state.showJudgeEvent ? {display:'block'} : {display:'none'};
     const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
 
     // Return the app frame (header and background)
     return (
       <div>
-        <div className="header">
-            <div style={showLogin}>
-              <button
-                className="headerButton"
-                onClick={(e) => {this.handleLearnMore(e)}}>
-                Learn More
-              </button>
+
+        <header className="header">
+          <div className="header__container">
+            <div className="header__logo-box">
+              Matchery
             </div>
-            <div style={showCandidate}>
-              <button
-                className="headerButton"
-                onClick={(e) => {this.handleAccountDropDown(e)}}>
-                My Account
-              </button>
+            <div className="header__my-account-box">
+              My Account
+              <ion-icon className="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
             </div>
-            <h1 className="headerTitle">Matchery</h1>
-        </div>
+          </div>
+        </header>
+
         <div style={showLogin}>
           <Login
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
           />
         </div>
-        <div style={showCandidate}>
-          <Candidate />
+
+        <div style={showDashboard}>
+          <Dashboard
+            parentHandleSelectEvent={this.parentHandleSelectEvent}
+          />
         </div>
+
+        <div style={showJudgeEvent}>
+          <JudgeEvent
+            parentHandleSelectEvent={this.parentHandleSelectEvent}
+          />
+        </div>
+
       </div>
+      // <div>
+        // <div className="header">
+        //     <div style={showLogin}>
+        //       <button
+        //         className="headerButton"
+        //         onClick={(e) => {this.handleLearnMore(e)}}>
+        //         Learn More
+        //       </button>
+        //     </div>
+        //     <div style={showCandidate}>
+        //       <button
+        //         className="headerButton"
+        //         onClick={(e) => {this.handleAccountDropDown(e)}}>
+        //         My Account
+        //       </button>
+        //     </div>
+        //     <h1 className="headerTitle">Matchery</h1>
+        // </div>
+      //   <div style={showLogin}>
+      //     <Login
+      //       parentHandleLogin={this.parentHandleLogin}
+      //       parentHandleSignup={this.parentHandleSignup}
+      //     />
+      //   </div>
+      //   <div style={showCandidate}>
+      //     <Candidate />
+      //   </div>
+      // </div>
     );
   }
 }

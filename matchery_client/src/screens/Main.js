@@ -52,9 +52,13 @@ class App extends Component {
   // This function is triggered by a child
   // function in the Login component and
   // handles the signup process
-  parentHandleSignup = (e, username, password) => {
+  parentHandleSignup = (e) => {
     e.preventDefault();
     this.setState({showSignUp: true});
+  }
+
+  parentHandleSelectEvent = (e, username, password) => {
+    e.preventDefault();
     alert("Registration With: Username[" + username + "] Password[" + password + "]");
 
     //Insert in database
@@ -76,10 +80,6 @@ class App extends Component {
             alert("failed!");
           }
         });
-  }
-
-  parentHandleSelectEvent = (e) => {
-    e.preventDefault();
     this.setState({showDashboard: false, showJudgeEvent: true});
   }
 

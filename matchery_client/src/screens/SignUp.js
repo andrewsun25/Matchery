@@ -13,7 +13,10 @@ class SignUp extends React.Component {
   }
 
   childHandleSelectEvent = (e) => {
-  	this.props.parentHandleSelectEvent(e);
+  	this.props.parentHandleSelectEvent(
+      e,
+      this.state.username,
+      this.state.password);
   }
 
   // Render the component

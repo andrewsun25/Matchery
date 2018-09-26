@@ -1,4 +1,4 @@
-from sortedcontainers import SortedSet
+from sortedcontainers import SortedDict
 
 
 def makeRankings(preferences):
@@ -14,23 +14,21 @@ class Group:
 	        @preferences: IE (2, 0, 1). Tuple of group's preferences over applicants with preferences[0] being the most preferred applicant.
 	        @rankings: IE {0:1, 2:0, 1:2}. Dictionary of rank of each applicant.
 	    '''
-	    self.preferences = preferences
-	    self.rankings = makeRankings(preferences)
+	    # self.preferences = preferences
+	    self.applicantToRank = makeRankings(preferences)
 	    self.num = num
 	    self.quota = quota
-	    self.waitList = []
+	    self.waitList = SortedDict()
 
 	def addToWaitList(self, applicant):
-		for position, existingApplicant in enumerate(self.waitList):
-			if self.rankings[applicant] < self.rankings[existingApplicant]:  # If new applicant is more preferred
-				self.waitList.insert(position, applicant)  # inserted at 1 better rank than existingApplicant
-				return
-		self.waitList.append(applicant)
+		rank = self.applicantToRank[applicant]
+		self.waitList[rank] = applicant
+		
 
 	def acceptQuota(self):
-	    rejected = self.waitList[self.quota:]
-	    self.waitList = self.waitList[:self.quota]
-	    return self.waitList, rejected
+	    rejected = self.waitList.islice(self.quota)
+	    for rank in rejected:
+	    	self.waitList.pop(rank)
 
 
 class Applicant:
@@ -76,7 +74,7 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
             bestGroupNum = eligibleApplicant.getBestGroup()
             bestGroup = groups[bestGroupNum]
             # Applicant applies to their top choice
-            if eligibleApplicant.num in bestGroup.rankings:
+            if eligibleApplicant.num in bestGroup.applicantToRank:
                 bestGroup.addToWaitList(eligibleApplicant.num)
             # After applicant applies to their top choice, they cannot apply to that choice again
             eligibleApplicant.removeTopChoice()
@@ -85,11 +83,14 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
                 eligibleApplicants.remove(eligibleApplicant)
 
         for group in groups:
-            accepted, rejected = group.acceptQuota()
+            group.acceptQuota()
 
     acceptedMatrix = []
     for group in groups:
-        acceptedMatrix.append(group.waitList)
+    	waitList = []
+    	for rank in group.waitList:
+    		waitList.append(group.waitList[rank])
+    	acceptedMatrix.append(waitList)
     return acceptedMatrix
 
 if __name__ == "__main__":
@@ -97,12 +98,12 @@ if __name__ == "__main__":
 	applicantPreferences = [
 	    [4, 0, 1], # 0. Applies to 1.
 	    [4, 0, 2], # 1
-	    [0, 2, 4], # 2
-	    [0, 2, 3]  # 3
+	    [3, 2, 4], # 2
+	    [1, 2, 3]  # 3
 	]
 
 	groupPreferences = [
-	    [0, 1, 2], # 0
+	    [0, 3, 2], # 0
 	    [0, 1, 2], # 1 NONE
 	    [3, 1, 0], # 2
 	    [1, 3, 0], # 3 NONE

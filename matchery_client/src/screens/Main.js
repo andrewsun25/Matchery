@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
 import Dashboard from './Dashboard'; // Dashboard component
->>>>>>> Test server and user API
 import Login from './Login'; // Login component
 import SignUp from './SignUp'; // SignUp component
 import JudgeEvent from './JudgeEvent'; // JudgeEvent component
@@ -53,10 +52,30 @@ class App extends Component {
   // This function is triggered by a child
   // function in the Login component and
   // handles the signup process
-  parentHandleSignup = (e, username, password) => {
+  parentHandleSignup = (e) => {
     //e.preventDefault();
     this.setState({showSignUp: true});
-    //alert("Registration With: Username[" + username + "] Password[" + password + "]");
+  }
+
+  parentHandleSignupSubmit = (e, firstName, lastName, email, username, password) => {
+    //Insert in database
+    fetch('/api/account/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        username: username,
+        password: password
+      }),
+    }).then(res => res.json())
+      .then(json => {
+          console.log('json', json);
+          alert(json.message);
+        });
   }
 
   parentHandleExitSignup = (e) => {
@@ -65,28 +84,8 @@ class App extends Component {
   }
 
   parentHandleSelectEvent = (e) => {
-        e.preventDefault();
-    alert("Registration With: Username[" + username + "] Password[" + password + "]");
-
-    //Insert in database
-    fetch('/api/account/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    }).then(res => res.json())
-      .then(json => {
-          console.log('json', json);
-          if (json.success) {
-            alert("success!");
-          } else {
-            alert("failed!");
-          }
-        });
+    e.preventDefault();
+    //alert("Registration With: Username[" + username + "] Password[" + password + "]");
     this.setState({showDashboard: false, showJudgeEvent: true});
   }
 
@@ -129,6 +128,7 @@ class App extends Component {
           <SignUp
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
+            parentHandleSignupSubmit={this.parentHandleSignupSubmit}
             parentHandleExitSignup={this.parentHandleExitSignup}
           />
         </div>

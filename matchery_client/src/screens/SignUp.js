@@ -40,7 +40,14 @@ class SignUp extends React.Component {
 
   processSignUp = (e) => {
     e.preventDefault();
-    alert("process sign up!");
+    this.props.parentHandleSignupSubmit(
+      e,
+      this.state.firstName,
+      this.state.lastName,
+      this.state.email,
+      this.state.username,
+      this.state.password);
+    this.props.parentHandleExitSignup(e);
   }
 
   // Render the component

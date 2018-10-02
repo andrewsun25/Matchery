@@ -59,7 +59,10 @@ app.post('/api/account/signup', (req, res, next) => {
     password
   } = body;
   let {
-    username
+    username,
+    firstName,
+    lastName,
+    email
   } = body;
   
   if (!username) {
@@ -79,7 +82,7 @@ app.post('/api/account/signup', (req, res, next) => {
   // 1. Verify email doesn't exist
   // 2. Save
   User.find({
-    username: username
+    $or:[ {username: username}, {email: email} ]
   }, (err, previousUsers) => {
     if (err) {
       return res.send({
@@ -89,11 +92,14 @@ app.post('/api/account/signup', (req, res, next) => {
     } else if (previousUsers.length > 0) {
       return res.send({
         success: false,
-        message: 'Error: Account already exist.'
+        message: 'Error: Account username or email already exists.'
       });
     }
     // Save the new user
     const newUser = new User();
+    newUser.firstName = firstName;
+    newUser.lastName = lastName;
+    newUser.email = email;
     newUser.username = username;
     newUser.password = newUser.generateHash(password);
     newUser.save((err, user) => {

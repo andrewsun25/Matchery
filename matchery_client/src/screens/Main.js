@@ -1,6 +1,8 @@
 // IMPORT COMPONENTS
 import React, { Component } from 'react';
+import 'whatwg-fetch';
 import Dashboard from './Dashboard'; // Dashboard component
+>>>>>>> Test server and user API
 import Login from './Login'; // Login component
 import SignUp from './SignUp'; // SignUp component
 import JudgeEvent from './JudgeEvent'; // JudgeEvent component

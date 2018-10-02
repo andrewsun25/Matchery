@@ -10,6 +10,40 @@ class Dashboard extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.state = {
+    	showAdministrator: false,
+    	showJudge: false,
+    	showCandidate: false,
+    }
+  }
+
+  componentWillMount() {
+	fetch('/api/account/getEvents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username')
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+	          switch (json.role) {
+	            	case 'Administrator':
+	            		alert("Administrator");
+	            		this.state.showAdministrator = true;
+	            		break;
+	            	case 'Judge':
+	            		alert("Judge");
+	            		this.state.showJudge = true;
+	            		break;
+	            	case 'Candidate':
+	            		this.state.showCandidate = true;
+	            		break;
+          }
+        }
+      });
   }
 
   childHandleSelectEvent = (e) => {
@@ -23,6 +57,11 @@ class Dashboard extends React.Component {
 
   // Render the component
   render() {
+
+  	// Styling constants for showing different screens
+    const showAdministrator = this.state.showAdministrator ? {display:'block'} : {display:'none'};
+    const showJudge = this.state.showJudge ? {display:'block'} : {display:'none'};
+    const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
 
     // Return the component frame
     return (
@@ -56,7 +95,7 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 
-					<div className="panel">
+					<div className="panel" style={showAdministrator}>
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="person"></ion-icon>
 							<div className="panel__header-text">Administrator for</div>
@@ -66,7 +105,7 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 
-					<div className="panel">
+					<div className="panel" style={showJudge}>
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="thumbs-up"></ion-icon>
 							<div className="panel__header-text">Judge for</div>
@@ -77,7 +116,7 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 
-					<div className="panel">
+					<div className="panel" style={showCandidate}>
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="microphone"></ion-icon>
 							<div className="panel__header-text">Candidate for</div>

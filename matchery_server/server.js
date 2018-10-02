@@ -31,8 +31,8 @@ app.get('/api/users', function(req, res) {
     });
   });
 
-const User = require('./models/user.js')
-const Session = require('./models/session.js')
+const User = require('./models/user.js');
+const Session = require('./models/session.js');
 
 app.post('/api/account/signup', (req, res, next) => {
   const { body } = req;
@@ -215,6 +215,40 @@ app.get('/api/account/logout', (req, res, next) => {
         success: true,
         message: 'Logout successful'
       });
+    });
+  });
+
+app.post('/api/account/getEvents', (req, res, next) => {
+    const { body } = req;
+    let {
+      username
+    } = body;
+
+    username = username.trim();
+    User.find({
+      username: username
+    }, (err, users) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      if (users.length != 1) {
+        return res.send({
+          success: false,
+          message: 'Invalid username or password'
+        });
+      }
+      const user = users[0];
+      // Otherwise correct user
+      const eventRole = user.Events[0];
+
+      return res.send({
+          success: true,
+          role: eventRole.role,
+          eventName: eventRole.eventName
+        });
     });
   });
 

@@ -44,9 +44,28 @@ class App extends Component {
   // This function is triggered by a child
   // function in the Login component and
   // handles the login process
-  parentHandleLogin = (e) => {
+  parentHandleLogin = (e, username, password) => {
     e.preventDefault();
-    this.setState({showLogin: false, showDashboard: true});
+    // Login request
+    fetch('/api/account/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        console.log('json', json);
+        alert(json.message);
+        if (json.success) {
+          localStorage.setItem('session', json.token);
+          localStorage.setItem('username', json.username);
+          this.setState({showLogin: false, showDashboard: true});
+        }
+      });
   }
 
   // This function is triggered by a child

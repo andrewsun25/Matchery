@@ -23,14 +23,6 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From Express' });
-});
-
-//====ROOT DIRECTORY===//
-app.get('/', function(req, res) {
-  res.json('you did it');
-});
 //==========================//
 //====GET ALL SIGNATURES===//
 app.get('/api/users', function(req, res) {
@@ -38,20 +30,9 @@ app.get('/api/users', function(req, res) {
     res.json(eachOne);
     });
   });
-//==========================//
-//====POST NEW SIGNATURE===//
-app.post('/api/users', function(req, res) {
-	console.log(req.body);
-  User.create({
-    username: req.body.username,
-    password: req.body.password,
-  }).then(user => {
-    res.json(user)
-  });
-});
-//==========================//
 
 const User = require('./models/user.js')
+const Session = require('./models/session.js')
 
 app.post('/api/account/signup', (req, res, next) => {
   const { body } = req;
@@ -78,9 +59,7 @@ app.post('/api/account/signup', (req, res, next) => {
     });
   }
   username = username.trim();
-  // Steps:
-  // 1. Verify email doesn't exist
-  // 2. Save
+
   User.find({
     $or:[ {username: username}, {email: email} ]
   }, (err, previousUsers) => {
@@ -115,6 +94,128 @@ app.post('/api/account/signup', (req, res, next) => {
       });
     });
   });
-}); // end of sign up endpoint
+});
+
+app.post('/api/account/signin', (req, res, next) => {
+    const { body } = req;
+    const {
+      password
+    } = body;
+    let {
+      username
+    } = body;
+    if (!username) {
+      return res.send({
+        success: false,
+        message: 'Error: Username cannot be blank.'
+      });
+    }
+    if (!password) {
+      return res.send({
+        success: false,
+        message: 'Error: Password cannot be blank.'
+      });
+    }
+    username = username.trim();
+    User.find({
+      username: username
+    }, (err, users) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      if (users.length != 1) {
+        return res.send({
+          success: false,
+          message: 'Invalid username or password'
+        });
+      }
+      const user = users[0];
+      if (!user.validPassword(password)) {
+        return res.send({
+          success: false,
+          message: 'Invalid username or password'
+        });
+      }
+      // Otherwise correct user
+      const session = new Session();
+      session.userId = user._id;
+      session.save((err, session) => {
+        if (err) {
+          console.log(err);
+          return res.send({
+            success: false,
+            message: 'Error: server error'
+          });
+        }
+        return res.send({
+          success: true,
+          message: 'Sign in successful',
+          token: session._id,
+          username: username
+        });
+      });
+    });
+  });
+
+app.get('/api/account/verify', (req, res, next) => {
+    const { query } = req;
+    const { token } = query;
+    // Verify the token is one of a kind and it's not deleted.
+    Session.find({
+      _id: token,
+      isActive: true
+    }, (err, sessions) => {
+      if (err) {
+        console.log(err);
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      }
+      if (sessions.length != 1) {
+        return res.send({
+          success: false,
+          message: 'Error: Invalid'
+        });
+      } else {
+        // DO ACTION
+        return res.send({
+          success: true,
+          message: 'Verified'
+        });
+      }
+    });
+  });
+
+app.get('/api/account/logout', (req, res, next) => {
+    // Get the token
+    const { query } = req;
+    const { token } = query;
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
+    Session.findOneAndUpdate({
+      _id: token,
+      isActive: true
+    }, {
+      $set: {
+        isActive:false
+      }
+    }, null, (err, sessions) => {
+      if (err) {
+        console.log(err);
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      }
+      return res.send({
+        success: true,
+        message: 'Logout successful'
+      });
+    });
+  });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

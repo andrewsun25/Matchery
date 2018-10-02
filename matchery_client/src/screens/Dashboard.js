@@ -30,7 +30,7 @@ class Dashboard extends React.Component {
       <section className="section-dashboard">
 
 				<div className="dashboard-header-row u-margin-bottom-hg">
-					<h1 className="heading-primary u-color-white">Welcome, William</h1>
+					<h1 className="heading-primary u-color-white">Welcome, {localStorage.getItem('username')}</h1>
 					<button className="btn-create">
 						<div
               onClick={(e) => {this.handleCreateEvent(e)}}

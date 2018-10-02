@@ -27,11 +27,34 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    const token = localStorage.getItem('session');
+    if (token) {
+      fetch('/api/account/verify?token=' + token)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            this.setState({showLogin: false, showDashboard: true});
+          }
+        });
+    }
+  }
+
   // This function is triggered when a
   // user presses the Learn More button
   handleMyAccount = (e) => {
     e.preventDefault();
-    alert("handleMyAccount!");
+    const token = localStorage.getItem('session');
+    if (token) {
+      fetch('/api/account/logout?token=' + token)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            alert("Logged out!");
+            this.setState({showLogin: true, showDashboard: false});
+          }
+        });
+    }
   }
 
   // This function is triggered when a

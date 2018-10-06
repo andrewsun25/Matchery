@@ -117,7 +117,8 @@ body {
 
 .btn-create:focus, .btn-create:active {
   border: 0.2rem solid #efa467;
-  color: #efa467; }
+  color: #efa467;
+  outline: 0; }
 
 .btn-create:focus .btn-create__text, .btn-create:active .btn-create__text {
   border-right: 0.2rem solid #efa467; }

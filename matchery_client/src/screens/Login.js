@@ -27,7 +27,11 @@ class Login extends React.Component {
   // in the Main component to handle the
   // login process
   childHandleLogin = (e) => {
-    this.props.parentHandleLogin(e);
+    this.props.parentHandleLogin(
+      e,
+      this.state.username,
+      this.state.password
+      );
   }
 
   // This function calls a parent function

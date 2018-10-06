@@ -27,11 +27,34 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    const token = localStorage.getItem('session');
+    if (token) {
+      fetch('/api/account/verify?token=' + token)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            this.setState({showLogin: false, showDashboard: true});
+          }
+        });
+    }
+  }
+
   // This function is triggered when a
   // user presses the Learn More button
   handleMyAccount = (e) => {
     e.preventDefault();
-    alert("handleMyAccount!");
+    const token = localStorage.getItem('session');
+    if (token) {
+      fetch('/api/account/logout?token=' + token)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            alert("Logged out!");
+            this.setState({showLogin: true, showDashboard: false});
+          }
+        });
+    }
   }
 
   // This function is triggered when a
@@ -44,25 +67,10 @@ class App extends Component {
   // This function is triggered by a child
   // function in the Login component and
   // handles the login process
-  parentHandleLogin = (e) => {
+  parentHandleLogin = (e, username, password) => {
     e.preventDefault();
-    this.setState({showLogin: false, showDashboard: true});
-  }
-
-  // This function is triggered by a child
-  // function in the Login component and
-  // handles the signup process
-  parentHandleSignup = (e) => {
-    e.preventDefault();
-    this.setState({showSignUp: true});
-  }
-
-  parentHandleSelectEvent = (e, username, password) => {
-    e.preventDefault();
-    alert("Registration With: Username[" + username + "] Password[" + password + "]");
-
-    //Insert in database
-    fetch('/api/account/signup', {
+    // Login request
+    fetch('/api/account/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -73,13 +81,53 @@ class App extends Component {
       }),
     }).then(res => res.json())
       .then(json => {
+        console.log('json', json);
+        alert(json.message);
+        if (json.success) {
+          localStorage.setItem('session', json.token);
+          localStorage.setItem('username', json.username);
+          this.setState({showLogin: false, showDashboard: true});
+        }
+      });
+  }
+
+  // This function is triggered by a child
+  // function in the Login component and
+  // handles the signup process
+  parentHandleSignup = (e) => {
+    //e.preventDefault();
+    this.setState({showSignUp: true});
+  }
+
+  parentHandleSignupSubmit = (e, firstName, lastName, email, username, password) => {
+    //Insert in database
+    fetch('/api/account/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        username: username,
+        password: password
+      }),
+    }).then(res => res.json())
+      .then(json => {
           console.log('json', json);
-          if (json.success) {
-            alert("success!");
-          } else {
-            alert("failed!");
-          }
+          alert(json.message);
         });
+  }
+
+  parentHandleExitSignup = (e) => {
+    e.preventDefault();
+    this.setState({showSignUp: false});
+  }
+
+  parentHandleSelectEvent = (e) => {
+    e.preventDefault();
+    //alert("Registration With: Username[" + username + "] Password[" + password + "]");
     this.setState({showDashboard: false, showJudgeEvent: true});
   }
 
@@ -122,6 +170,8 @@ class App extends Component {
           <SignUp
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
+            parentHandleSignupSubmit={this.parentHandleSignupSubmit}
+            parentHandleExitSignup={this.parentHandleExitSignup}
           />
         </div>
 

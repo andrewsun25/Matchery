@@ -32,7 +32,6 @@ class Group:
         rejected = self.waitList.islice(self.quota)
         rejectedApplicants = [self.waitList.pop(rank) for rank in rejected]
         
-        print("rejectedApplicants ",rejectedApplicants," acceptedApplicants",acceptedApplicants)
         return acceptedApplicants, rejectedApplicants
 
 
@@ -75,27 +74,31 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
     eligibleApplicants = set(applicants)
     # while exists applicant such that applicant hasn't been rejected by everyone or accepted anywhere:
     while eligibleApplicants:
+        # All eligibleApplicants apply to their top choice
         for eligibleApplicant in eligibleApplicants.copy():
+            
+            if not eligibleApplicant.preferences:
+                eligibleApplicants.remove(eligibleApplicant)
+                continue
+
             bestGroupNum = eligibleApplicant.getBestGroup()
             bestGroup = groups[bestGroupNum]
-            # Applicant applies to their top choice
             if eligibleApplicant.num in bestGroup.applicantToRank:
                 bestGroup.addToWaitList(eligibleApplicant.num)
+            else:
+                eligibleApplicant.removeTopChoice()
+
 
         for group in groups:
             accepted, rejected = group.acceptQuota()
-            # print("accepted", accepted, " rejected", rejected)
-        # After applicant applies to their top choice, they cannot apply to that choice again
-        for applicantNum in rejected:
-            applicant = applicants[applicantNum]
-            applicant.removeTopChoice()
-            if not applicant.preferences:
-                eligibleApplicants.remove(applicant)
+            for applicantNum in rejected:
+                applicant = applicants[applicantNum]
+                applicant.removeTopChoice()
 
-        for applicantNum in accepted:
-            applicant = applicants[applicantNum]
-            if applicant in eligibleApplicants:
-                eligibleApplicants.remove(applicant)
+            for applicantNum in accepted:
+                applicant = applicants[applicantNum]
+                if applicant in eligibleApplicants:
+                    eligibleApplicants.remove(applicant)
 
             
     acceptedMatrix = []

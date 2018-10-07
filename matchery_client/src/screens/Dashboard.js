@@ -17,35 +17,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  componentWillMount() {
-	fetch('/api/account/getEvents', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: localStorage.getItem('username')
-      }),
-    }).then(res => res.json())
-      .then(json => {
-        if (json.success) {
-	          switch (json.role) {
-	            	case 'Administrator':
-	            		alert("Administrator");
-	            		this.state.showAdministrator = true;
-	            		break;
-	            	case 'Judge':
-	            		alert("Judge");
-	            		this.state.showJudge = true;
-	            		break;
-	            	case 'Candidate':
-	            		this.state.showCandidate = true;
-	            		break;
-          }
-        }
-      });
-  }
-
   childHandleSelectEvent = (e) => {
   	this.props.parentHandleSelectEvent(e);
   }
@@ -59,9 +30,9 @@ class Dashboard extends React.Component {
   render() {
 
   	// Styling constants for showing different screens
-    const showAdministrator = this.state.showAdministrator ? {display:'block'} : {display:'none'};
-    const showJudge = this.state.showJudge ? {display:'block'} : {display:'none'};
-    const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
+    const showAdministrator = (localStorage.getItem('userType') == "Administrator") ? {display:'block'} : {display:'none'};
+    const showJudge = (localStorage.getItem('userType') == "Judge") ? {display:'block'} : {display:'none'};
+    const showCandidate = (localStorage.getItem('userType') == "Candidate") ? {display:'block'} : {display:'none'};
 
     // Return the component frame
     return (

@@ -57,6 +57,25 @@ class App extends Component {
     }
   }
 
+  handleUserPermission = (e) => {
+    e.preventDefault();
+
+    fetch('/api/account/getEvents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username')
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          localStorage.setItem('userType', json.role);
+        }
+      });
+  }
+
   // This function is triggered when a
   // user presses the Learn More button
   handleLearnMore = (e) => {
@@ -163,6 +182,7 @@ class App extends Component {
           <Login
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
+            parentHandleUserPermission = {this.handleUserPermission}
           />
         </div>
 

@@ -30,9 +30,9 @@ class Dashboard extends React.Component {
   render() {
 
   	// Styling constants for showing different screens
-    const showAdministrator = (localStorage.getItem('userType') == "Administrator") ? {display:'block'} : {display:'none'};
-    const showJudge = (localStorage.getItem('userType') == "Judge") ? {display:'block'} : {display:'none'};
-    const showCandidate = (localStorage.getItem('userType') == "Candidate") ? {display:'block'} : {display:'none'};
+    const showAdministrator = {display:'block'};
+    const showJudge = {display:'none'};
+    const showCandidate = {display:'none'};
 
     // Return the component frame
     return (

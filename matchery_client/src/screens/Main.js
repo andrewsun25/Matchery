@@ -60,7 +60,7 @@ class App extends Component {
   handleUserPermission = (e) => {
     e.preventDefault();
 
-    fetch('/api/account/getEvents', {
+/*    fetch('/api/account/getEvents', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ class App extends Component {
         if (json.success) {
           localStorage.setItem('userType', json.role);
         }
-      });
+      });*/
   }
 
   // This function is triggered when a

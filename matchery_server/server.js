@@ -25,7 +25,7 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-<<<<<<< HEAD
+
 app.get('/api/hello', (req, res) => {
   res.send({
     express: 'Hello From Express'
@@ -51,10 +51,10 @@ app.get('/match', function(req, res) {
   data = {
     "numApplicants": 4,
     "applicantPreferences": [
-      [4, 0, 1],
-      [4, 0, 2],
-      [3, 2, 4],
-      [1, 2, 3]
+      [4, 0, 1, 2, 3], 
+      [4, 0, 2, 3, 1], 
+      [3, 2, 4, 1, 0], 
+      [1, 2, 3, 4, 0] 
     ],
     "numGroups": 5,
     "groupPreferences": [

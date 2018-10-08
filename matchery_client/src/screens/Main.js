@@ -159,6 +159,7 @@ class App extends Component {
     const showDashboard = this.state.showDashboard ? {display:'block'} : {display:'none'};
     const showJudgeEvent = this.state.showJudgeEvent ? {display:'block'} : {display:'none'};
     const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
+    const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'block'};
 
     // Return the app frame (header and background)
     return (
@@ -169,7 +170,7 @@ class App extends Component {
             <div className="header__logo-box">
               Matchery
             </div>
-            <div
+            <div style={loggedIn}
               onClick={(e) => {this.handleMyAccount(e)}}
               className="header__my-account-box">
               My Account

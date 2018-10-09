@@ -24,7 +24,7 @@ class JudgeEvent extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-		
+
       }),*/
     }).then(res => res.json())
       .then(json => {
@@ -33,7 +33,7 @@ class JudgeEvent extends React.Component {
             genData = json.data;
         }
       });
-    
+
     this.setState({matchesList: genData }, () => {
       this.props.parentHandleGenerateMatches(e, this.state.matchesList);
     });

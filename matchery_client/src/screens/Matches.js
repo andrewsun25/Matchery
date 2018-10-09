@@ -46,32 +46,6 @@ class Login extends React.Component {
   render() {
 
     let myMatches;
-    if (this.props.matchesList.length > 0) {
-      myMatches = <div className="matchesText">
-        {this.props.matchesList[0][1]}
-        <ul>
-          <li>{this.props.matchesList[0][0]}</li>
-        </ul>
-        <br/>
-        {this.props.matchesList[1][1]}
-        <ul>
-          <li>{this.props.matchesList[1][0]}</li>
-        </ul>
-        <br/>
-        {this.props.matchesList[2][1]}
-        <ul>
-          <li>{this.props.matchesList[2][0]}</li>
-        </ul>
-        <br/>
-        {this.props.matchesList[3][1]}
-        <ul>
-          <li>{this.props.matchesList[3][0]}</li>
-        </ul>
-        <br/>
-      </div>;
-    } else {
-      myMatches = <div>Nothing to see here!</div>
-    }
 
     // Return the component frame
     return (
@@ -79,6 +53,7 @@ class Login extends React.Component {
 
       <div className="login-panel u-center-text">
         {myMatches}
+        {this.props.matchesList}
       </div>
 
     );

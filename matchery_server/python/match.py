@@ -1,4 +1,5 @@
 from sortedcontainers import SortedDict
+import json
 import sys
 
 def makeRankings(preferences):
@@ -50,7 +51,6 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
     applicants = {}
     for name in applicantPreferences:
         applicants[name] = Applicant(name, applicantPreferences[name])
-        
 
     groups = {}
     for name in groupPreferences:
@@ -65,7 +65,7 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
                 eligibleApplicants.remove(eligibleApplicant)
                 continue
 
-            bestGroupName = eligibleApplicant.getBestGroup() # returns string
+            bestGroupName = eligibleApplicant.getBestGroup()
             bestGroup = groups[bestGroupName]
             if applicantName in bestGroup.applicantToRank:
                 bestGroup.addToWaitList(applicantName)
@@ -105,18 +105,22 @@ def parseStringToPreferences(string, numAgents):
 def parseStringToList(string):
     return [int(c) for c in string.split(',')]
 
+
+
 if __name__ == "__main__":
     # 5 groups, 4 applicants
 
-    numApplicants = int(sys.argv[4])
-    numGroups = int(sys.argv[5])
+    data = json.loads(sys.argv[1])
 
-    applicantPreferences = parseStringToPreferences(sys.argv[1], numApplicants)
+    # numApplicants = int(sys.argv[4])
+    # numGroups = int(sys.argv[5])
 
-    groupPreferences = parseStringToPreferences(sys.argv[2], numGroups)
+    # applicantPreferences = parseStringToPreferences(sys.argv[1], numApplicants)
 
-    groupQuotas = parseStringToList(sys.argv[3])
+    # groupPreferences = parseStringToPreferences(sys.argv[2], numGroups)
 
-    print(match(applicantPreferences, groupPreferences, groupQuotas))
+    # groupQuotas = parseStringToList(sys.argv[3])
+    # print("ASD")
+    print(match(data["applicantPreferences"], data["groupPreferences"], data["groupQuotas"]))
 
     sys.stdout.flush()

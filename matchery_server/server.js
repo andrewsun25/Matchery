@@ -70,12 +70,11 @@ app.get('/match', function(req, res) {
     }
   }
 
-  const pythonProcess = spawn('python', ["python/match.py", data["applicantPreferences"], data["groupPreferences"], data["groupQuotas"], data["numApplicants"], data["numGroups"]]);
+  const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
   pythonProcess.stdout.on('data', (data) => {
-    console.log(data.toString());
     return res.send({
       success: true,
-      data: data
+      data: data.toString().trim()
     });
   });
 });

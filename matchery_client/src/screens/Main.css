@@ -169,6 +169,13 @@ body {
     font-size: 2rem;
     font-weight: 600;
     color: #fff; }
+  .header__logo-box-clickable {
+    margin-left: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+  }
   .header__my-account-box {
     margin-right: 2rem;
     font-size: 1.4rem;

@@ -175,7 +175,7 @@ class App extends Component {
         <header className="header">
           <div className="header__container">
             <div
-              className="header__logo-box"
+              className="header__logo-box-clickable"
               style={notInDashboardButLoggedIn}
               onClick={(e) => {this.goToDashBoard(e)}}>
               Matchery

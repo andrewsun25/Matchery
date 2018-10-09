@@ -16,6 +16,7 @@ class JudgeEvent extends React.Component {
   }
 
   childHandleGenerateMatches = (e) => {
+    let genData;
   	alert("Generating");
     fetch('/match', {
       method: 'GET',
@@ -29,15 +30,13 @@ class JudgeEvent extends React.Component {
       .then(json => {
         console.log('json', json);
         if (json.success) {
-            this.setState({matchesList: json.data}, () => {
-      			this.props.parentHandleGenerateMatches(e, this.state.matchesList);
-    		});
+            genData = json.data;
         }
       });
     
-/*    this.setState({matchesList: [["Zhi", "Mosaic Whispers"], ["Andrew", "Sensasions"], ["Shane","The Amateurs"], ["William", "Aristocats"]] }, () => {
+    this.setState({matchesList: genData }, () => {
       this.props.parentHandleGenerateMatches(e, this.state.matchesList);
-    });*/
+    });
   }
 
   // Render the component

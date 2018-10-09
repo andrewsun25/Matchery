@@ -16,17 +16,27 @@ class JudgeEvent extends React.Component {
   }
 
   childHandleGenerateMatches = (e) => {
-    // TODO
-    /*
-      You need to call the python script here.
-      Then, after you have the results from the python script, set matchesList to it.
-      I have an crappy example below of what it possibly could look like.
-      This info is sent to Main.js, which then sends it to Matches.js, where it is displayed.
-    */
+    fetch('/match', {
+      method: 'GET',
+/*      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+		
+      }),*/
+    }).then(res => res.json())
+      .then(json => {
+        console.log('json', json);
+        if (json.success) {
+            this.setState({matchesList: json.data}, () => {
+      			this.props.parentHandleGenerateMatches(e, this.state.matchesList);
+    		});
+        }
+      });
     
-    this.setState({matchesList: [["Zhi", "Mosaic Whispers"], ["Andrew", "Sensasions"], ["Shane","The Amateurs"], ["William", "Aristocats"]] }, () => {
+/*    this.setState({matchesList: [["Zhi", "Mosaic Whispers"], ["Andrew", "Sensasions"], ["Shane","The Amateurs"], ["William", "Aristocats"]] }, () => {
       this.props.parentHandleGenerateMatches(e, this.state.matchesList);
-    });
+    });*/
   }
 
   // Render the component

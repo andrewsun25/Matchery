@@ -49,29 +49,34 @@ app.get('/match', function(req, res) {
 
   const spawn = require("child_process").spawn;
   data = {
-    "numApplicants": 4,
-    "applicantPreferences": [
-      [4, 0, 1, 2, 3], 
-      [4, 0, 2, 3, 1], 
-      [3, 2, 4, 1, 0], 
-      [1, 2, 3, 4, 0] 
-    ],
-    "numGroups": 5,
-    "groupPreferences": [
-      [0, 3, 2],
-      [0, 1, 2],
-      [3, 1, 0],
-      [1, 3, 0],
-      [1, 3, 0]
-    ],
-    "groupQuotas": [2, 2, 2, 2, 2]
+    "applicantPreferences": {
+      "andrew": ["aristocats", "ghostlights"],
+      "zhi": ["singers", "sensasians"],
+      "will": ["ghostlights", "aristocats"]
+    },
+
+    "groupPreferences": {
+      "aristocats": ["andrew", "will"],
+      "sensasians": ["zhi"],
+      "singers": ["andrew"],
+      "ghostlights": ["andrew"]
+    },
+
+    "groupQuotas": {
+      "aristocats": 2,
+      "sensasians": 2,
+      "singers": 2,
+      "ghostlights": 2
+    }
   }
 
   const pythonProcess = spawn('python', ["python/match.py", data["applicantPreferences"], data["groupPreferences"], data["groupQuotas"], data["numApplicants"], data["numGroups"]]);
   pythonProcess.stdout.on('data', (data) => {
     console.log(data.toString());
-    res.write(data);
-    res.end('end');
+    return res.send({
+      success: true,
+      data: data
+    });
   });
 });
 //==========================//

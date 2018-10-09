@@ -60,7 +60,7 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
     # while exists applicant such that applicant hasn't been rejected by everyone or accepted anywhere:
     while eligibleApplicants:
         # All eligibleApplicants apply to their top choice
-        for name, eligibleApplicant in eligibleApplicants.copy().items():
+        for name, eligibleApplicant in eligibleApplicants.items():
             if not eligibleApplicant.preferences:
                 eligibleApplicants.remove(eligibleApplicant)
                 continue

@@ -60,19 +60,19 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
     # while exists applicant such that applicant hasn't been rejected by everyone or accepted anywhere:
     while eligibleApplicants:
         # All eligibleApplicants apply to their top choice
-        for name, eligibleApplicant in eligibleApplicants.items():
+        for applicantName, eligibleApplicant in eligibleApplicants.items():
             if not eligibleApplicant.preferences:
                 eligibleApplicants.remove(eligibleApplicant)
                 continue
 
             bestGroupName = eligibleApplicant.getBestGroup() # returns string
             bestGroup = groups[bestGroupName]
-            if name in bestGroup.applicantToRank:
-                bestGroup.addToWaitList(eligibleApplicant.name)
+            if applicantName in bestGroup.applicantToRank:
+                bestGroup.addToWaitList(applicantName)
             else:
                 eligibleApplicant.removeTopChoice()
 
-        for name, group in groups.items():
+        for groupName, group in groups.items():
             accepted, rejected = group.acceptQuota()
             for applicantName in rejected:
                 applicant = applicants[applicantName]

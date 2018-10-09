@@ -6,6 +6,7 @@ import Login from './Login'; // Login component
 import SignUp from './SignUp'; // SignUp component
 import JudgeEvent from './JudgeEvent'; // JudgeEvent component
 import Candidate from './Candidate';
+import Matches from './Matches';
 
 // IMPORT STYLING
 import './Main.css'; // Header and background styling
@@ -24,6 +25,8 @@ class App extends Component {
       showDashboard: false,
       showJudgeEvent: false,
       showCandidate: false,
+      showMatches: false,
+      matchesList: [],
     };
   }
 
@@ -154,6 +157,11 @@ class App extends Component {
     this.setState({showDashboard: true, showJudgeEvent: false, showCandidate: false});
   }
 
+  parentHandleGenerateMatches = (e, childList) => {
+    e.preventDefault();
+    this.setState({showDashboard: false, showJudgeEvent: false, showCandidate: false, showMatches: true, matchesList: childList});
+  }
+
   // Render the Main application
   render() {
 
@@ -166,6 +174,7 @@ class App extends Component {
     const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'block'};
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const inDashboardOrNotLoggedIn = (this.state.showLogin || this.state.showSignUp || this.state.showDashboard) ? {display:'block'} : {display: 'none'};
+    const showMatches = this.state.showMatches ? {display:'block'} : {display:'none'};
     // TODO: make the Matchery logo clickable
 
     // Return the app frame (header and background)
@@ -220,7 +229,12 @@ class App extends Component {
         <div style={showJudgeEvent}>
           <JudgeEvent
             parentHandleSelectEvent={this.parentHandleSelectEvent}
+            parentHandleGenerateMatches={this.parentHandleGenerateMatches}
           />
+        </div>
+
+        <div style={showMatches}>
+          <Matches matchesList={this.state.matchesList}/>
         </div>
 
       </div>

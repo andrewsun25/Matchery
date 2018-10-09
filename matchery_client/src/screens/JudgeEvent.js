@@ -11,8 +11,21 @@ class JudgeEvent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+      matchesList: [],
     }
+  }
+
+  childHandleGenerateMatches = (e) => {
+    // TODO
+    /*
+      You need to call the python script here.
+      Then, after you have the results from the python script, set matchesList to it.
+      I have an crappy example below of what it possibly could look like.
+      This info is sent to Main.js, which then sends it to Matches.js, where it is displayed.
+    */
+    this.setState({matchesList: [["Zhi", "Mosaic Whispers"], ["Andrew", "Sensasions"], ["Shane","The Amateurs"], ["William", "Aristocats"]] }, () => {
+      this.props.parentHandleGenerateMatches(e, this.state.matchesList);
+    });
   }
 
   // Render the component
@@ -61,7 +74,11 @@ class JudgeEvent extends React.Component {
 								<div className="area-action">
 									<div className="faint-notif">Preferences Saved</div>
 									<button className="btn btn--disabled u-margin-left-md">Save Preferences</button>
-									<button className="btn btn--high-action u-margin-left-sm">Generate Matches</button>
+									<button
+                    className="btn btn--high-action u-margin-left-sm"
+                    onClick={(e) => {this.childHandleGenerateMatches(e)}}>
+                    Generate Matches
+                  </button>
 								</div>
 							</section>
 

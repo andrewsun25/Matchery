@@ -4,22 +4,25 @@ import match
 class TestMatch(unittest.TestCase):
 
 	def test_match(self):
-		applicantPreferences = [
-			[4, 0, 1, 2, 3], # got 4
-			[4, 0, 2, 3, 1], # got 4
-			[3, 2, 4, 1, 0], # got 1
-			[1, 2, 3, 4, 0] # got 2
-		]
+		applicantPreferences = {
+			"andrew": ["aristocats", "ghostlights"],
+			"zhi": ["singers", "sensasians"],
+			"will": ["ghostlights", "aristocats"]
+		}
 
-		groupPreferences = [
-			[0, 3, 2], # got None
-			[0, 1, 2], # got 2
-			[3, 1, 0], # got 3
-			[1, 3, 0], # got None
-			[1, 3, 0] # got 1, 0
-		]
+		groupPreferences = {
+			"aristocats": ["andrew", "will"],
+			"sensasians": ["zhi"],
+			"singers": ["andrew"],
+			"ghostlights": ["andrew"]
+		}
 
-		groupQuotas = [2, 2, 2, 2, 2]
+		groupQuotas = {
+			"aristocats": 2,
+			"sensasians": 2,
+			"singers": 2,
+			"ghostlights": 2
+		}
 
 		print(match.match(applicantPreferences, groupPreferences, groupQuotas))
   

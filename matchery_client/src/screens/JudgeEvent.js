@@ -23,6 +23,7 @@ class JudgeEvent extends React.Component {
       I have an crappy example below of what it possibly could look like.
       This info is sent to Main.js, which then sends it to Matches.js, where it is displayed.
     */
+    
     this.setState({matchesList: [["Zhi", "Mosaic Whispers"], ["Andrew", "Sensasions"], ["Shane","The Amateurs"], ["William", "Aristocats"]] }, () => {
       this.props.parentHandleGenerateMatches(e, this.state.matchesList);
     });

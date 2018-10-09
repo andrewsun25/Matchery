@@ -9,14 +9,14 @@ def makeRankings(preferences):
 
 
 class Group:
-    def __init__(self, num, preferences, quota):
+    def __init__(self, name, preferences, quota):
         '''
         @preferences: IE (2, 0, 1). Tuple of group's preferences over applicants with preferences[0] being the most preferred applicant.
         @rankings: IE {0:1, 2:0, 1:2}. Dictionary of rank of each applicant.
         '''
         # self.preferences = preferences
-        self.applicantToRank = makeRankings(preferences)
-        self.num = num
+        self.applicantToRank = makeRankings(preferences) # ["andrew", "will"]
+        self.name = name
         self.quota = quota
         self.waitList = SortedDict() # rank --> applicant
 
@@ -36,9 +36,9 @@ class Group:
 
 
 class Applicant:
-    def __init__(self, num, preferences):
+    def __init__(self, name, preferences):
         self.preferences = preferences
-        self.num = num
+        self.name = name
 
     def getBestGroup(self):
         return self.preferences[0]
@@ -46,69 +46,51 @@ class Applicant:
     def removeTopChoice(self):
         self.preferences.pop(0)
 
-'''
-There are G groups and A applicants
-@applicantPreferences: ((0, 1, 2), 
-(2, 1), 
-...) # applicantPreferences[3] --> tuple of applicant 3's preferences among groups they would consider. Dimensions are (A x some # that is at most G)
-@groupPreferences: ((0, 2, 1), 
-(0), 
-...). # groupPreferences[3] --> tuple of group 3's preferences among applicants they would consider. Dimensions are (G x some # that is at most A)
-@groupQuotas: (13, 14, 15, 8, ...) # groupQuotas[3] --> maximum number of applicants that group 3 can accept. len(groupQuotas) == G
-returns: (G x A) matrix @match,  where match[0][1] == 1 indicates a match between group 0 and applicant 1 and match[0][1] == 0 indicates no match.
-
-'''
-
-
 def match(applicantPreferences, groupPreferences, groupQuotas):
-    applicants = []
-    for i, preference in enumerate(applicantPreferences):
-        applicants.append(Applicant(i, preference))
-    applicants = tuple(applicants)
+    applicants = {}
+    for name in applicantPreferences:
+        applicants[name] = Applicant(name, applicantPreferences[name])
+        
 
-    groups = []
-    for i, preference in enumerate(groupPreferences):
-        groups.append(Group(i, preference, groupQuotas[i]))
-    groups = tuple(groups)
+    groups = {}
+    for name in groupPreferences:
+        groups[name] = Group(name, groupPreferences[name], groupQuotas[name])
 
-    eligibleApplicants = set(applicants)
+    eligibleApplicants = applicants.copy()
     # while exists applicant such that applicant hasn't been rejected by everyone or accepted anywhere:
     while eligibleApplicants:
         # All eligibleApplicants apply to their top choice
-        for eligibleApplicant in eligibleApplicants.copy():
-            
+        for name, eligibleApplicant in eligibleApplicants.copy().items():
             if not eligibleApplicant.preferences:
                 eligibleApplicants.remove(eligibleApplicant)
                 continue
 
-            bestGroupNum = eligibleApplicant.getBestGroup()
-            bestGroup = groups[bestGroupNum]
-            if eligibleApplicant.num in bestGroup.applicantToRank:
-                bestGroup.addToWaitList(eligibleApplicant.num)
+            bestGroupName = eligibleApplicant.getBestGroup() # returns string
+            bestGroup = groups[bestGroupName]
+            if name in bestGroup.applicantToRank:
+                bestGroup.addToWaitList(eligibleApplicant.name)
             else:
                 eligibleApplicant.removeTopChoice()
 
-
-        for group in groups:
+        for name, group in groups.items():
             accepted, rejected = group.acceptQuota()
-            for applicantNum in rejected:
-                applicant = applicants[applicantNum]
+            for applicantName in rejected:
+                applicant = applicants[applicantName]
                 applicant.removeTopChoice()
 
-            for applicantNum in accepted:
-                applicant = applicants[applicantNum]
-                if applicant in eligibleApplicants:
-                    eligibleApplicants.remove(applicant)
+            for applicantName in accepted:
+                if applicantName in eligibleApplicants:
+                    eligibleApplicants.pop(applicantName)
 
             
-    acceptedMatrix = []
-    for group in groups:
+    groupAcceptances = {}
+    for groupName, group in groups.items():
         waitList = []
         for rank in group.waitList:
             applicant = group.waitList[rank]
             waitList.append(applicant)
-        acceptedMatrix.append(waitList)
-    return acceptedMatrix
+        groupAcceptances[groupName] = waitList
+    return groupAcceptances
 
 def parseStringToPreferences(string, numAgents):
     # len preferencesList == 12, numAgents = 3, numPreferencesPerAgent = 4. start = 0, start + numPreferencesPerAgent = 4.

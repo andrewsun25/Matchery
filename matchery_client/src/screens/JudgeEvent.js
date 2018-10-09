@@ -16,6 +16,7 @@ class JudgeEvent extends React.Component {
   }
 
   childHandleGenerateMatches = (e) => {
+  	alert("Generating");
     fetch('/match', {
       method: 'GET',
 /*      headers: {

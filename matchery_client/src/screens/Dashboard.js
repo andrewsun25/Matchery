@@ -10,11 +10,6 @@ class Dashboard extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
-    this.state = {
-    	showAdministrator: false,
-    	showJudge: false,
-    	showCandidate: false,
-    }
   }
 
   childHandleSelectEvent = (e) => {
@@ -29,10 +24,9 @@ class Dashboard extends React.Component {
   // Render the component
   render() {
 
-  	// Styling constants for showing different screens
-    const showAdministrator = {display:'block'};
-    const showJudge = {display:'none'};
-    const showCandidate = {display:'none'};
+  	const showAdministrator = this.props.showAdministrator ? {display:'block'} : {display:'none'};
+  	const showJudge = this.props.showJudge ? {display:'block'} : {display:'none'};
+  	const showCandidateRole = this.props.showCandidateRole ? {display:'block'} : {display:'none'};
 
     // Return the component frame
     return (
@@ -87,7 +81,7 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 
-					<div className="panel" style={showCandidate}>
+					<div className="panel" style={showCandidateRole}>
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="microphone"></ion-icon>
 							<div className="panel__header-text">Candidate for</div>

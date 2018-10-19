@@ -26,7 +26,11 @@ class App extends Component {
       showJudgeEvent: false,
       showCandidate: false,
       showMatches: false,
-      matchesList: [],
+      showAdministrator: false,
+      showJudge: false,
+      showCandidateRole: false,
+      role: "",
+      matchesList: []
     };
   }
 
@@ -60,10 +64,10 @@ class App extends Component {
     }
   }
 
-  handleUserPermission = (e) => {
+  parentHandleUserPermission = (e) => {
     e.preventDefault();
 
-/*    fetch('/api/account/getEvents', {
+    fetch('/api/account/getEvents', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -74,9 +78,18 @@ class App extends Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
-          localStorage.setItem('userType', json.role);
+          alert(json.role);
+          this.setState({
+            showLogin: false, 
+            showDashboard: true,
+
+            role: json.role,
+            showAdministrator: (json.role == "Administrator") ? true : false,
+            showJudge: (json.role == "Judge") ? true : false,
+            showCandidateRole: (json.role == "Candidate") ? true : false,
+          });
         }
-      });*/
+      });
   }
 
   // This function is triggered when a
@@ -108,7 +121,7 @@ class App extends Component {
         if (json.success) {
           localStorage.setItem('session', json.token);
           localStorage.setItem('username', json.username);
-          this.setState({showLogin: false, showDashboard: true});
+          this.parentHandleUserPermission(e);
         }
       });
   }
@@ -207,7 +220,7 @@ class App extends Component {
           <Login
             parentHandleLogin={this.parentHandleLogin}
             parentHandleSignup={this.parentHandleSignup}
-            parentHandleUserPermission = {this.handleUserPermission}
+            parentHandleUserPermission = {this.parentHandleUserPermission}
           />
         </div>
 
@@ -223,6 +236,9 @@ class App extends Component {
         <div style={showDashboard}>
           <Dashboard
             parentHandleSelectEvent={this.parentHandleSelectEvent}
+            showAdministrator={this.state.showAdministrator}
+            showJudge={this.state.showJudge}
+            showCandidateRole={this.state.showCandidateRole}
           />
         </div>
 

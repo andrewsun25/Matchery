@@ -308,8 +308,7 @@ app.post('/api/account/getEvents', (req, res, next) => {
 
       return res.send({
           success: true,
-          role: eventRole.role,
-          eventName: eventRole.eventName
+          eventRoles: user.Events
         });
     });
   });

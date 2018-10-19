@@ -29,7 +29,11 @@ class App extends Component {
       showAdministrator: false,
       showJudge: false,
       showCandidateRole: false,
-      role: "",
+      roles: {
+        'Administrator' : false,
+        'Judge' : false,
+        'Candidate' : false
+      },
       matchesList: []
     };
   }
@@ -41,7 +45,7 @@ class App extends Component {
         .then(res => res.json())
         .then(json => {
           if (json.success) {
-            this.setState({showLogin: false, showDashboard: true});
+            this.parentHandleUserPermission();
           }
         });
     }
@@ -58,15 +62,21 @@ class App extends Component {
         .then(json => {
           if (json.success) {
             alert("Logged out!");
-            this.setState({showLogin: true, showDashboard: false});
+            this.setState({
+              showLogin: true, 
+              showDashboard: false,
+              roles: {
+                'Administrator' : false,
+                'Judge' : false,
+                'Candidate' : false
+              }
+            });
           }
         });
     }
   }
 
-  parentHandleUserPermission = (e) => {
-    e.preventDefault();
-
+  parentHandleUserPermission() {
     fetch('/api/account/getEvents', {
       method: 'POST',
       headers: {
@@ -78,15 +88,16 @@ class App extends Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
-          alert(json.role);
+          const eventRole = json.eventRoles;
+          eventRole.forEach((event) => {
+            this.state.roles[event.role] = true;
+          });
           this.setState({
             showLogin: false, 
             showDashboard: true,
-
-            role: json.role,
-            showAdministrator: (json.role == "Administrator") ? true : false,
-            showJudge: (json.role == "Judge") ? true : false,
-            showCandidateRole: (json.role == "Candidate") ? true : false,
+            showAdministrator: this.state.roles['Administrator'],
+            showJudge: this.state.roles['Judge'],
+            showCandidateRole: this.state.roles['Candidate']
           });
         }
       });

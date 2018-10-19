@@ -34,6 +34,11 @@ class App extends Component {
         'Judge' : false,
         'Candidate' : false
       },
+      events: {
+        'Administrator' : [],
+        'Judge' : [],
+        'Candidate' : []
+      },
       matchesList: []
     };
   }
@@ -69,6 +74,11 @@ class App extends Component {
                 'Administrator' : false,
                 'Judge' : false,
                 'Candidate' : false
+              },
+              events: {
+                'Administrator' : [],
+                'Judge' : [],
+                'Candidate' : []
               }
             });
           }
@@ -89,15 +99,14 @@ class App extends Component {
       .then(json => {
         if (json.success) {
           const eventRole = json.eventRoles;
+          let counter = 0;
           eventRole.forEach((event) => {
             this.state.roles[event.role] = true;
+            this.state.events[event.role][counter] = event.eventName;
           });
           this.setState({
             showLogin: false, 
-            showDashboard: true,
-            showAdministrator: this.state.roles['Administrator'],
-            showJudge: this.state.roles['Judge'],
-            showCandidateRole: this.state.roles['Candidate']
+            showDashboard: true
           });
         }
       });
@@ -247,9 +256,8 @@ class App extends Component {
         <div style={showDashboard}>
           <Dashboard
             parentHandleSelectEvent={this.parentHandleSelectEvent}
-            showAdministrator={this.state.showAdministrator}
-            showJudge={this.state.showJudge}
-            showCandidateRole={this.state.showCandidateRole}
+            roles={this.state.roles}
+            events={this.state.events}
           />
         </div>
 

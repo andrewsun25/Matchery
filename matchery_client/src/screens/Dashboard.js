@@ -24,9 +24,19 @@ class Dashboard extends React.Component {
   // Render the component
   render() {
 
-  	const showAdministrator = this.props.showAdministrator ? {display:'block'} : {display:'none'};
-  	const showJudge = this.props.showJudge ? {display:'block'} : {display:'none'};
-  	const showCandidateRole = this.props.showCandidateRole ? {display:'block'} : {display:'none'};
+  	const showAdministrator = this.props.roles['Administrator'] ? {display:'block'} : {display:'none'};
+  	const showJudge = this.props.roles['Judge'] ? {display:'block'} : {display:'none'};
+  	const showCandidateRole = this.props.roles['Candidate'] ? {display:'block'} : {display:'none'};
+
+  	const administratorEvents = this.props.events['Administrator'].map((eventName) => 
+  		<li className="panel__content-item">{eventName}</li>
+  	);
+  	const judgeEvents = this.props.events['Judge'].map((eventName) => 
+		<li className="panel__content-item">{eventName}</li>
+	);
+	const candidateEvents = this.props.events['Candidate'].map((eventName) => 
+		<li className="panel__content-item">{eventName}</li>
+	);
 
     // Return the component frame
     return (
@@ -66,7 +76,7 @@ class Dashboard extends React.Component {
 							<div className="panel__header-text">Administrator for</div>
 						</div>
 						<ul className="panel__content">
-							<li className="panel__content-item">WashU Acappella Auditions 2018</li>
+							{administratorEvents}
 						</ul>
 					</div>
 
@@ -76,8 +86,7 @@ class Dashboard extends React.Component {
 							<div className="panel__header-text">Judge for</div>
 						</div>
 						<ul className="panel__content">
-							<li className="panel__content-item">WashU LNYF Auditions 2018</li>
-							<li className="panel__content-item">Black Anthology Auditions 2018</li>
+							{judgeEvents}
 						</ul>
 					</div>
 
@@ -87,9 +96,7 @@ class Dashboard extends React.Component {
 							<div className="panel__header-text">Candidate for</div>
 						</div>
 						<ul className="panel__content">
-							<li className="panel__content-item">WashU Diwali Auditions 2018</li>
-							<li className="panel__content-item">WashU PL4Y Auditions 2018</li>
-							<li className="panel__content-item">WashU SOK Auditions 2018</li>
+							{candidateEvents}
 						</ul>
 					</div>
 

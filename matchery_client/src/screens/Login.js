@@ -32,6 +32,7 @@ class Login extends React.Component {
       this.state.username,
       this.state.password
       );
+    this.props.parentHandleUserPermission(e);
   }
 
   // This function calls a parent function

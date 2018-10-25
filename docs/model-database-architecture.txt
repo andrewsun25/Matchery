@@ -1,0 +1,28 @@
+MODEL/DATABASE ARCHITECTURE
+
+USER MODEL
+User ID
+First name
+Last name
+Email
+Username
+Password
+List of event IDs mapped to the user’s roles in those events
+
+EVENT MODEL
+Event ID
+Name of event
+List of administrator IDs
+List of audition IDs associated with the event ID
+List of candidate IDs
+
+AUDITION MODEL
+Audition ID
+Event ID of the event this audition is in
+List of judge IDs
+Ranking list of candidate IDs (single ranking shared by all judges)
+
+CANDIDATE MODEL
+User ID of candidate
+Event ID of event which user is a candidate
+Ranking of audition/group IDs candidate prefers

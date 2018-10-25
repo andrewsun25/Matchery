@@ -13,8 +13,8 @@ class Candidate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPreferences: false,
-      showResults: true
+      showPreferences: true,
+      showResults: false
     }
   }
 

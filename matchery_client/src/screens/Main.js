@@ -4,6 +4,7 @@ import 'whatwg-fetch';
 import Dashboard from './Dashboard'; // Dashboard component
 import Login from './Login'; // Login component
 import SignUp from './SignUp'; // SignUp component
+import Matches from './Matches';
 import Admin from './Admin/Admin'; // Admin component
 import Judge from './Judge/Judge'; // Judge component
 import Candidate from './Candidate/Candidate'; // Candidate component
@@ -39,7 +40,7 @@ class App extends Component {
         'Judge' : [],
         'Candidate' : []
       },
-      matchesList: []
+      matchesList: [],
 
       showAdmin: false,
       showJudge: false,

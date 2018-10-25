@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import List from './List';
 
 // IMPORT STYLING
-import './Candidate.css';
+import './DragCandidate.css';
 
 // COMPONENT CLASS
 class Candidate extends React.Component {

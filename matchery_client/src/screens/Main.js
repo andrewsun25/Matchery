@@ -4,9 +4,9 @@ import 'whatwg-fetch';
 import Dashboard from './Dashboard'; // Dashboard component
 import Login from './Login'; // Login component
 import SignUp from './SignUp'; // SignUp component
-import JudgeEvent from './JudgeEvent'; // JudgeEvent component
-import Candidate from './Candidate';
-import Matches from './Matches';
+import Admin from './Admin/Admin'; // Admin component
+import Judge from './Judge/Judge'; // Judge component
+import Candidate from './Candidate/Candidate'; // Candidate component
 
 // IMPORT STYLING
 import './Main.css'; // Header and background styling
@@ -23,11 +23,11 @@ class App extends Component {
       showLogin: true,
       showSignUp: false,
       showDashboard: false,
-      showJudgeEvent: false,
-      showCandidate: false,
-      showMatches: false,
-      showAdministrator: false,
-      showJudge: false,
+      // showJudgeEvent: false,
+      // showCandidate: false,
+      // showMatches: false,
+      // showAdministrator: false,
+      // showJudge: false,
       showCandidateRole: false,
       roles: {
         'Administrator' : false,
@@ -40,6 +40,10 @@ class App extends Component {
         'Candidate' : []
       },
       matchesList: []
+
+      showAdmin: false,
+      showJudge: false,
+      showCandidate: false
     };
   }
 
@@ -202,8 +206,10 @@ class App extends Component {
     const showLogin = this.state.showLogin ? {display:'block'} : {display:'none'};
     const showSignUp = this.state.showSignUp ? {display:'block'} : {display:'none'};
     const showDashboard = this.state.showDashboard ? {display:'block'} : {display:'none'};
-    const showJudgeEvent = this.state.showJudgeEvent ? {display:'block'} : {display:'none'};
+    const showAdmin = this.state.showAdmin ? {display:'block'} : {display:'none'};
+    const showJudge = this.state.showJudge ? {display:'block'} : {display:'none'};
     const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
+
     const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'block'};
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const inDashboardOrNotLoggedIn = (this.state.showLogin || this.state.showSignUp || this.state.showDashboard) ? {display:'block'} : {display: 'none'};
@@ -236,6 +242,13 @@ class App extends Component {
           </div>
         </header>
 
+        <div class="container-btn-back">
+          <button class="btn-back">
+            <ion-icon class="btn-back__icon" name="arrow-dropleft"></ion-icon>
+            Back
+          </button>
+        </div>
+
         <div style={showLogin}>
           <Login
             parentHandleLogin={this.parentHandleLogin}
@@ -261,10 +274,21 @@ class App extends Component {
           />
         </div>
 
-        <div style={showJudgeEvent}>
-          <JudgeEvent
-            parentHandleSelectEvent={this.parentHandleSelectEvent}
-            parentHandleGenerateMatches={this.parentHandleGenerateMatches}
+        <div style={showAdmin}>
+          <Admin
+            
+          />
+        </div>
+
+        <div style={showJudge}>
+          <Judge
+            
+          />
+        </div>
+
+        <div style={showCandidate}>
+          <Candidate
+            
           />
         </div>
 

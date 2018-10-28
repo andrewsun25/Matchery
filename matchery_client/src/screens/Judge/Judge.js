@@ -30,7 +30,7 @@ class Judge extends React.Component {
     	<div className="main-panel">
 
 				<div className="main-panel__header">
-					<h2 className="heading-secondary">WashU Acappella Auditions 2018 <span className="main-panel__header--user"> - Sensasians Judge</span></h2>
+					<h2 className="heading-secondary">WashU LNYF Auditions 2018 <span className="main-panel__header--user"> - Sensasians Judge</span></h2>
 				</div>
 
 				<div className="main-panel__nav-and-content">

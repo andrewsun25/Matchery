@@ -200,22 +200,18 @@ class App extends Component {
   }
 
   dashboardToAdmin = (e) => {
-    alert("Admin");
+    this.setState({showDashboard: false, showAdmin: true, showBackButton: true,});
   }
   dashboardToJudge = (e) => {
-    alert("Judge");
+    this.setState({showDashboard: false, showJudge: true, showBackButton: true,});
   }
   dashboardToCandidate = (e) => {
-    alert("Can");
-  }
-
-  goToDashBoard = (e) => {
-    this.setState({showDashboard: true, showJudge: false, showCandidate: false});
+    this.setState({showDashboard: false, showCandidate: true, showBackButton: true,});
   }
 
   parentHandleGenerateMatches = (e, childList) => {
     e.preventDefault();
-    this.setState({showDashboard: false, showJudge: false, showCandidate: false, showMatches: true, matchesList: childList});
+    this.setState({showDashboard: false, showJudge: false, showCandidate: false, showMatches: true, matchesList: childList,});
   }
 
   // Render the Main application
@@ -245,7 +241,14 @@ class App extends Component {
             <div
               className="header__logo-box-clickable"
               style={notInDashboardButLoggedIn}
-              onClick={(e) => {this.goToDashBoard(e)}}>
+              onClick={(e) => {this.setState({
+                showBackButton: false,
+                showDashboard: true,
+                showJudge: false,
+                showAdmin: false,
+                showCandidate: false,
+                showMatches: false,
+              })}}>
               Matchery
             </div>
             <div
@@ -267,6 +270,7 @@ class App extends Component {
           showDashboard: true,
           showJudge: false,
           showAdmin: false,
+          showCandidate: false,
           showMatches: false,
         })}}>
           <div class="container-btn-back">

@@ -65,8 +65,7 @@ class Dashboard extends React.Component {
 							<div className="panel__header-text">Recently Visited</div>
 						</div>
 						<ul className="panel__content">
-							<li className="panel__content-item" onClick={(e) => {this.dashboardToRole(e)}}>WashU Acappella Auditions 2018</li>
-							<li className="panel__content-item" onClick={(e) => {this.dashboardToRole(e)}}>WashU LNYF Auditions 2018</li>
+							<li className="panel__content-item" onClick={(e) => {this.dashboardToRole(e)}}>Temporary Item</li>
 						</ul>
 					</div>
 

@@ -36,8 +36,42 @@ class Candidate extends React.Component {
 				<div className="main-panel__nav-and-content">
 
 					<ul className="main-panel__nav">
-						<li className="main-panel__nav-item main-panel__nav-item--current">Preferences</li>
-						<li className="main-panel__nav-item">Results</li>
+            <div style={showPreferences}>
+              <li
+                className="main-panel__nav-item main-panel__nav-item--current"
+                onClick={(e) => {
+                  this.setState({
+                    showPreferences: true,
+                    showResults: false,
+                  });
+                }}>Preferences</li>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                  this.setState({
+                    showPreferences: false,
+                    showResults: true,
+                  });
+                }}>Results</li>
+            </div>
+            <div style={showResults}>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                  this.setState({
+                    showPreferences: true,
+                    showResults: false,
+                  });
+                }}>Preferences</li>
+              <li
+                className="main-panel__nav-item main-panel__nav-item--current"
+                onClick={(e) => {
+                  this.setState({
+                    showPreferences: false,
+                    showResults: true,
+                  });
+                }}>Results</li>
+            </div>
 					</ul>
 
 					<div className="main-panel__content">
@@ -45,18 +79,18 @@ class Candidate extends React.Component {
 
 							<div style={showPreferences}>
 			          <CandidatePreferences
-			            
+
 			          />
 			        </div>
 
 			        <div style={showResults}>
 			          <CandidateResults
-			            
+
 			          />
 			        </div>
 
 						</div>
-						
+
 					</div>
 				</div>
 			</div>

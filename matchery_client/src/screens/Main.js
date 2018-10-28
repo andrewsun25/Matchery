@@ -24,7 +24,6 @@ class App extends Component {
       showLogin: true,
       showSignUp: false,
       showDashboard: false,
-      // showJudgeEvent: false,
       // showCandidate: false,
       // showMatches: false,
       // showAdministrator: false,
@@ -44,7 +43,8 @@ class App extends Component {
 
       showAdmin: false,
       showJudge: false,
-      showCandidate: false
+      showCandidate: false,
+      showBackButton: false,
     };
   }
 
@@ -73,7 +73,7 @@ class App extends Component {
           if (json.success) {
             alert("Logged out!");
             this.setState({
-              showLogin: true, 
+              showLogin: true,
               showDashboard: false,
               roles: {
                 'Administrator' : false,
@@ -110,7 +110,7 @@ class App extends Component {
             this.state.events[event.role][counter] = event.eventName;
           });
           this.setState({
-            showLogin: false, 
+            showLogin: false,
             showDashboard: true
           });
         }
@@ -187,17 +187,16 @@ class App extends Component {
 
   parentHandleSelectEvent = (e) => {
     e.preventDefault();
-    //alert("Registration With: Username[" + username + "] Password[" + password + "]");
-    this.setState({showDashboard: false, showJudgeEvent: true});
+    this.setState({showDashboard: false, showJudge: true, showBackButton: true});
   }
 
   goToDashBoard = (e) => {
-    this.setState({showDashboard: true, showJudgeEvent: false, showCandidate: false});
+    this.setState({showDashboard: true, showJudge: false, showCandidate: false});
   }
 
   parentHandleGenerateMatches = (e, childList) => {
     e.preventDefault();
-    this.setState({showDashboard: false, showJudgeEvent: false, showCandidate: false, showMatches: true, matchesList: childList});
+    this.setState({showDashboard: false, showJudge: false, showCandidate: false, showMatches: true, matchesList: childList});
   }
 
   // Render the Main application
@@ -215,6 +214,7 @@ class App extends Component {
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const inDashboardOrNotLoggedIn = (this.state.showLogin || this.state.showSignUp || this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const showMatches = this.state.showMatches ? {display:'block'} : {display:'none'};
+    const showBackButton = this.state.showBackButton ? {display:'block'} : {display:'none'};
     // TODO: make the Matchery logo clickable
 
     // Return the app frame (header and background)
@@ -243,11 +243,19 @@ class App extends Component {
           </div>
         </header>
 
-        <div class="container-btn-back">
-          <button class="btn-back">
-            <ion-icon class="btn-back__icon" name="arrow-dropleft"></ion-icon>
-            Back
-          </button>
+        <div style={showBackButton} onClick={(e) => {this.setState({
+          showBackButton: false,
+          showDashboard: true,
+          showJudge: false,
+          showAdmin: false,
+          showMatches: false,
+        })}}>
+          <div class="container-btn-back">
+            <button class="btn-back">
+              <ion-icon class="btn-back__icon" name="arrow-dropleft"></ion-icon>
+              Back
+            </button>
+          </div>
         </div>
 
         <div style={showLogin}>
@@ -277,19 +285,19 @@ class App extends Component {
 
         <div style={showAdmin}>
           <Admin
-            
+
           />
         </div>
 
         <div style={showJudge}>
           <Judge
-            
+
           />
         </div>
 
         <div style={showCandidate}>
           <Candidate
-            
+
           />
         </div>
 

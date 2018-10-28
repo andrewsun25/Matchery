@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import './List.css';
 
 // COMPONENT CLASS
-class List extends React.Component {
+class NotList extends React.Component {
 
   // Component constructor
   constructor(props) {
@@ -67,17 +67,16 @@ class List extends React.Component {
                 data-id={i}
                 key={i}
                 onClick={() => this.toggleSomething(item)}
-                draggable="true"
+                draggable="false"
                 onDragStart={this.dragStart}
                 onDragOver={this.dragOver}
                 onDragEnd={this.dragEnd}>
                 <div className="bar-group__bar">
-                  {i+1}. &nbsp; {item}
+                  {item}
                   <ion-icon
                     class="bar-group__icon bar-group__icon--leftmost"
-                    name="close"
-                    onClick={(e) => {this.props.removeFromRanking(e, item)}}
-                  ></ion-icon>
+                    name="arrow-up"
+                    onClick={(e) => {this.props.putBackInRanking(e, item)}}></ion-icon>
                 </div>
               </li>;
             })
@@ -87,4 +86,4 @@ class List extends React.Component {
 		)
 	}
 }
-export default List;
+export default NotList;

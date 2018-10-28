@@ -101,6 +101,16 @@ body {
   background-color: #aaa;
   cursor: default; }
 
+.btn--notdisabled {
+  background-color: #ea8839;
+}
+
+.btn--notdisabled:hover {
+  background-color: #d96e17;
+}
+
+button:focus {outline:0;}
+
 .btn--action {
   background-color: #ea8839; }
   .btn--action:hover {

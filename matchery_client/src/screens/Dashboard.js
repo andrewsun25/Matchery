@@ -29,13 +29,13 @@ class Dashboard extends React.Component {
   	const showCandidateRole = this.props.roles['Candidate'] ? {display:'block'} : {display:'none'};
 
   	const administratorEvents = this.props.events['Administrator'].map((eventName) =>
-  		<li className="panel__content-item">{eventName}</li>
+  		<li className="panel__content-item" onClick={(e) => {this.props.dashboardToAdmin(e)}}>{eventName}</li>
   	);
   	const judgeEvents = this.props.events['Judge'].map((eventName) =>
-		<li className="panel__content-item">{eventName}</li>
+		<li className="panel__content-item" onClick={(e) => {this.props.dashboardToJudge(e)}}>{eventName}</li>
 	);
 	const candidateEvents = this.props.events['Candidate'].map((eventName) =>
-		<li className="panel__content-item">{eventName}</li>
+		<li className="panel__content-item" onClick={(e) => {this.props.dashboardToCandidate(e)}}>{eventName}</li>
 	);
 
     // Return the component frame

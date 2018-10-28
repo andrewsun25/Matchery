@@ -113,9 +113,14 @@ class App extends Component {
             showLogin: false,
             showDashboard: true,
             roles: {
-              'Administrator' : false,
+              'Administrator' : true,
               'Judge' : true,
-              'Candidate' : false
+              'Candidate' : true
+            },
+            events: {
+              'Administrator': ['WashU Acappella Auditions 2018'],
+              'Judge': ['WashU LNYF Auditions 2018'],
+              'Candidate': ['WashU New Chancellor Auditions 2018'],
             },
           });
         }
@@ -191,16 +196,17 @@ class App extends Component {
   }
 
   dashboardToRole = (e) => {
-    e.preventDefault();
-    if (this.state.roles['Administrator'] == true) {
-      this.setState({showDashboard: false, showAdmin: true, showBackButton: true});
-    } else if (this.state.roles['Judge'] == true) {
-      this.setState({showDashboard: false, showJudge: true, showBackButton: true});
-    } else if (this.state.roles['Candidate'] == true) {
-      this.setState({showDashboard: false, showCandidate: true, showBackButton: true});
-    } else {
-      alert('ERROR: User has not been assigned a role.');
-    }
+    alert("Ping!");
+  }
+
+  dashboardToAdmin = (e) => {
+    alert("Admin");
+  }
+  dashboardToJudge = (e) => {
+    alert("Judge");
+  }
+  dashboardToCandidate = (e) => {
+    alert("Can");
   }
 
   goToDashBoard = (e) => {
@@ -291,6 +297,9 @@ class App extends Component {
         <div style={showDashboard}>
           <Dashboard
             dashboardToRole={this.dashboardToRole}
+            dashboardToAdmin={this.dashboardToAdmin}
+            dashboardToJudge={this.dashboardToJudge}
+            dashboardToCandidate={this.dashboardToCandidate}
             roles={this.state.roles}
             events={this.state.events}
           />

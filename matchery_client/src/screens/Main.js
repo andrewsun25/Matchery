@@ -187,7 +187,15 @@ class App extends Component {
 
   parentHandleSelectEvent = (e) => {
     e.preventDefault();
-    this.setState({showDashboard: false, showJudge: true, showBackButton: true});
+    if (this.state.roles['Administrator'] == true) {
+      this.setState({showDashboard: false, showAdmin: true, showBackButton: true});
+    } else if (this.state.roles['Judge'] == true) {
+      this.setState({showDashboard: false, showJudge: true, showBackButton: true});
+    } else if (this.state.roles['Candidate'] == true) {
+      this.setState({showDashboard: false, showCandidate: true, showBackButton: true});
+    } else {
+      alert('ERROR: User has not been assigned a role.');
+    }
   }
 
   goToDashBoard = (e) => {

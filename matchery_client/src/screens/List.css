@@ -5,11 +5,9 @@
   padding:0;
 }
 .draggableList li {
-  margin-left: 30%;
   transition: 0.2s;
   margin-bottom: 5px;
   background:lightgrey;
-  padding: 1%;
 }
 .draggableList .isEnabled, .draggableList .dragging {
   background:maroon;

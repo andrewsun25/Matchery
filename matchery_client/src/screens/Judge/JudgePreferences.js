@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 // IMPORT STYLING
 // import './Admin.css';
+import List from '../List';
 
 // COMPONENT CLASS
 class JudgePreferences extends React.Component {
@@ -11,7 +12,19 @@ class JudgePreferences extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+      rankingGroup: [
+        "Zhi Shen Yong",
+        "Andrew Sun",
+        "Shane Blair",
+        "William Leung",
+      ],
+      newGroup: [
+        "John Doe",
+        "Jane Eyre",
+      ],
+      notGroup: [
+        "Mahmoud",
+      ],
     }
   }
 
@@ -27,23 +40,8 @@ class JudgePreferences extends React.Component {
 					<h3 className="heading-tertiary">Ranking <span className="heading-tertiary--sub"> - drag to rearrange</span></h3>
 					<p className="paragraph u-margin-bottom-md">Note: all Sensasions judges can edit this ranking</p>
 
-					<div className="bar-group u-margin-bottom-md">
-						<div className="bar-group__bar">
-							1. Zhi Shen Yong
-							<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
-						</div>
-						<div className="bar-group__bar">
-							2. Andrew Sun
-							<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
-						</div>
-						<div className="bar-group__bar">
-							3. Shane Blair
-							<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
-						</div>
-						<div className="bar-group__bar">
-							4. William Leung
-							<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
-						</div>
+					<div className="bar-group u-margin-bottom-md draggableList">
+						<List groups={this.state.rankingGroup} />
 					</div>
 
 					<div className="area-action">
@@ -63,13 +61,28 @@ class JudgePreferences extends React.Component {
 					<div className="bar-group">
 						<div className="bar-group__bar">
 							John Doe
-							<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="arrow-up"></ion-icon>
-							<ion-icon class="bar-group__icon" name="close"></ion-icon>
+							<ion-icon
+                class="bar-group__icon bar-group__icon--leftmost"
+                name="arrow-up"
+                onClick={(e) => {alert("Move up.")}}></ion-icon>
+							<ion-icon
+                class="bar-group__icon"
+                name="close"
+                onClick={(e) => {alert("Remove candidate.")}}>
+              </ion-icon>
 						</div>
 						<div className="bar-group__bar">
 							Jane Eyre
-							<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="arrow-up"></ion-icon>
-							<ion-icon class="bar-group__icon" name="close"></ion-icon>
+							<ion-icon
+                class="bar-group__icon bar-group__icon--leftmost"
+                name="arrow-up"
+                onClick={(e) => {alert("Move up.")}}>
+              </ion-icon>
+							<ion-icon
+                class="bar-group__icon"
+                name="close"
+                onClick={(e) => {alert("Remove candidate.")}}>
+              </ion-icon>
 						</div>
 					</div>
 

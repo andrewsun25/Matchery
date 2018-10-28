@@ -111,7 +111,12 @@ class App extends Component {
           });
           this.setState({
             showLogin: false,
-            showDashboard: true
+            showDashboard: true,
+            roles: {
+              'Administrator' : false,
+              'Judge' : true,
+              'Candidate' : false
+            },
           });
         }
       });
@@ -185,7 +190,7 @@ class App extends Component {
     this.setState({showSignUp: false});
   }
 
-  parentHandleSelectEvent = (e) => {
+  dashboardToRole = (e) => {
     e.preventDefault();
     if (this.state.roles['Administrator'] == true) {
       this.setState({showDashboard: false, showAdmin: true, showBackButton: true});
@@ -285,7 +290,7 @@ class App extends Component {
 
         <div style={showDashboard}>
           <Dashboard
-            parentHandleSelectEvent={this.parentHandleSelectEvent}
+            dashboardToRole={this.dashboardToRole}
             roles={this.state.roles}
             events={this.state.events}
           />

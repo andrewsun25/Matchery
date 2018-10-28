@@ -70,7 +70,10 @@ class List extends React.Component {
                 onDragStart={this.dragStart}
                 onDragOver={this.dragOver}
                 onDragEnd={this.dragEnd}>
-                {item}
+                <div className="bar-group__bar">
+                  {i+1}. &nbsp; {item}
+                  <ion-icon class="bar-group__icon bar-group__icon--leftmost" name="close"></ion-icon>
+                </div>
               </li>;
             })
           }

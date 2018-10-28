@@ -12,8 +12,8 @@ class Dashboard extends React.Component {
     super(props);
   }
 
-  childHandleSelectEvent = (e) => {
-  	this.props.parentHandleSelectEvent(e);
+  dashboardToRole = (e) => {
+  	this.props.dashboardToRole(e);
   }
 
   handleCreateEvent = (e) => {
@@ -28,13 +28,13 @@ class Dashboard extends React.Component {
   	const showJudge = this.props.roles['Judge'] ? {display:'block'} : {display:'none'};
   	const showCandidateRole = this.props.roles['Candidate'] ? {display:'block'} : {display:'none'};
 
-  	const administratorEvents = this.props.events['Administrator'].map((eventName) => 
+  	const administratorEvents = this.props.events['Administrator'].map((eventName) =>
   		<li className="panel__content-item">{eventName}</li>
   	);
-  	const judgeEvents = this.props.events['Judge'].map((eventName) => 
+  	const judgeEvents = this.props.events['Judge'].map((eventName) =>
 		<li className="panel__content-item">{eventName}</li>
 	);
-	const candidateEvents = this.props.events['Candidate'].map((eventName) => 
+	const candidateEvents = this.props.events['Candidate'].map((eventName) =>
 		<li className="panel__content-item">{eventName}</li>
 	);
 
@@ -65,8 +65,8 @@ class Dashboard extends React.Component {
 							<div className="panel__header-text">Recently Visited</div>
 						</div>
 						<ul className="panel__content">
-							<li className="panel__content-item" onClick={(e) => {this.childHandleSelectEvent(e)}}>WashU Acappella Auditions 2018</li>
-							<li className="panel__content-item" onClick={(e) => {this.childHandleSelectEvent(e)}}>WashU LNYF Auditions 2018</li>
+							<li className="panel__content-item" onClick={(e) => {this.dashboardToRole(e)}}>WashU Acappella Auditions 2018</li>
+							<li className="panel__content-item" onClick={(e) => {this.dashboardToRole(e)}}>WashU LNYF Auditions 2018</li>
 						</ul>
 					</div>
 

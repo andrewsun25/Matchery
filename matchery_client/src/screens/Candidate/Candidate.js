@@ -14,7 +14,7 @@ class Candidate extends React.Component {
     super(props);
     this.state = {
       showPreferences: true,
-      showResults: false
+      showResults: false,
     }
   }
 

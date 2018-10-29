@@ -11,12 +11,29 @@ class AdminResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    	
+      sensasiansHasStuffToDisplay: true,
+      afterDarkHasStuffToDisplay: true,
+      ungroupedHasStuffToDisplay: true,
+      hideSensasians: true,
+      hideAfterDark: true,
+      hideUngrouped: true,
     }
   }
 
   // Render the component
   render() {
+
+    const hideSensasians = this.state.hideSensasians ? "Hide" : "Show";
+    const hideAfterDark = this.state.hideAfterDark ? "Hide" : "Show";
+    const hideUngrouped = this.state.hideUngrouped ? "Hide" : "Show";
+
+    const hideSensasiansArray = this.state.hideSensasians ? {display:'block'} : {display:'none'};
+    const hideAfterDarkArray = this.state.hideAfterDark ? {display:'block'} : {display:'none'};
+    const hideUngroupedArray = this.state.hideUngrouped ? {display:'block'} : {display:'none'};
+
+    const sensasiansHasStuffToDisplay = this.state.sensasiansHasStuffToDisplay ? <button className="btn-hide u-margin-left-md" onClick={(e) => {this.setState({hideSensasians: !this.state.hideSensasians})}}>{hideSensasians}</button> : <p></p>;
+    const afterDarkHasStuffToDisplay = this.state.afterDarkHasStuffToDisplay ? <button className="btn-hide u-margin-left-md" onClick={(e) => {this.setState({hideAfterDark: !this.state.hideAfterDark})}}>{hideAfterDark}</button> : <p></p>;
+    const ungroupedHasStuffToDisplay = this.state.ungroupedHasStuffToDisplay ? <button className="btn-hide u-margin-left-md" onClick={(e) => {this.setState({hideUngrouped: !this.state.hideUngrouped})}}>{hideUngrouped}</button> : <p></p>;
 
     // Return the component frame
     return (
@@ -24,8 +41,16 @@ class AdminResults extends React.Component {
     	<div>
 
 				<section className="section-generate-and-publish u-margin-bottom-md">
-					<button className="btn btn--high-action-hollowed event-admin-custom-width u-margin-left-md">Re-Generate Matches</button>
-					<button className="btn btn--high-action event-admin-custom-width u-margin-left-sm">Publish Results</button>
+					<button
+            className="btn btn--high-action-hollowed event-admin-custom-width u-margin-left-md"
+            onClick={(e) => {alert("Results re-generated!")}}>
+            Re-Generate Matches
+          </button>
+					<button
+            className="btn btn--high-action event-admin-custom-width u-margin-left-sm"
+            onClick={(e) => {alert("Results published!")}}>
+            Publish Results
+          </button>
 				</section>
 
 				<section className="notifications u-margin-bottom-lg">
@@ -37,13 +62,15 @@ class AdminResults extends React.Component {
 
 					<div className="area-section-heading-center u-margin-bottom-md">
 						<h3 className="heading-tertiary u-center-text">Sensasians</h3>
-						<button className="btn-hide u-margin-left-md">Hide</button>
+						{sensasiansHasStuffToDisplay}
 					</div>
 
 					<div className="bar-group-result">
-						<div className="bar-group-result__bar bar-group-result__bar--success">Zhi Shen Yong</div>
-						<div className="bar-group-result__bar bar-group-result__bar--success">William Leung</div>
-					</div>
+            <div style={hideSensasiansArray}>
+						  <div className="bar-group-result__bar bar-group-result__bar--success">Zhi Shen Yong</div>
+						  <div className="bar-group-result__bar bar-group-result__bar--success">William Leung</div>
+					  </div>
+          </div>
 
 				</section>
 
@@ -51,13 +78,15 @@ class AdminResults extends React.Component {
 
 					<div className="area-section-heading-center u-margin-bottom-md">
 						<h3 className="heading-tertiary u-center-text">After Dark</h3>
-						<button className="btn-hide u-margin-left-md">Hide</button>
+						{afterDarkHasStuffToDisplay}
 					</div>
 
-					<div className="bar-group-result">
-						<div className="bar-group-result__bar bar-group-result__bar--success">Shane Blair</div>
-						<div className="bar-group-result__bar bar-group-result__bar--success">Andrew Sun</div>
-					</div>
+          <div className="bar-group-result">
+            <div style={hideAfterDarkArray}>
+  						<div className="bar-group-result__bar bar-group-result__bar--success">Shane Blair</div>
+  						<div className="bar-group-result__bar bar-group-result__bar--success">Andrew Sun</div>
+  					</div>
+          </div>
 
 				</section>
 
@@ -65,13 +94,15 @@ class AdminResults extends React.Component {
 
 					<div className="area-section-heading-center u-margin-bottom-md">
 						<h3 className="heading-tertiary u-center-text">Ungrouped Candidates</h3>
-						<button className="btn-hide u-margin-left-md">Hide</button>
+						{ungroupedHasStuffToDisplay}
 					</div>
 
-					<div className="bar-group-result">
-						<div className="bar-group-result__bar bar-group-result__bar--failure">Jack Reacher</div>
-						<div className="bar-group-result__bar bar-group-result__bar--failure">Jane Eyre</div>
-					</div>
+  				<div className="bar-group-result">
+            <div style={hideUngroupedArray}>
+  						<div className="bar-group-result__bar bar-group-result__bar--failure">Jack Reacher</div>
+  						<div className="bar-group-result__bar bar-group-result__bar--failure">Jane Eyre</div>
+  					</div>
+          </div>
 
 				</section>
 

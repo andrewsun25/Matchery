@@ -276,6 +276,7 @@ class Admin extends React.Component {
 
 							<div style={showGroups}>
 			          <AdminGroups
+                  ref={this.showGroupChild}
                   showAddGroupModal={this.showAddGroupModal}
                   groups={this.state.groups}
 			          />

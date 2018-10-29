@@ -12,6 +12,7 @@ class AdminGroups extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.adminGroupListChild = React.createRef();
     this.state = {
       groups: this.props.groups,
     }
@@ -20,6 +21,22 @@ class AdminGroups extends React.Component {
   deleteFromList = (e, item) => {
     var indexOfGroup = this.state.groups.indexOf(item);
     this.state.groups.splice(indexOfGroup, 1);
+  }
+
+  updateSearchInput = (e) => {
+    var keyword = e.target.value;
+    if (keyword.length == 0) {
+      this.adminGroupListChild.current.updateList(this.state.groups);
+    } else {
+      var tempGroups = this.state.groups;
+      var sendGroups = [];
+      tempGroups.forEach((group) => {
+        if (group.toLowerCase().includes(keyword)) {
+          sendGroups.push(group);
+        }
+      });
+      this.adminGroupListChild.current.updateList(sendGroups);
+    }
   }
 
 
@@ -37,6 +54,7 @@ class AdminGroups extends React.Component {
               type="text"
               className="search-bar"
               placeholder="Search groups"
+              onChange={this.updateSearchInput}
               required >
             </input>
 						<ion-icon class="search-bar__icon" name="search"></ion-icon>
@@ -51,6 +69,7 @@ class AdminGroups extends React.Component {
 
 				<div className="bar-group draggableList">
 					<AdminGroupList
+            ref={this.adminGroupListChild}
             groups={this.state.groups}
             deleteFromList={this.deleteFromList}
           />

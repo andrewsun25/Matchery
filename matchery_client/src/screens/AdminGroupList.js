@@ -16,6 +16,10 @@ class AdminGroupList extends React.Component {
     }
   }
 
+  updateList = (groups) => {
+    this.setState({list: groups});
+  }
+
 
   toggleSomething = (stateToToggle) => {
     this.setState({[stateToToggle]: !this.state[stateToToggle]});

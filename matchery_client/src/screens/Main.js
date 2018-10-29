@@ -238,7 +238,6 @@ class App extends Component {
     const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'block'};
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const inDashboardOrNotLoggedIn = (this.state.showLogin || this.state.showSignUp || this.state.showDashboard) ? {display:'block'} : {display: 'none'};
-    const showMatches = this.state.showMatches ? {display:'block'} : {display:'none'};
     const showBackButton = this.state.showBackButton ? {display:'block'} : {display:'none'};
     // TODO: make the Matchery logo clickable
 
@@ -257,7 +256,6 @@ class App extends Component {
                 showJudge: false,
                 showAdmin: false,
                 showCandidate: false,
-                showMatches: false,
               })}}>
               Matchery
             </div>
@@ -281,7 +279,6 @@ class App extends Component {
           showJudge: false,
           showAdmin: false,
           showCandidate: false,
-          showMatches: false,
         })}}>
           <div class="container-btn-back">
             <button class="btn-back">
@@ -328,10 +325,6 @@ class App extends Component {
 
         <div style={showCandidate}>
           <Candidate />
-        </div>
-
-        <div style={showMatches}>
-          <Matches matchesList={this.state.matchesList}/>
         </div>
 
       </div>

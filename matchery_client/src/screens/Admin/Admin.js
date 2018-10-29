@@ -17,6 +17,8 @@ class Admin extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.addCandidateChild = React.createRef();
+    this.addGroupChild = React.createRef();
     this.state = {
       groups: [
         'Sensasions',
@@ -24,6 +26,13 @@ class Admin extends React.Component {
         'The Amateurs',
         'Mosaic Whispers',
       ],
+      candidates: [
+        'Zhi Shen Yong',
+        'Andrew Sun',
+        'Shane Blair',
+        'William Leung',
+      ],
+
 
       showGroups: true,
       showJudges: false,
@@ -37,14 +46,27 @@ class Admin extends React.Component {
   }
 
   showAddGroupModal = (e) => { this.setState({showAddGroupModal: true}); }
+  showAddCandidateModal = (e) => { this.setState({showAddCandidateModal: true}); }
 
   closeAddGroupModal = (e) => { this.setState({showAddGroupModal: false}); }
+  closeAddCandidateModal = (e) => { this.setState({showAddCandidateModal: false}); }
+
   addGroupSuccess = (e, group) => {
     e.preventDefault();
     this.setState({showAddGroupModal: false});
     var tempGroup = this.state.groups;
     tempGroup.push(group);
-    this.setState({groups: tempGroup, tempGroups: tempGroup});
+    this.setState({groups: tempGroup});
+    this.addGroupChild.current.resetInput();
+  }
+  addCandidateSuccess = (e, candidate) => {
+    e.preventDefault();
+    this.setState({showAddCandidateModal: false});
+    var tempGroup = this.state.candidates;
+    var candidateArray = candidate.split(',');
+    tempGroup.push.apply(tempGroup, candidateArray);
+    this.setState({candidates: tempGroup});
+    this.addCandidateChild.current.resetInput();
   }
 
   // Render the component
@@ -234,7 +256,6 @@ class Admin extends React.Component {
 			          <AdminGroups
                   showAddGroupModal={this.showAddGroupModal}
                   groups={this.state.groups}
-                  updateSearchArray={this.updateSearchArray}
 			          />
 			        </div>
 
@@ -246,7 +267,8 @@ class Admin extends React.Component {
 
 			        <div style={showCandidates}>
 			          <AdminCandidates
-
+                  showAddCandidateModal={this.showAddCandidateModal}
+                  candidates={this.state.candidates}
 			          />
 			        </div>
 
@@ -258,6 +280,7 @@ class Admin extends React.Component {
 
 			        <div style={showAddGroupModal}>
 			          <AddGroupModal
+                  ref={this.addGroupChild}
                   closeAddGroupModal={this.closeAddGroupModal}
                   addGroupSuccess={this.addGroupSuccess}
 			          />
@@ -271,7 +294,9 @@ class Admin extends React.Component {
 
 			        <div style={showAddCandidateModal}>
 			          <AddCandidateModal
-
+                  ref={this.addCandidateChild}
+                  closeAddCandidateModal={this.closeAddCandidateModal}
+                  addCandidateSuccess={this.addCandidateSuccess}
 			          />
 			        </div>
 

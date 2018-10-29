@@ -21,6 +21,10 @@ class AddGroupModal extends React.Component {
     });
   }
 
+  resetInput = () => {
+    this.setState({inputValue: ""});
+  }
+
   // Render the component
   render() {
 

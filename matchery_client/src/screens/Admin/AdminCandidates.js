@@ -12,6 +12,7 @@ class AdminCandidates extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.adminGroupListChild = React.createRef();
     this.state = {
       candidates: this.props.candidates,
     }
@@ -20,6 +21,22 @@ class AdminCandidates extends React.Component {
   deleteFromList = (e, item) => {
     var indexOfGroup = this.state.candidates.indexOf(item);
     this.state.candidates.splice(indexOfGroup, 1);
+  }
+
+  updateSearchInput = (e) => {
+    var keyword = e.target.value;
+    if (keyword.length == 0) {
+      this.adminGroupListChild.current.updateList(this.state.candidates);
+    } else {
+      var tempGroups = this.state.candidates;
+      var sendGroups = [];
+      tempGroups.forEach((group) => {
+        if (group.toLowerCase().includes(keyword)) {
+          sendGroups.push(group);
+        }
+      });
+      this.adminGroupListChild.current.updateList(sendGroups);
+    }
   }
 
   // Render the component
@@ -32,7 +49,12 @@ class AdminCandidates extends React.Component {
 
 				<div className="area-search-bar-with-add u-margin-bottom-md">
 					<form action="#" className="search-bar__form">
-						<input type="text" className="search-bar" placeholder="Search candidates" required></input>
+						<input
+              type="text"
+              className="search-bar"
+              placeholder="Search candidates"
+              onChange={this.updateSearchInput}
+              required></input>
 						<ion-icon class="search-bar__icon" name="search"></ion-icon>
 					</form>
 					<button
@@ -45,6 +67,7 @@ class AdminCandidates extends React.Component {
 
 				<div className="bar-group draggableList">
 					<AdminGroupList
+            ref={this.adminGroupListChild}
             groups={this.state.candidates}
             deleteFromList={this.deleteFromList}
           />

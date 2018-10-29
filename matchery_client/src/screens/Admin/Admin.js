@@ -24,6 +24,7 @@ class Admin extends React.Component {
         'The Amateurs',
         'Mosaic Whispers',
       ],
+
       showGroups: true,
       showJudges: false,
       showCandidates: false,
@@ -43,7 +44,7 @@ class Admin extends React.Component {
     this.setState({showAddGroupModal: false});
     var tempGroup = this.state.groups;
     tempGroup.push(group);
-    this.setState({groups: tempGroup});
+    this.setState({groups: tempGroup, tempGroups: tempGroup});
   }
 
   // Render the component
@@ -67,10 +68,164 @@ class Admin extends React.Component {
 				</div>
 				<div className="main-panel__nav-and-content">
 					<ul className="main-panel__nav">
-						<li className="main-panel__nav-item">Groups</li>
-						<li className="main-panel__nav-item main-panel__nav-item--current">Judges</li>
-						<li className="main-panel__nav-item">Candidates</li>
-						<li className="main-panel__nav-item">Results</li>
+            <div style={showGroups}>
+              <li className="main-panel__nav-item main-panel__nav-item--current"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: true,
+                    showJudges: false,
+                    showCandidates: false,
+                    showResults: false,
+                  });
+              }}>Groups</li>
+              <li className="main-panel__nav-item"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: false,
+                    showJudges: true,
+                    showCandidates: false,
+                    showResults: false,
+                  });
+              }}>Judges</li>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                this.setState({
+                  showGroups: false,
+                  showJudges: false,
+                  showCandidates: true,
+                  showResults: false,
+                });
+              }}>Candidates</li>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                this.setState({
+                  showGroups: false,
+                  showJudges: false,
+                  showCandidates: false,
+                  showResults: true,
+                });
+              }}>Results</li>
+            </div>
+            <div style={showJudges}>
+              <li className="main-panel__nav-item"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: true,
+                    showJudges: false,
+                    showCandidates: false,
+                    showResults: false,
+                  });
+              }}>Groups</li>
+              <li className="main-panel__nav-item main-panel__nav-item--current"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: false,
+                    showJudges: true,
+                    showCandidates: false,
+                    showResults: false,
+                  });
+              }}>Judges</li>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                this.setState({
+                  showGroups: false,
+                  showJudges: false,
+                  showCandidates: true,
+                  showResults: false,
+                });
+              }}>Candidates</li>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                this.setState({
+                  showGroups: false,
+                  showJudges: false,
+                  showCandidates: false,
+                  showResults: true,
+                });
+              }}>Results</li>
+            </div>
+            <div style={showCandidates}>
+              <li className="main-panel__nav-item"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: true,
+                    showJudges: false,
+                    showCandidates: false,
+                    showResults: false,
+                  });
+              }}>Groups</li>
+              <li className="main-panel__nav-item"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: false,
+                    showJudges: true,
+                    showCandidates: false,
+                    showResults: false,
+                  });
+              }}>Judges</li>
+              <li className="main-panel__nav-item main-panel__nav-item--current"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: false,
+                    showJudges: false,
+                    showCandidates: true,
+                    showResults: false,
+                  });
+              }}>Candidates</li>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                this.setState({
+                  showGroups: false,
+                  showJudges: false,
+                  showCandidates: false,
+                  showResults: true,
+                });
+              }}>Results</li>
+            </div>
+            <div style={showResults}>
+            <li className="main-panel__nav-item"
+              onClick={(e) => {
+                this.setState({
+                  showGroups: true,
+                  showJudges: false,
+                  showCandidates: false,
+                  showResults: false,
+                });
+            }}>Groups</li>
+              <li className="main-panel__nav-item"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: false,
+                    showJudges: true,
+                    showCandidates: false,
+                    showResults: false,
+                  });
+              }}>Judges</li>
+              <li
+                className="main-panel__nav-item"
+                onClick={(e) => {
+                this.setState({
+                  showGroups: false,
+                  showJudges: false,
+                  showCandidates: true,
+                  showResults: false,
+                });
+              }}>Candidates</li>
+              <li className="main-panel__nav-item main-panel__nav-item--current"
+                onClick={(e) => {
+                  this.setState({
+                    showGroups: false,
+                    showJudges: false,
+                    showCandidates: false,
+                    showResults: true,
+                  });
+              }}>Results</li>
+            </div>
 					</ul>
 					<div className="main-panel__content">
 						<div className="main-panel__content-container">
@@ -79,6 +234,7 @@ class Admin extends React.Component {
 			          <AdminGroups
                   showAddGroupModal={this.showAddGroupModal}
                   groups={this.state.groups}
+                  updateSearchArray={this.updateSearchArray}
 			          />
 			        </div>
 

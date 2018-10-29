@@ -14,7 +14,6 @@ class AdminGroups extends React.Component {
     super(props);
     this.state = {
       groups: this.props.groups,
-      searchText: "",
     }
   }
 
@@ -22,6 +21,7 @@ class AdminGroups extends React.Component {
     var indexOfGroup = this.state.groups.indexOf(item);
     this.state.groups.splice(indexOfGroup, 1);
   }
+
 
   // Render the component
   render() {

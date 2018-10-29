@@ -18,6 +18,12 @@ class Admin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      groups: [
+        'Sensasions',
+        'After Dark',
+        'The Amateurs',
+        'Mosaic Whispers',
+      ],
       showGroups: true,
       showJudges: false,
       showCandidates: false,
@@ -27,6 +33,17 @@ class Admin extends React.Component {
       showAddJudgeModal: false,
       showAddCandidateModal: false
     }
+  }
+
+  showAddGroupModal = (e) => { this.setState({showAddGroupModal: true}); }
+
+  closeAddGroupModal = (e) => { this.setState({showAddGroupModal: false}); }
+  addGroupSuccess = (e, group) => {
+    e.preventDefault();
+    this.setState({showAddGroupModal: false});
+    var tempGroup = this.state.groups;
+    tempGroup.push(group);
+    this.setState({groups: tempGroup});
   }
 
   // Render the component
@@ -60,46 +77,48 @@ class Admin extends React.Component {
 
 							<div style={showGroups}>
 			          <AdminGroups
-			          	
+                  showAddGroupModal={this.showAddGroupModal}
+                  groups={this.state.groups}
 			          />
 			        </div>
 
 			        <div style={showJudges}>
 			          <AdminJudges
-			            
+
 			          />
 			        </div>
 
 			        <div style={showCandidates}>
 			          <AdminCandidates
-			            
+
 			          />
 			        </div>
 
 			        <div style={showResults}>
 			          <AdminResults
-			            
+
 			          />
 			        </div>
 
 			        <div style={showAddGroupModal}>
 			          <AddGroupModal
-			            
+                  closeAddGroupModal={this.closeAddGroupModal}
+                  addGroupSuccess={this.addGroupSuccess}
 			          />
 			        </div>
 
 			        <div style={showAddJudgeModal}>
 			          <AddJudgeModal
-			            
+
 			          />
 			        </div>
 
 			        <div style={showAddCandidateModal}>
 			          <AddCandidateModal
-			            
+
 			          />
 			        </div>
-							
+
 						</div>
 					</div>
 				</div>

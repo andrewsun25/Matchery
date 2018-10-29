@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 // IMPORT STYLING
 // import './Admin.css';
 
+import AdminGroupList from '../AdminGroupList';
+
 // COMPONENT CLASS
 class AdminGroups extends React.Component {
 
@@ -11,8 +13,14 @@ class AdminGroups extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    	
+      groups: this.props.groups,
+      searchText: "",
     }
+  }
+
+  deleteFromList = (e, item) => {
+    var indexOfGroup = this.state.groups.indexOf(item);
+    this.state.groups.splice(indexOfGroup, 1);
   }
 
   // Render the component
@@ -25,32 +33,27 @@ class AdminGroups extends React.Component {
 
 				<div className="area-search-bar-with-add u-margin-bottom-md">
 					<form action="#" className="search-bar__form">
-						<input type="text" className="search-bar" placeholder="Search groups" required></input>
+						<input
+              type="text"
+              className="search-bar"
+              placeholder="Search groups"
+              required >
+            </input>
 						<ion-icon class="search-bar__icon" name="search"></ion-icon>
 					</form>
-					<button className="btn btn--action btn--with-icon">
+					<button
+            className="btn btn--action btn--with-icon"
+            onClick={(e) => {this.props.showAddGroupModal(e)}}>
 						<ion-icon class="btn__left-icon" name="add"></ion-icon>
 						Add Group
 					</button>
 				</div>
 
-				<div className="bar-group">
-					<div className="bar-group__bar">
-						Sensasians
-						<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="trash"></ion-icon>
-					</div>
-					<div className="bar-group__bar">
-						After Dark
-						<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="trash"></ion-icon>
-					</div>
-					<div className="bar-group__bar">
-						The Amateurs
-						<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="trash"></ion-icon>
-					</div>
-					<div className="bar-group__bar">
-						Mosaic Whispers
-						<ion-icon class="bar-group__icon bar-group__icon--leftmost" name="trash"></ion-icon>
-					</div>
+				<div className="bar-group draggableList">
+					<AdminGroupList
+            groups={this.state.groups}
+            deleteFromList={this.deleteFromList}
+          />
 				</div>
 
 			</section>

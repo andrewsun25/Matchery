@@ -20,34 +20,29 @@ class App extends Component {
   // Component constructor
   constructor(props) {
     super(props);
-    this.state = { // Initialize screen states
+    this.state = {
       showLogin: true,
       showSignUp: false,
-      showDashboard: false,
-      // showCandidate: false,
-      // showMatches: false,
-      // showAdministrator: false,
-      // showJudge: false,
-      showCandidateRole: false,
-      roles: {
-        'Administrator' : false,
-        'Judge' : false,
-        'Candidate' : false
-      },
-      events: {
-        'Administrator' : [],
-        'Judge' : [],
-        'Candidate' : []
-      },
-      matchesList: [],
-
+      showDashboard: false, // Main screen
       showAdmin: false,
       showJudge: false,
       showCandidate: false,
       showBackButton: false,
+      roles: { // TODO This will need to be pulled from the server
+        'Administrator' : false,
+        'Judge' : false,
+        'Candidate' : false
+      },
+      events: { // TODO This will need to be pulled from the server
+        'Administrator' : [],
+        'Judge' : [],
+        'Candidate' : []
+      },
     };
   }
 
+  // Function to check if a session
+  // already exists.
   componentDidMount() {
     const token = localStorage.getItem('session');
     if (token) {
@@ -55,15 +50,84 @@ class App extends Component {
         .then(res => res.json())
         .then(json => {
           if (json.success) {
-            this.parentHandleUserPermission();
+            this.fetchUserPermissions();
           }
         });
     }
   }
 
-  // This function is triggered when a
-  // user presses the Learn More button
-  handleMyAccount = (e) => {
+  // Function to fetch the user's
+  // roles and events.
+  fetchUserPermissions = () => {
+    fetch('/api/account/getEvents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username')
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) { // If user exists
+          const eventRole = json.eventRoles;
+          eventRole.forEach((event) => {
+            var tempRoles = this.state.roles;
+            tempRoles[event.role] = true;
+            var tempEvents = this.state.events;
+            tempEvents[event.role].push(event.eventName);
+            this.setState({
+              roles: tempRoles,
+              events: tempEvents,
+            });
+          });
+          this.setState({
+            showLogin: false,
+            showDashboard: true,
+            // TODO These are manually encoded roles! Remember to remove this.
+            roles: {
+              'Administrator' : true,
+              'Judge' : true,
+              'Candidate' : true
+            },
+            events: {
+              'Administrator': ['WashU Acappella Auditions 2018'],
+              'Judge': ['WashU LNYF Auditions 2018'],
+              'Candidate': ['WashU New Chancellor Auditions 2018'],
+            },
+            // TODO End deletion section.
+          });
+        }
+      });
+  }
+
+  // Function to logIn a user.
+  handleLogIn = (e, username, password) => {
+    e.preventDefault();
+    // Login request
+    fetch('/api/account/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        console.log('json', json);
+        alert(json.message);
+        if (json.success) {
+          localStorage.setItem('session', json.token);
+          localStorage.setItem('username', json.username);
+          this.fetchUserPermissions(e);
+        }
+      });
+  }
+
+  // Function to logOut the user.
+  handleLogOut = (e) => {
     e.preventDefault();
     const token = localStorage.getItem('session');
     if (token) {
@@ -91,85 +155,25 @@ class App extends Component {
     }
   }
 
-  parentHandleUserPermission() {
-    fetch('/api/account/getEvents', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: localStorage.getItem('username')
-      }),
-    }).then(res => res.json())
-      .then(json => {
-        if (json.success) {
-          const eventRole = json.eventRoles;
-          let counter = 0;
-          eventRole.forEach((event) => {
-            this.state.roles[event.role] = true;
-            this.state.events[event.role][counter] = event.eventName;
-          });
-          this.setState({
-            showLogin: false,
-            showDashboard: true,
-            roles: {
-              'Administrator' : true,
-              'Judge' : true,
-              'Candidate' : true
-            },
-            events: {
-              'Administrator': ['WashU Acappella Auditions 2018'],
-              'Judge': ['WashU LNYF Auditions 2018'],
-              'Candidate': ['WashU New Chancellor Auditions 2018'],
-            },
-          });
-        }
-      });
-  }
-
-  // This function is triggered when a
-  // user presses the Learn More button
-  handleLearnMore = (e) => {
+  // Function to open the signUp page.
+  openSignUp = (e) => {
     e.preventDefault();
-    alert("handleLearnMore");
+    this.setState({
+      showSignUp: true,
+    });
   }
 
-  // This function is triggered by a child
-  // function in the Login component and
-  // handles the login process
-  parentHandleLogin = (e, username, password) => {
+  // Function to close the signUp page.
+  closeSignUp = (e) => {
     e.preventDefault();
-    // Login request
-    fetch('/api/account/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    }).then(res => res.json())
-      .then(json => {
-        console.log('json', json);
-        alert(json.message);
-        if (json.success) {
-          localStorage.setItem('session', json.token);
-          localStorage.setItem('username', json.username);
-          this.parentHandleUserPermission(e);
-        }
-      });
+    this.setState({
+      showSignUp: false,
+    });
   }
 
-  // This function is triggered by a child
-  // function in the Login component and
-  // handles the signup process
-  parentHandleSignup = (e) => {
-    //e.preventDefault();
-    this.setState({showSignUp: true});
-  }
-
-  parentHandleSignupSubmit = (e, firstName, lastName, email, username, password) => {
+  // Function to register a new user
+  // in the database.
+  handleSignUpSubmit = (e, firstName, lastName, email, username, password) => {
     //Insert in database
     fetch('/api/account/signup', {
       method: 'POST',
@@ -186,32 +190,38 @@ class App extends Component {
     }).then(res => res.json())
       .then(json => {
           console.log('json', json);
-          alert(json.message);
+          // alert(json.message);
         });
   }
 
-  parentHandleExitSignup = (e) => {
-    e.preventDefault();
-    this.setState({showSignUp: false});
-  }
-
-  dashboardToRole = (e) => {
-    alert("Ping!");
-  }
-
+  // Function to navigate from the dashboard
+  // page to the admin page.
   dashboardToAdmin = (e) => {
-    this.setState({showDashboard: false, showAdmin: true, showBackButton: true,});
-  }
-  dashboardToJudge = (e) => {
-    this.setState({showDashboard: false, showJudge: true, showBackButton: true,});
-  }
-  dashboardToCandidate = (e) => {
-    this.setState({showDashboard: false, showCandidate: true, showBackButton: true,});
+    this.setState({
+      showDashboard: false,
+      showAdmin: true,
+      showBackButton: true,
+    });
   }
 
-  parentHandleGenerateMatches = (e, childList) => {
-    e.preventDefault();
-    this.setState({showDashboard: false, showJudge: false, showCandidate: false, showMatches: true, matchesList: childList,});
+  // Function to navigate from the dashboard
+  // page to the judge page.
+  dashboardToJudge = (e) => {
+    this.setState({
+      showDashboard: false,
+      showJudge: true,
+      showBackButton: true,
+    });
+  }
+
+  // Function to navigate from the dashboard
+  // page to the candidate page.
+  dashboardToCandidate = (e) => {
+    this.setState({
+      showDashboard: false,
+      showCandidate: true,
+      showBackButton: true,
+    });
   }
 
   // Render the Main application
@@ -257,9 +267,9 @@ class App extends Component {
               Matchery
             </div>
             <div style={loggedIn}
-              onClick={(e) => {this.handleMyAccount(e)}}
+              onClick={(e) => {this.handleLogOut(e)}}
               className="header__my-account-box">
-              My Account
+              LogOut
               <ion-icon class="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
             </div>
           </div>
@@ -283,24 +293,23 @@ class App extends Component {
 
         <div style={showLogin}>
           <Login
-            parentHandleLogin={this.parentHandleLogin}
-            parentHandleSignup={this.parentHandleSignup}
-            parentHandleUserPermission = {this.parentHandleUserPermission}
+            parentHandleLogin={this.handleLogIn}
+            parentHandleSignup={this.openSignUp}
+            fetchUserPermissions = {this.fetchUserPermissions}
           />
         </div>
 
         <div style={showSignUp}>
           <SignUp
-            parentHandleLogin={this.parentHandleLogin}
-            parentHandleSignup={this.parentHandleSignup}
-            parentHandleSignupSubmit={this.parentHandleSignupSubmit}
-            parentHandleExitSignup={this.parentHandleExitSignup}
+            parentHandleLogin={this.handleLogIn}
+            parentHandleSignup={this.openSignUp}
+            parentHandleExitSignup={this.closeSignUp}
+            parentHandleSignupSubmit={this.handleSignUpSubmit}
           />
         </div>
 
         <div style={showDashboard}>
           <Dashboard
-            dashboardToRole={this.dashboardToRole}
             dashboardToAdmin={this.dashboardToAdmin}
             dashboardToJudge={this.dashboardToJudge}
             dashboardToCandidate={this.dashboardToCandidate}
@@ -310,21 +319,15 @@ class App extends Component {
         </div>
 
         <div style={showAdmin}>
-          <Admin
-
-          />
+          <Admin />
         </div>
 
         <div style={showJudge}>
-          <Judge
-
-          />
+          <Judge />
         </div>
 
         <div style={showCandidate}>
-          <Candidate
-
-          />
+          <Candidate />
         </div>
 
         <div style={showMatches}>

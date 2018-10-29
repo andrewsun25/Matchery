@@ -37,7 +37,7 @@ class AddGroupModal extends React.Component {
           <ion-icon
             class="modal__close-icon"
             name="close"
-            onClick={(e) => {this.props.closeAddGroupModal(e)}}>>
+            onClick={(e) => {this.props.closeAddGroupModal(e)}}>
           </ion-icon>
           <h3 className="heading-secondary u-margin-bottom-md-lg">Add Group</h3>
 

@@ -19,6 +19,7 @@ class Admin extends React.Component {
     super(props);
     this.addCandidateChild = React.createRef();
     this.addGroupChild = React.createRef();
+    this.addJudgeChild = React.createRef();
     this.state = {
       groups: [
         'Sensasions',
@@ -32,7 +33,17 @@ class Admin extends React.Component {
         'Shane Blair',
         'William Leung',
       ],
-
+      sensasiansJudges: [
+        'Zhi Shen Yong',
+        'Andrew Sun',
+        'Shane Blair',
+        'William Leung',
+      ],
+      afterDarkJudges: [
+        'Jack Black',
+        'Fanny Rosenberg',
+        'Some Guy',
+      ],
 
       showGroups: true,
       showJudges: false,
@@ -47,9 +58,11 @@ class Admin extends React.Component {
 
   showAddGroupModal = (e) => { this.setState({showAddGroupModal: true}); }
   showAddCandidateModal = (e) => { this.setState({showAddCandidateModal: true}); }
+  showAddJudgeModal = (e) => { this.setState({showAddJudgeModal: true}); }
 
   closeAddGroupModal = (e) => { this.setState({showAddGroupModal: false}); }
   closeAddCandidateModal = (e) => { this.setState({showAddCandidateModal: false}); }
+  closeAddJudgeModal = (e) => { this.setState({showAddJudgeModal: false}); }
 
   addGroupSuccess = (e, group) => {
     e.preventDefault();
@@ -67,6 +80,15 @@ class Admin extends React.Component {
     tempGroup.push.apply(tempGroup, candidateArray);
     this.setState({candidates: tempGroup});
     this.addCandidateChild.current.resetInput();
+  }
+  addJudgeSuccess = (e, judges) => {
+    e.preventDefault();
+    this.setState({showAddJudgeModal: false});
+    var tempGroup = this.state.sensasiansJudges;
+    var judgeArray = judges.split(',');
+    tempGroup.push.apply(tempGroup, judgeArray);
+    this.setState({sensasiansJudges: tempGroup});
+    this.addJudgeChild.current.resetInput();
   }
 
   // Render the component
@@ -261,7 +283,9 @@ class Admin extends React.Component {
 
 			        <div style={showJudges}>
 			          <AdminJudges
-
+                  sensasiansJudges={this.state.sensasiansJudges}
+                  afterDarkJudges={this.state.afterDarkJudges}
+                  showAddJudgeModal={this.showAddJudgeModal}
 			          />
 			        </div>
 
@@ -288,7 +312,9 @@ class Admin extends React.Component {
 
 			        <div style={showAddJudgeModal}>
 			          <AddJudgeModal
-
+                  ref={this.addJudgeChild}
+                  closeAddJudgeModal={this.closeAddJudgeModal}
+                  addJudgeSuccess={this.addJudgeSuccess}
 			          />
 			        </div>
 

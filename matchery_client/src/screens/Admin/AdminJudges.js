@@ -11,6 +11,8 @@ class AdminJudges extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.adminSensasiansGroupListChild = React.createRef();
+    this.adminAfterDarkGroupListChild = React.createRef();
     this.state = {
       sensasiansHasStuffToDisplay: true,
       afterDarkHasStuffToDisplay: true,
@@ -23,12 +25,16 @@ class AdminJudges extends React.Component {
 
   deleteFromAfterDarkList = (e, item) => {
     var indexOfGroup = this.state.afterDarkJudges.indexOf(item);
-    this.state.afterDarkJudges.splice(indexOfGroup, 1);
+    var tempGroup = this.state.afterDarkJudges;
+    tempGroup.splice(indexOfGroup, 1);
+    this.adminAfterDarkGroupListChild.current.updateList(tempGroup);
   }
 
   deleteFromSensasiansList = (e, item) => {
     var indexOfGroup = this.state.sensasiansJudges.indexOf(item);
-    this.state.sensasiansJudges.splice(indexOfGroup, 1);
+    var tempGroup = this.state.sensasiansJudges;
+    tempGroup.splice(indexOfGroup, 1);
+    this.adminSensasiansGroupListChild.current.updateList(tempGroup);
   }
 
   // Render the component
@@ -55,6 +61,7 @@ class AdminJudges extends React.Component {
           <div style={hideSensasiansArray}>
   					<div className="bar-group u-margin-bottom-md draggableList">
               <AdminGroupList
+                ref={this.adminSensasiansGroupListChild}
                 groups={this.state.sensasiansJudges}
                 deleteFromList={this.deleteFromSensasiansList}
               />
@@ -82,6 +89,7 @@ class AdminJudges extends React.Component {
           <div style={hideAfterDarkArray}>
   					<div className="bar-group u-margin-bottom-md draggableList">
               <AdminGroupList
+                ref={this.adminAfterDarkGroupListChild}
                 groups={this.state.afterDarkJudges}
                 deleteFromList={this.deleteFromAfterDarkList}
               />

@@ -20,7 +20,10 @@ class AdminGroups extends React.Component {
 
   deleteFromList = (e, item) => {
     var indexOfGroup = this.state.groups.indexOf(item);
-    this.state.groups.splice(indexOfGroup, 1);
+    var tempGroup = this.state.groups;
+    tempGroup.splice(indexOfGroup, 1);
+    this.adminGroupListChild.current.updateList(tempGroup);
+    // TODO
   }
 
   updateSearchInput = (e) => {

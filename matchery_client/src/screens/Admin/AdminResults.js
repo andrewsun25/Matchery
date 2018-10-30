@@ -20,6 +20,16 @@ class AdminResults extends React.Component {
     }
   }
 
+  publishResults = (e) => {
+    e.preventDefault();
+    alert("Results published!");
+  }
+
+  regenerateResults = (e) => {
+    e.preventDefault();
+    alert("Results re-generated!");
+  }
+
   // Render the component
   render() {
 
@@ -43,12 +53,12 @@ class AdminResults extends React.Component {
 				<section className="section-generate-and-publish u-margin-bottom-md">
 					<button
             className="btn btn--high-action-hollowed event-admin-custom-width u-margin-left-md"
-            onClick={(e) => {alert("Results re-generated!")}}>
+            onClick={(e) => {this.regenerateResults(e)}}>
             Re-Generate Matches
           </button>
 					<button
             className="btn btn--high-action event-admin-custom-width u-margin-left-sm"
-            onClick={(e) => {alert("Results published!")}}>
+            onClick={(e) => {this.publishResults(e)}}>
             Publish Results
           </button>
 				</section>

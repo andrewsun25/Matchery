@@ -117,7 +117,7 @@ class App extends Component {
     }).then(res => res.json())
       .then(json => {
         console.log('json', json);
-        alert(json.message);
+        // alert(json.message);
         if (json.success) {
           localStorage.setItem('session', json.token);
           localStorage.setItem('username', json.username);
@@ -135,7 +135,7 @@ class App extends Component {
         .then(res => res.json())
         .then(json => {
           if (json.success) {
-            alert("Logged out!");
+            // alert("Logged out!");
             this.setState({
               showLogin: true,
               showDashboard: false,

@@ -65,12 +65,7 @@ class NotList extends React.Component {
               const dragging = (i == this.state.dragging) ? "dragging" : "";
               return <li className={dragging}
                 data-id={i}
-                key={i}
-                onClick={() => this.toggleSomething(item)}
-                draggable="false"
-                onDragStart={this.dragStart}
-                onDragOver={this.dragOver}
-                onDragEnd={this.dragEnd}>
+                key={i}>
                 <div className="bar-group__bar">
                   {item}
                   <ion-icon

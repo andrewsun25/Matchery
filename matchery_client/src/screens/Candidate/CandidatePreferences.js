@@ -24,18 +24,19 @@ class CandidatePreferences extends React.Component {
     }
   }
 
+  // Set local states and forward to List
   getList = (list) => {
     this.setState({rankingGroup: list});
     this.listChild.current.getList(list);
   }
 
+  // Set local states and forward to notList
   getNotList = (list) => {
     this.setState({notGroup: list});
     this.notListChild.current.getList(list);
   }
 
   broadcastSortedList = (e, list) => {
-    //console.log(list);
     this.setState({hasEditedRankingGroup: true});
     // update the original json object
     this.props.propagate(list, this.state.notGroup);

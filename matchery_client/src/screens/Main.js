@@ -144,21 +144,25 @@ class App extends Component {
           };
           var username = localStorage.getItem('username');
           var eventsList = EventsObject.events;
+          // Iterate through all the events
           eventsList.forEach((event) => {
-            // TODO check if exists
             if (
               event.hasOwnProperty("eventName") &&
               event.hasOwnProperty("admins") &&
               event.hasOwnProperty("candidates") &&
               event.hasOwnProperty("groups")
             ) {
-              if (event.admins.includes(username)) { // Check if admin
+              if (event.admins.includes(username)) {
                 // User is an admin for this event
+
                 var t_events = this.state.events;
                 t_events.administrator.push(event.eventName);
-              } else if (event.candidates.hasOwnProperty(username)) {
 
-                // User is a candidate for this event
+              } else if (event.candidates.hasOwnProperty(username)) {
+                // If the user is a candidate for this event...
+
+                // We push an object to the this.state.events.candidate
+                // that contains some information.
                 var pushToCandidate = {
                   "eventName": event.eventName,
                   "list": event.candidates[username].list,
@@ -303,13 +307,18 @@ class App extends Component {
   }
 
   // Function to navigate from the dashboard
-  // page to the candidate page.
+  // page to the candidate page for a specific event
+  // given an eventName.
   dashboardToCandidate = (e, eventName) => {
     this.state.events.candidate.forEach((event) => {
       if (event.eventName === eventName) {
+        // If we have found the right event...
+        // forward the eventName, the list, and the notList
+        // to the candidate page.
         this.candidateChild.current.setEventName(event.eventName);
         this.candidateChild.current.getList(event.list);
         this.candidateChild.current.getNotList(event.notList);
+        // Display the candidate page.
         this.setState({
           showDashboard: false,
           showCandidate: true,

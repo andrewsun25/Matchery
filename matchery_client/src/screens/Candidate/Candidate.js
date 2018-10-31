@@ -26,14 +26,17 @@ class Candidate extends React.Component {
     });
   }
 
+  // Forwards the list to CandidatePreferences
   getList = (list) => {
     this.candidatePreferencesChild.current.getList(list);
   }
 
+  // Forwards the notList to CandidatePreferences
   getNotList = (list) => {
     this.candidatePreferencesChild.current.getNotList(list);
   }
 
+  // Propage the lists back to Main from Candidate Preferences
   propagate = (list, notList) => {
     this.props.propagate(this.state.eventName, list, notList);
   }

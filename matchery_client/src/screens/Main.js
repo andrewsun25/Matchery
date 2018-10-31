@@ -38,6 +38,7 @@ class App extends Component {
         'Judge' : [],
         'Candidate' : []
       },
+
     };
   }
 
@@ -70,6 +71,8 @@ class App extends Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) { // If user exists
+          console.log(json);
+          console.log(json.eventRoles);
           const eventRole = json.eventRoles;
           eventRole.forEach((event) => {
             var tempRoles = this.state.roles;
@@ -81,9 +84,13 @@ class App extends Component {
               events: tempEvents,
             });
           });
+          // TODO ASSUMPTION OF EVENT STRUCTURE
+          // FETCH: all events user is in
+
           this.setState({
             showLogin: false,
             showDashboard: true,
+            // {success: true, eventRoles: []}
             // TODO These are manually encoded roles! Remember to remove this.
             roles: {
               'Administrator' : true,
@@ -96,7 +103,85 @@ class App extends Component {
               'Candidate': ['WashU New Chancellor Auditions 2018'],
             },
             // TODO End deletion section.
+            /*
+            event
+              admin
+                bob
+                bill
+              candidate
+                will
+                  preferences array
+                andrew
+              groups
+                group1
+                  judge1
+                  judge2
+                  preferencesarray
+
+
+            user
+              username and password
+              events & role
+            */
           });
+          var JSONObject = {
+            "events": [
+              {
+                "eventName": "Acapella",
+                "admins": [
+                  "Adam",
+                ],
+                "candidates": {
+                  "Bailey": [
+                    "Sensasions",
+                    "After Dark",
+                    "The Amateurs",
+                  ],
+                  "Carl": [
+                    "After Dark",
+                    "The Amateurs",
+                    "Sensasions",
+                  ],
+                },
+                "groups": {
+                  "Sensasions": {
+                    "Judges": [
+                      "Dan",
+                      "Fiona",
+                    ],
+                    "Ranking": [
+                      "Bailey",
+                      "Carl",
+                    ],
+                  },
+                  "After Dark": {
+                    "Judges": [
+                      "Ephraim",
+                      "George",
+                    ],
+                    "Ranking": [
+                      "Carl",
+                      "Bailey",
+                    ],
+                  },
+                  "The Amateurs": {
+                    "Judges": [
+                      "Halley",
+                      "Isabelle",
+                    ],
+                    "Ranking": [
+                      "Bailey",
+                      "Carl",
+                    ],
+                  },
+                },
+              },
+              {
+                "eventName": "LNYF",
+              },
+            ]
+          };
+          console.log(JSONObject);
         }
       });
   }
@@ -268,7 +353,7 @@ class App extends Component {
               onClick={(e) => {this.handleLogOut(e)}}
               className="header__my-account-box">
               LogOut
-              <ion-icon class="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
+              <ion-icon className="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
             </div>
           </div>
         </header>
@@ -280,9 +365,9 @@ class App extends Component {
           showAdmin: false,
           showCandidate: false,
         })}}>
-          <div class="container-btn-back">
-            <button class="btn-back">
-              <ion-icon class="btn-back__icon" name="arrow-dropleft"></ion-icon>
+          <div className="container-btn-back">
+            <button className="btn-back">
+              <ion-icon className="btn-back__icon" name="arrow-dropleft"></ion-icon>
               Back
             </button>
           </div>

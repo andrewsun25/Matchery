@@ -9,3 +9,4 @@
 TODO
 * Admin Judge page adding judges only adds to the first event, need to figure out a way to fix this
 * Pressing enter when wanting to submit form (currently requires clicking buttons)
+* synchronicity between two judges eg

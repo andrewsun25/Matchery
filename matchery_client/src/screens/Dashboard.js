@@ -20,20 +20,20 @@ class Dashboard extends React.Component {
   // Render the component
   render() {
 
-    // Show a card if the user has permissions.
+    // Show a card if the user has permissions. TODO
   	const showAdministrator = this.props.roles['Administrator'] ? {display:'block'} : {display:'none'};
   	const showJudge = this.props.roles['Judge'] ? {display:'block'} : {display:'none'};
   	const showCandidateRole = this.props.roles['Candidate'] ? {display:'block'} : {display:'none'};
 
     // List events on each card.
-  	const administratorEvents = this.props.events['Administrator'].map((eventName) =>
-  		<li className="panel__content-item" onClick={(e) => {this.props.dashboardToAdmin(e)}}>{eventName}</li>
+  	const administratorEvents = this.props.events['Administrator'].map((eventName, key) =>
+  		<li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToAdmin(e)}}>{eventName}</li>
   	);
-  	const judgeEvents = this.props.events['Judge'].map((eventName) =>
-		  <li className="panel__content-item" onClick={(e) => {this.props.dashboardToJudge(e)}}>{eventName}</li>
+  	const judgeEvents = this.props.events['Judge'].map((eventName, key) =>
+		  <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToJudge(e)}}>{eventName}</li>
 	  );
-	  const candidateEvents = this.props.events['Candidate'].map((eventName) =>
-      <li className="panel__content-item" onClick={(e) => {this.props.dashboardToCandidate(e)}}>{eventName}</li>
+	  const candidateEvents = this.props.events['Candidate'].map((eventName, key) =>
+      <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToCandidate(e)}}>{eventName}</li>
 	  );
 
     // Return the component frame

@@ -12,10 +12,30 @@ class Candidate extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.candidatePreferencesChild = React.createRef();
     this.state = {
+      eventName: "",
       showPreferences: true,
       showResults: false,
     }
+  }
+
+  setEventName = (eventName) => {
+    this.setState({
+      eventName: eventName,
+    });
+  }
+
+  getList = (list) => {
+    this.candidatePreferencesChild.current.getList(list);
+  }
+
+  getNotList = (list) => {
+    this.candidatePreferencesChild.current.getNotList(list);
+  }
+
+  propagate = (list, notList) => {
+    this.props.propagate(this.state.eventName, list, notList);
   }
 
   // Render the component
@@ -30,7 +50,7 @@ class Candidate extends React.Component {
     	<div className="main-panel">
 
 				<div className="main-panel__header">
-					<h2 className="heading-secondary">WashU Acappella Auditions 2018 <span className="main-panel__header--user"> - Candidate</span></h2>
+					<h2 className="heading-secondary">{this.state.eventName} <span className="main-panel__header--user"> - Candidate</span></h2>
 				</div>
 
 				<div className="main-panel__nav-and-content">
@@ -79,7 +99,8 @@ class Candidate extends React.Component {
 
 							<div style={showPreferences}>
 			          <CandidatePreferences
-
+                  ref={this.candidatePreferencesChild}
+                  propagate={this.propagate}
 			          />
 			        </div>
 

@@ -10,3 +10,5 @@ TODO
 * Admin Judge page adding judges only adds to the first event, need to figure out a way to fix this
 * Pressing enter when wanting to submit form (currently requires clicking buttons)
 * synchronicity between two judges eg
+
+* Want to use firstName instead of username in Main.js but this is not set in localStorage during login so we need to make a separate fetch request for the user's first name

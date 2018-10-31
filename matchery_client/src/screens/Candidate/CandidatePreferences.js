@@ -13,49 +13,82 @@ class CandidatePreferences extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.listChild = React.createRef();
+    this.notListChild = React.createRef();
     this.state = {
-      rankingGroup: [
-        "Mosaic Whispers",
-        "Sensasions",
-        "The Amateurs",
-        "Aristocats",
-      ],
-      notGroup: [
-        "The Pikers",
-        "After Dark",
-      ],
+      rankingGroup: [],
+      notGroup: [],
       notHasStuffToDisplay: true,
       hasEditedRankingGroup: false,
       hideNot: true,
     }
   }
 
+  getList = (list) => {
+    this.setState({rankingGroup: list});
+    this.listChild.current.getList(list);
+  }
+
+  getNotList = (list) => {
+    this.setState({notGroup: list});
+    this.notListChild.current.getList(list);
+  }
+
   broadcastSortedList = (e, list) => {
-    console.log(list);
+    //console.log(list);
     this.setState({hasEditedRankingGroup: true});
+    // update the original json object
+    this.props.propagate(list, this.state.notGroup);
   }
 
   removeFromRanking = (e, name) => {
-    var tempNotGroup = this.state.notGroup;
-    tempNotGroup.push(name);
-    this.setState({notGroup: tempNotGroup});
-    var indexOfUser = this.state.rankingGroup.indexOf(name);
-    this.state.rankingGroup.splice(indexOfUser, 1);
+    // Add group to the "Not Considering" List
+    var temp_notList = this.state.notGroup;
+    temp_notList.push(name);
+    this.notListChild.current.getList(temp_notList);
+    this.setState({
+      notGroup: temp_notList,
+    });
+    // Remove group from the "Ranking" List
+    var temp_list = this.state.rankingGroup;
+    var indexOfUser = temp_list.indexOf(name);
+    temp_list.splice(indexOfUser, 1);
+    this.listChild.current.getList(temp_list);
+    this.setState({
+      rankingGroup: temp_list,
+    });
+    // Update save preferences
     this.setState({hasEditedRankingGroup: true});
     if (this.state.notGroup.length != 0) {
       this.setState({notHasStuffToDisplay: true});
     }
+    // Update original json object
+    this.props.propagate(temp_list, temp_notList);
   }
+
   putBackInRanking = (e, name) => {
-    var tempRankingGroup = this.state.rankingGroup;
-    tempRankingGroup.push(name);
-    this.setState({rankingGroup: tempRankingGroup});
-    var indexOfUser = this.state.notGroup.indexOf(name);
-    this.state.notGroup.splice(indexOfUser, 1);
+    // Put back into "Ranking" List
+    var temp_list = this.state.rankingGroup;
+    temp_list.push(name);
+    this.listChild.current.getList(temp_list);
+    this.setState({
+      rankingGroup: temp_list
+    });
+    // Put back into "Not Considering" List
+    var temp_notList = this.state.notGroup;
+    var indexOfUser = temp_notList.indexOf(name);
+    temp_notList.splice(indexOfUser, 1);
+    this.notListChild.current.getList(temp_notList);
+    this.setState({
+      notGroup: temp_notList,
+    });
+    // Update save preferences
     this.setState({hasEditedRankingGroup: true});
     if (this.state.notGroup.length == 0) {
       this.setState({notHasStuffToDisplay: false});
     }
+    // Update the original json object
+    this.props.propagate(temp_list, temp_notList);
   }
 
   // Render the component
@@ -78,7 +111,7 @@ class CandidatePreferences extends React.Component {
 
 					<div className="bar-group u-margin-bottom-md draggableList">
 						<List
-              groups={this.state.rankingGroup}
+              ref={this.listChild}
               broadcastSortedList={this.broadcastSortedList}
               removeFromRanking={this.removeFromRanking}
             />
@@ -114,7 +147,7 @@ class CandidatePreferences extends React.Component {
 
 					<div className="bar-group draggableList" style={hideNotArray}>
             <NotList
-              groups={this.state.notGroup}
+              ref={this.notListChild}
               putBackInRanking={this.putBackInRanking}
               />
 					</div>

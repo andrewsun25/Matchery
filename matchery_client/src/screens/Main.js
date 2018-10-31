@@ -20,6 +20,7 @@ class App extends Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.candidateChild = React.createRef();
     this.state = {
       showLogin: true,
       showSignUp: false,
@@ -28,17 +29,12 @@ class App extends Component {
       showJudge: false,
       showCandidate: false,
       showBackButton: false,
-      roles: { // TODO This will need to be pulled from the server
-        'Administrator' : false,
-        'Judge' : false,
-        'Candidate' : false
-      },
+      candidateGroupList: [],
       events: { // TODO This will need to be pulled from the server
-        'Administrator' : [],
-        'Judge' : [],
-        'Candidate' : []
+        'administrator' : [],
+        'judge' : [],
+        'candidate' : []
       },
-
     };
   }
 
@@ -71,117 +67,129 @@ class App extends Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) { // If user exists
-          console.log(json);
-          console.log(json.eventRoles);
-          const eventRole = json.eventRoles;
-          eventRole.forEach((event) => {
-            var tempRoles = this.state.roles;
-            tempRoles[event.role] = true;
-            var tempEvents = this.state.events;
-            tempEvents[event.role].push(event.eventName);
-            this.setState({
-              roles: tempRoles,
-              events: tempEvents,
-            });
-          });
-          // TODO ASSUMPTION OF EVENT STRUCTURE
-          // FETCH: all events user is in
-
-          this.setState({
-            showLogin: false,
-            showDashboard: true,
-            // {success: true, eventRoles: []}
-            // TODO These are manually encoded roles! Remember to remove this.
-            roles: {
-              'Administrator' : true,
-              'Judge' : true,
-              'Candidate' : true
-            },
-            events: {
-              'Administrator': ['WashU Acappella Auditions 2018'],
-              'Judge': ['WashU LNYF Auditions 2018'],
-              'Candidate': ['WashU New Chancellor Auditions 2018'],
-            },
-            // TODO End deletion section.
-            /*
-            event
-              admin
-                bob
-                bill
-              candidate
-                will
-                  preferences array
-                andrew
-              groups
-                group1
-                  judge1
-                  judge2
-                  preferencesarray
-
-
-            user
-              username and password
-              events & role
-            */
-          });
-          var JSONObject = {
+          var EventsObject = {  // DUMMY DATA
             "events": [
               {
-                "eventName": "Acapella",
+                "eventName": "2018 Acapella",
                 "admins": [
                   "Adam",
                 ],
                 "candidates": {
-                  "Bailey": [
-                    "Sensasions",
-                    "After Dark",
-                    "The Amateurs",
-                  ],
-                  "Carl": [
-                    "After Dark",
-                    "The Amateurs",
-                    "Sensasions",
-                  ],
+                  "test1": {
+                    "list": [
+                      "Sensasions",
+                      "After Dark",
+                      "After Light",
+                    ],
+                    "notList": [
+                      "The Amateurs",
+                    ],
+                  },
+                  "test2": {
+                    "list": [
+                      "Sensasions",
+                      "After Dark",
+                    ],
+                    "notList": [
+                      "The Amateurs",
+                    ],
+                  },
                 },
-                "groups": {
-                  "Sensasions": {
-                    "Judges": [
-                      "Dan",
+                "groups": [
+                  {
+                    "groupName": "Sensasions",
+                    "judges": [
+                      "test3",
                       "Fiona",
                     ],
-                    "Ranking": [
+                    "list": [
                       "Bailey",
                       "Carl",
                     ],
+                    "newList": [
+                      "test2",
+                    ],
+                    "notList": [
+                      "test1",
+                    ],
                   },
-                  "After Dark": {
-                    "Judges": [
+                  {
+                    "groupName": "After Dark",
+                    "judges": [
                       "Ephraim",
                       "George",
                     ],
-                    "Ranking": [
+                    "ranking": [
                       "Carl",
                       "Bailey",
                     ],
                   },
-                  "The Amateurs": {
-                    "Judges": [
+                  {
+                    "groupName": "The Amateurs",
+                    "judges": [
                       "Halley",
-                      "Isabelle",
+                      "Frederick",
                     ],
-                    "Ranking": [
+                    "ranking": [
                       "Bailey",
                       "Carl",
                     ],
                   },
-                },
+                ],
               },
               {
                 "eventName": "LNYF",
               },
             ]
           };
-          console.log(JSONObject);
+          var username = localStorage.getItem('username');
+          var eventsList = EventsObject.events;
+          eventsList.forEach((event) => {
+            // TODO check if exists
+            if (
+              event.hasOwnProperty("eventName") &&
+              event.hasOwnProperty("admins") &&
+              event.hasOwnProperty("candidates") &&
+              event.hasOwnProperty("groups")
+            ) {
+              if (event.admins.includes(username)) { // Check if admin
+                // User is an admin for this event
+                var t_events = this.state.events;
+                t_events.administrator.push(event.eventName);
+              } else if (event.candidates.hasOwnProperty(username)) {
+
+                // User is a candidate for this event
+                var pushToCandidate = {
+                  "eventName": event.eventName,
+                  "list": event.candidates[username].list,
+                  "notList": event.candidates[username].notList,
+                };
+                var t_events = this.state.events;
+                t_events.candidate.push(pushToCandidate);
+                this.setState({events: t_events});
+
+              } else { // Check if judge
+                event.groups.forEach((group) => {
+                  if (group.judges.includes(username)) {
+                    // User is a judge for this event
+                    var t_events = this.state.events;
+                    t_events.judge.push(event.eventName);
+                  }
+                })
+              }
+            }
+          });
+          this.setState({
+            showLogin: false,
+            showDashboard: true,
+            /*
+            events: {
+              'Administrator': ['WashU Acappella Auditions 2018'],
+              'Judge': ['WashU LNYF Auditions 2018'],
+              'Candidate': ['WashU New Chancellor Auditions 2018'],
+            },
+            */
+          });
         }
       });
   }
@@ -224,16 +232,11 @@ class App extends Component {
             this.setState({
               showLogin: true,
               showDashboard: false,
-              roles: {
-                'Administrator' : false,
-                'Judge' : false,
-                'Candidate' : false
-              },
               events: {
-                'Administrator' : [],
-                'Judge' : [],
-                'Candidate' : []
-              }
+                'administrator' : [],
+                'judge' : [],
+                'candidate' : []
+              },
             });
           }
         });
@@ -301,12 +304,34 @@ class App extends Component {
 
   // Function to navigate from the dashboard
   // page to the candidate page.
-  dashboardToCandidate = (e) => {
-    this.setState({
-      showDashboard: false,
-      showCandidate: true,
-      showBackButton: true,
-    });
+  dashboardToCandidate = (e, eventName) => {
+    this.state.events.candidate.forEach((event) => {
+      if (event.eventName === eventName) {
+        this.candidateChild.current.setEventName(event.eventName);
+        this.candidateChild.current.getList(event.list);
+        this.candidateChild.current.getNotList(event.notList);
+        this.setState({
+          showDashboard: false,
+          showCandidate: true,
+          showBackButton: true,
+        });
+      }
+    })
+  }
+
+  candidatePropagate = (eventName, list, notList) => {
+    var temp_events = this.state.events;
+    temp_events.candidate.forEach((event) => {
+      if (event.eventName === eventName) {
+        event.list = list;
+        event.notList = notList;
+        this.setState({
+          events: temp_events,
+        }, () => {
+          console.dir(this.state.events);
+        });
+      }
+    })
   }
 
   // Render the Main application
@@ -395,7 +420,6 @@ class App extends Component {
             dashboardToAdmin={this.dashboardToAdmin}
             dashboardToJudge={this.dashboardToJudge}
             dashboardToCandidate={this.dashboardToCandidate}
-            roles={this.state.roles}
             events={this.state.events}
           />
         </div>
@@ -409,7 +433,10 @@ class App extends Component {
         </div>
 
         <div style={showCandidate}>
-          <Candidate />
+          <Candidate
+            ref={this.candidateChild}
+            propagate={this.candidatePropagate}
+          />
         </div>
 
       </div>

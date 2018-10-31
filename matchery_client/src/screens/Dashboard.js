@@ -20,20 +20,16 @@ class Dashboard extends React.Component {
   // Render the component
   render() {
 
-    // Show a card if the user has permissions. TODO
-  	const showAdministrator = this.props.roles['Administrator'] ? {display:'block'} : {display:'none'};
-  	const showJudge = this.props.roles['Judge'] ? {display:'block'} : {display:'none'};
-  	const showCandidateRole = this.props.roles['Candidate'] ? {display:'block'} : {display:'none'};
-
     // List events on each card.
-  	const administratorEvents = this.props.events['Administrator'].map((eventName, key) =>
+  	const administratorEvents = this.props.events['administrator'].map((eventName, key) =>
   		<li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToAdmin(e)}}>{eventName}</li>
   	);
-  	const judgeEvents = this.props.events['Judge'].map((eventName, key) =>
+
+  	const judgeEvents = this.props.events['judge'].map((eventName, key) =>
 		  <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToJudge(e)}}>{eventName}</li>
 	  );
-	  const candidateEvents = this.props.events['Candidate'].map((eventName, key) =>
-      <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToCandidate(e)}}>{eventName}</li>
+	  const candidateEvents = this.props.events['candidate'].map((event, key) =>
+      <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToCandidate(e, event.eventName)}}>{event.eventName}</li>
 	  );
 
     // Return the component frame
@@ -68,7 +64,7 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 
-					<div className="panel" style={showAdministrator}>
+					<div className="panel">
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="person"></ion-icon>
 							<div className="panel__header-text">Administrator for</div>
@@ -78,7 +74,7 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 
-					<div className="panel" style={showJudge}>
+					<div className="panel">
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="thumbs-up"></ion-icon>
 							<div className="panel__header-text">Judge for</div>
@@ -88,7 +84,7 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 
-					<div className="panel" style={showCandidateRole}>
+					<div className="panel">
 						<div className="panel__header">
 							<ion-icon class="panel__icon" name="microphone"></ion-icon>
 							<div className="panel__header-text">Candidate for</div>

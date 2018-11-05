@@ -66,133 +66,16 @@ class App extends Component {
       }),
     }).then(res => res.json())
       .then(json => {
-        if (json.success) { // If user exists
-          var EventsObject = {  // DUMMY DATA
-            "events": [
-              {
-                "eventName": "2018 Acapella",
-                "admins": [
-                  "Adam",
-                ],
-                "candidates": {
-                  "test1": {
-                    "list": [
-                      "Sensasions",
-                      "After Dark",
-                      "After Light",
-                    ],
-                    "notList": [
-                      "The Amateurs",
-                    ],
-                  },
-                  "test2": {
-                    "list": [
-                      "Sensasions",
-                      "After Dark",
-                    ],
-                    "notList": [
-                      "The Amateurs",
-                    ],
-                  },
-                },
-                "groups": [
-                  {
-                    "groupName": "Sensasions",
-                    "judges": [
-                      "test3",
-                      "Fiona",
-                    ],
-                    "list": [
-                      "Bailey",
-                      "Carl",
-                    ],
-                    "newList": [
-                      "test2",
-                    ],
-                    "notList": [
-                      "test1",
-                    ],
-                  },
-                  {
-                    "groupName": "After Dark",
-                    "judges": [
-                      "Ephraim",
-                      "George",
-                    ],
-                    "ranking": [
-                      "Carl",
-                      "Bailey",
-                    ],
-                  },
-                  {
-                    "groupName": "The Amateurs",
-                    "judges": [
-                      "Halley",
-                      "Frederick",
-                    ],
-                    "ranking": [
-                      "Bailey",
-                      "Carl",
-                    ],
-                  },
-                ],
-              },
-              {
-                "eventName": "LNYF",
-              },
-            ]
-          };
+        if (json.success) {
           var username = localStorage.getItem('username');
           var eventsList = EventsObject.events;
           // Iterate through all the events
           eventsList.forEach((event) => {
-            if (
-              event.hasOwnProperty("eventName") &&
-              event.hasOwnProperty("admins") &&
-              event.hasOwnProperty("candidates") &&
-              event.hasOwnProperty("groups")
-            ) {
-              if (event.admins.includes(username)) {
-                // User is an admin for this event
 
-                var t_events = this.state.events;
-                t_events.administrator.push(event.eventName);
-
-              } else if (event.candidates.hasOwnProperty(username)) {
-                // If the user is a candidate for this event...
-
-                // We push an object to the this.state.events.candidate
-                // that contains some information.
-                var pushToCandidate = {
-                  "eventName": event.eventName,
-                  "list": event.candidates[username].list,
-                  "notList": event.candidates[username].notList,
-                };
-                var t_events = this.state.events;
-                t_events.candidate.push(pushToCandidate);
-                this.setState({events: t_events});
-
-              } else { // Check if judge
-                event.groups.forEach((group) => {
-                  if (group.judges.includes(username)) {
-                    // User is a judge for this event
-                    var t_events = this.state.events;
-                    t_events.judge.push(event.eventName);
-                  }
-                })
-              }
-            }
           });
           this.setState({
             showLogin: false,
             showDashboard: true,
-            /*
-            events: {
-              'Administrator': ['WashU Acappella Auditions 2018'],
-              'Judge': ['WashU LNYF Auditions 2018'],
-              'Candidate': ['WashU New Chancellor Auditions 2018'],
-            },
-            */
           });
         }
       });

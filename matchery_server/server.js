@@ -65,48 +65,46 @@ app.get('/match', function(req, res) {
         applicantPreferences[candidateObject.candidate] = candidateObject.list;
       });
 
-      console.log(applicantPreferences);
+        Audition.find({
+          eventName: "WashU Diwali Auditions 2018"
+        }, (err, auditions) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
 
+          auditions.forEach((audition) => {
+            groupPreferences[audition.auditionName] = audition.list;
+          });
+
+          console.log(groupPreferences);
+          console.log(applicantPreferences);
+
+            const spawn = require("child_process").spawn;
+            data = {
+              "applicantPreferences": applicantPreferences,
+              "groupPreferences": groupPreferences
+
+           /*   "groupQuotas": {
+                "aristocats": 2,
+                "sensasians": 2,
+                "singers": 2,
+                "ghostlights": 2
+              }*/
+            }
+
+            const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
+            pythonProcess.stdout.on('data', (data) => {
+              return res.send({
+                success: true,
+                data: data.toString().trim()
+              });
+            });
+    });
     });
 
-  Audition.find({
-      eventName: "WashU Diwali Auditions 2018"
-    }, (err, auditions) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: server error'
-        });
-      }
-
-      auditions.forEach((audition) => {
-        groupPreferences[audition.auditionName] = audition.list;
-      });
-      console.log(groupPreferences);
-
-    });
-
-
-  const spawn = require("child_process").spawn;
-  data = {
-    "applicantPreferences": applicantPreferences,
-    "groupPreferences": groupPreferences
-
- /*   "groupQuotas": {
-      "aristocats": 2,
-      "sensasians": 2,
-      "singers": 2,
-      "ghostlights": 2
-    }*/
-  }
-
-  const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
-  pythonProcess.stdout.on('data', (data) => {
-    return res.send({
-      success: true,
-      data: data.toString().trim()
-    });
-  });
 });
 
 //==========================//

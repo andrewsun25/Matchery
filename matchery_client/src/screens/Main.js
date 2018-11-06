@@ -206,10 +206,10 @@ class App extends Component {
       'The Amateurs',
       'Mosaic Whispers',
     ]);
-    this.adminChild.current.setGroupJudgesDict({
-      'Group1': ['Mike'],
-      'Group2': ['Jamie'],
-    });
+    this.adminChild.current.setGroupJudgesDict([
+      ['Group1', 'Mike', 'Jake'],
+      ['Group2', 'Jamie', 'Bob']
+    ]);
 
     this.setState({
       showDashboard: false,

@@ -51,8 +51,8 @@ class Admin extends React.Component {
     this.showGroupsChild.current.setGroupList(list);
   }
 
-  setGroupJudgesDict = (dict) => {
-    this.showJudgesChild.current.setGroupJudgesDict(dict);
+  setGroupJudgesDict = (list) => {
+    this.showJudgesChild.current.setGroupJudgesList(list);
   }
 
   showAddGroupModal = (e) => { this.setState({showAddGroupModal: true}); }

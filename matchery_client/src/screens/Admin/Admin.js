@@ -26,10 +26,6 @@ class Admin extends React.Component {
     this.state = {
       eventName: "",
 
-      groups: [],
-      candidates: [],
-      groupJudges: {},
-
       showGroups: true,
       showJudges: false,
       showCandidates: false,
@@ -48,23 +44,14 @@ class Admin extends React.Component {
   }
 
   setCandidateList = (list) => {
-    this.setState({
-      candidates: list, // not really used
-    });
     this.showCandidatesChild.current.setCandidateList(list);
   }
 
   setGroupList = (list) => {
-    this.setState({
-      group: list, // not really used
-    });
     this.showGroupsChild.current.setGroupList(list);
   }
 
   setGroupJudgesDict = (dict) => {
-    this.setState({
-      groupJudges: dict, // not really used
-    });
     this.showJudgesChild.current.setGroupJudgesDict(dict);
   }
 
@@ -76,13 +63,13 @@ class Admin extends React.Component {
   closeAddCandidateModal = (e) => { this.setState({showAddCandidateModal: false}); }
   closeAddJudgeModal = (e) => { this.setState({showAddJudgeModal: false}); }
 
-  // This functi
+  // This function is called when the user attempts to add a group.
   addGroupSuccess = (e, group) => {
     e.preventDefault();
-    this.setState({showAddGroupModal: false});
-    var tempGroup = this.state.groups;
-    tempGroup.push(group);
-    this.setState({groups: tempGroup});
+    this.setState({
+      showAddGroupModal: false,
+    });
+    this.showGroupsChild.current.addGroupSuccess(group);
     this.addGroupChild.current.resetInput();
   }
 
@@ -91,11 +78,12 @@ class Admin extends React.Component {
   addCandidateSuccess = (e, candidateList) => {
     e.preventDefault();
     this.setState({
-      showAddCandidateModal: false
+      showAddCandidateModal: false,
     });
     this.showCandidatesChild.current.addCandidateSuccess(candidateList);
     this.addCandidateChild.current.resetInput();
   }
+
   addJudgeSuccess = (e, judges) => {
     e.preventDefault();
     this.setState({showAddJudgeModal: false});

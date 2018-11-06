@@ -20,19 +20,22 @@ class AdminGroups extends React.Component {
 
   // Function to set the local state [groups] to its initial value.
   // This is called whenever an admin clicks on an admin event.
-  setGrouplist = (list) => {
+  setGroupList = (list) => {
     this.setState({
       groups: list,
     });
-    this.adminGroupListChild.current.updateList(list); 
+    this.adminGroupListChild.current.updateList(list);
   }
 
   deleteFromList = (e, item) => {
-    var indexOfGroup = this.state.groups.indexOf(item);
-    var tempGroup = this.state.groups;
-    tempGroup.splice(indexOfGroup, 1);
-    this.adminGroupListChild.current.updateList(tempGroup);
-    // TODO
+    var tempList = this.state.groups;
+    var indexOfItem = tempList.indexOf(item);
+    tempList.splice(indexOfItem, 1);
+    this.setState({
+      groups: tempList,
+    });
+    this.adminGroupListChild.current.updateList(tempList);
+    this.update(tempList);
   }
 
   updateSearchInput = (e) => {
@@ -51,6 +54,17 @@ class AdminGroups extends React.Component {
     }
   }
 
+  addGroupSuccess = (group) => {
+    var tempGroup = this.state.groups;
+    tempGroup.push(group);
+    this.setState({groups: tempGroup});
+    this.adminGroupListChild.current.updateList(tempGroup);
+    this.update(tempGroup);
+  }
+
+  update = (list) => {
+    console.log(list);
+  }
 
   // Render the component
   render() {

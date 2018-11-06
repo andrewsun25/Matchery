@@ -18,9 +18,16 @@ class AdminJudges extends React.Component {
       afterDarkHasStuffToDisplay: true,
       hideSensasians: true,
       hideAfterDark: true,
-      sensasiansJudges: this.props.sensasiansJudges,
-      afterDarkJudges: this.props.afterDarkJudges,
+
+      groupJudges: {},
     }
+  }
+
+  setGroupJudgesDict = (dict) => {
+    this.setState({
+      groupJudges: dict,
+    });
+    //this.adminGroupListChild.current.updateList(list);
   }
 
   deleteFromAfterDarkList = (e, item) => {

@@ -103,7 +103,6 @@ class Candidate extends React.Component {
 							<div style={showPreferences}>
 			          <CandidatePreferences
                   ref={this.candidatePreferencesChild}
-                  propagate={this.propagate}
 			          />
 			        </div>
 

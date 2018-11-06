@@ -12,11 +12,35 @@ class Judge extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.judgePreferencesChild = React.createRef();
     this.state = {
       showPreferences: true,
       showResults: false
+      eventName: "",
     }
   }
+
+  setEventName = (eventName) => {
+    this.setState({
+      eventName: eventName,
+    });
+  }
+
+  // Forwards the list to CandidatePreferences
+  getList = (list) => {
+    this.judgePreferencesChild.current.getList(list);
+  }
+
+  getNewList = (list) => {
+    this.judgePreferencesChild.current.getList(list);
+  }
+
+  // Forwards the notList to CandidatePreferences
+  getNotList = (list) => {
+    this.judgePreferencesChild.current.getNotList(list);
+  }
+
+
 
   // Render the component
   render() {
@@ -30,7 +54,7 @@ class Judge extends React.Component {
     	<div className="main-panel">
 
 				<div className="main-panel__header">
-					<h2 className="heading-secondary">WashU LNYF Auditions 2018 <span className="main-panel__header--user"> - Sensasians Judge</span></h2>
+					<h2 className="heading-secondary">{this.state.eventName} <span className="main-panel__header--user"> - Sensasians Judge</span></h2>
 				</div>
 
 				<div className="main-panel__nav-and-content">
@@ -81,7 +105,7 @@ class Judge extends React.Component {
 
 							<div style={showPreferences}>
 			          <JudgePreferences
-
+                  ref={this.judgePreferencesChild}
 			          />
 			        </div>
 

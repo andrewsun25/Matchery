@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
   	);
 
   	const judgeEvents = this.props.events['judge'].map((eventName, key) =>
-		  <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToJudge(e)}}>{eventName}</li>
+		  <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToJudge(e, eventName)}}>{eventName}</li>
 	  );
 	  const candidateEvents = this.props.events['candidate'].map((eventName, key) =>
       <li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToCandidate(e, eventName)}}>{eventName}</li>

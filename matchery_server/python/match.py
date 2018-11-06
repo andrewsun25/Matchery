@@ -8,6 +8,25 @@ def makeRankings(preferences):
         rankings[agent] = rank
     return rankings
 
+class GroupNoQuotas:
+    def __init__(self, name, preferences):
+        '''
+        @preferences: IE (2, 0, 1). Tuple of group's preferences over applicants with preferences[0] being the most preferred applicant.
+        @rankings: IE {0:1, 2:0, 1:2}. Dictionary of rank of each applicant.
+        '''
+        # self.preferences = preferences
+        self.applicantToRank = makeRankings(preferences) # ["andrew", "will"]
+        self.name = name
+        self.waitList = SortedDict() # rank --> applicant
+
+    def addToWaitList(self, applicant):
+        rank = self.applicantToRank[applicant]
+        self.waitList[rank] = applicant
+
+
+    def acceptQuota(self):
+        acceptedApplicants = [self.waitList[rank] for rank in self.waitList]
+        return acceptedApplicants
 
 class Group:
     def __init__(self, name, preferences, quota):
@@ -47,14 +66,14 @@ class Applicant:
     def removeTopChoice(self):
         self.preferences.pop(0)
 
-def match(applicantPreferences, groupPreferences, groupQuotas):
+def match(applicantPreferences, groupPreferences):
     applicants = {}
     for name in applicantPreferences:
         applicants[name] = Applicant(name, applicantPreferences[name])
 
     groups = {}
     for name in groupPreferences:
-        groups[name] = Group(name, groupPreferences[name], groupQuotas[name])
+        groups[name] = GroupNoQuotas(name, groupPreferences[name])
 
     eligibleApplicants = applicants.copy()
     # while exists applicant such that applicant hasn't been rejected by everyone or accepted anywhere:
@@ -62,7 +81,7 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
         # All eligibleApplicants apply to their top choice
         for applicantName, eligibleApplicant in eligibleApplicants.items():
             if not eligibleApplicant.preferences:
-                eligibleApplicants.remove(eligibleApplicant)
+                eligibleApplicants.pop(eligibleApplicant)
                 continue
 
             bestGroupName = eligibleApplicant.getBestGroup()
@@ -73,10 +92,7 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
                 eligibleApplicant.removeTopChoice()
 
         for groupName, group in groups.items():
-            accepted, rejected = group.acceptQuota()
-            for applicantName in rejected:
-                applicant = applicants[applicantName]
-                applicant.removeTopChoice()
+            accepted = group.acceptQuota()
 
             for applicantName in accepted:
                 if applicantName in eligibleApplicants:
@@ -92,18 +108,6 @@ def match(applicantPreferences, groupPreferences, groupQuotas):
         groupAcceptances[groupName] = waitList
     return groupAcceptances
 
-def parseStringToPreferences(string, numAgents):
-    # len preferencesList == 12, numAgents = 3, numPreferencesPerAgent = 4. start = 0, start + numPreferencesPerAgent = 4.
-    preferencesList = [int(c) for c in string.split(',')] 
-    numPreferencesPerAgent = int(len(preferencesList) / numAgents)
-    preferences = []
-    for i in range(0, numAgents):
-        start = i * numPreferencesPerAgent
-        preferences.append(preferencesList[start:start + numPreferencesPerAgent])
-    return preferences
-
-def parseStringToList(string):
-    return [int(c) for c in string.split(',')]
 
 
 
@@ -121,6 +125,6 @@ if __name__ == "__main__":
 
     # groupQuotas = parseStringToList(sys.argv[3])
     # print("ASD")
-    print(match(data["applicantPreferences"], data["groupPreferences"], data["groupQuotas"]))
+    print(match(data["applicantPreferences"], data["groupPreferences"]))
 
     sys.stdout.flush()

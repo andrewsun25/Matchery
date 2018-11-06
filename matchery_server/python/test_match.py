@@ -24,7 +24,7 @@ class TestMatch(unittest.TestCase):
 			"ghostlights": 2
 		}
 
-		print(match.match(applicantPreferences, groupPreferences, groupQuotas))
+		print(match.match(applicantPreferences, groupPreferences))
   
 
 	# def check_optimal(self, groupsAcceptances, applicantRankings, groupRankings):

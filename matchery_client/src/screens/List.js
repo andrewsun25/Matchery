@@ -12,7 +12,7 @@ class List extends React.Component {
     super(props);
     this.state = {
       dragging: undefined,
-      list: [""], // Get from parent
+      list: [], // Get from parent
     }
   }
 

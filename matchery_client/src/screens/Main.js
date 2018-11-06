@@ -22,6 +22,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.candidateChild = React.createRef();
+    this.judgeChild = React.createRef();
     this.state = {
       showLogin: true,
       showSignUp: false,
@@ -192,7 +193,13 @@ class App extends Component {
 
   // Function to navigate from the dashboard
   // page to the judge page.
-  dashboardToJudge = (e) => {
+  dashboardToJudge = (e, eventName) => {
+
+    this.candidateChild.current.setEventName();
+    this.candidateChild.current.getList();
+    this.judgeChild.current.getNewList();
+    this.candidateChild.current.getNotList();
+
     this.setState({
       showDashboard: false,
       showJudge: true,
@@ -229,7 +236,7 @@ class App extends Component {
               showCandidate: true,
               showBackButton: true,
             });
-          } 
+          }
       });
         }
         else {
@@ -376,7 +383,9 @@ class App extends Component {
         </div>
 
         <div style={showJudge}>
-          <Judge />
+          <Judge
+            ref={this.judgeChild}
+          />
         </div>
 
         <div style={showCreateEvent}>

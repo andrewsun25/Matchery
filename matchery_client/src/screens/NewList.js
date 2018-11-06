@@ -12,8 +12,12 @@ class NewList extends React.Component {
     super(props);
     this.state = {
       dragging: undefined,
-      list: this.props.groups, // Get from parent
+      list: [], // Get from parent
     }
+  }
+
+  getList = (groupList) => {
+    this.setState({list: groupList});
   }
 
 

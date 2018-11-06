@@ -13,20 +13,14 @@ class JudgePreferences extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.listChild = React.createRef();
+    this.newListChild = React.createRef();
+    this.notListChild = React.createRef();
     this.state = {
-      rankingGroup: [
-        "Zhi Shen Yong",
-        "Andrew Sun",
-        "Shane Blair",
-        "William Leung",
-      ],
-      newGroup: [
-        "John Doe",
-        "Jane Eyre",
-      ],
-      notGroup: [
-        "Mahmoud",
-      ],
+      rankingGroup: [],
+      newGroup: [],
+      notGroup: [],
+
       hasEditedRankingGroup: false,
       newHasStuffToDisplay: true,
       notHasStuffToDisplay: true,
@@ -35,55 +29,101 @@ class JudgePreferences extends React.Component {
     }
   }
 
-  broadcastSortedList = (e, list) => {
-    console.log(list);
-    this.setState({hasEditedRankingGroup: true});
+  getList = (list) => {
+    this.setState({rankingGroup: list});
+    this.listChild.current.getList(list);
   }
+
+  getNewList = (list) => {
+    this.setState({newGroup: list});
+    this.newListChild.current.getList(list);
+  }
+
+  getNotList = (list) => {
+    this.setState({notGroup: list});
+    this.notListChild.current.getList(list);
+  }
+
+  broadcastSortedList = (e, list) => {
+    // console.log(list);
+    this.setState({hasEditedRankingGroup: true});
+    this.update(list, this.state.newGroup, this.state.notGroup);
+  }
+
+  update = (list, newList, notList) => {
+    console.log(list + "|" + newList + "|" + notList)
+  }
+
   removeFromRanking = (e, name) => {
     var tempNotGroup = this.state.notGroup;
     tempNotGroup.push(name);
+    this.notListChild.current.getList(tempNotGroup);
     this.setState({notGroup: tempNotGroup});
-    var indexOfUser = this.state.rankingGroup.indexOf(name);
-    this.state.rankingGroup.splice(indexOfUser, 1);
+
+    var tempList = this.state.rankingGroup;
+    var indexOfUser = tempList.indexOf(name);
+    tempList.splice(indexOfUser, 1);
     this.setState({hasEditedRankingGroup: true});
-    if (this.state.notGroup.length != 0) {
+    if (tempNotGroup.length != 0) {
       this.setState({notHasStuffToDisplay: true});
     }
+    this.listChild.current.getList(tempList);
+    this.setState({rankingGroup: tempList,});
+    this.update(tempList, this.state.newGroup, tempNotGroup);
   }
+
   removeFromRankingNew = (e, name) => {
     var tempNotGroup = this.state.notGroup;
     tempNotGroup.push(name);
     this.setState({notGroup: tempNotGroup});
-    var indexOfUser = this.state.newGroup.indexOf(name);
-    this.state.newGroup.splice(indexOfUser, 1);
-    if (this.state.newGroup.length == 0) {
+    this.notListChild.current.getList(tempNotGroup);
+
+    var tempNewList = this.state.newGroup;
+    var indexOfUser = tempNewList.indexOf(name);
+    tempNewList.splice(indexOfUser, 1);
+    this.newListChild.current.getList(tempNewList);
+    this.setState({newGroup: tempNewList,});
+    if (tempNewList.length == 0) {
       this.setState({newHasStuffToDisplay: false});
     }
-    if (this.state.notGroup.length != 0) {
+    if (tempNotGroup.length != 0) {
       this.setState({notHasStuffToDisplay: true});
     }
+    this.update(this.state.rankingGroup, tempNewList, tempNotGroup);
   }
+
   putBackInRanking = (e, name) => {
     var tempRankingGroup = this.state.rankingGroup;
     tempRankingGroup.push(name);
     this.setState({rankingGroup: tempRankingGroup});
-    var indexOfUser = this.state.notGroup.indexOf(name);
-    this.state.notGroup.splice(indexOfUser, 1);
+    this.listChild.current.getList(tempRankingGroup);
+
+    var tempNotGroup = this.state.notGroup;
+    var indexOfUser = tempNotGroup.indexOf(name);
+    tempNotGroup.splice(indexOfUser, 1);
     this.setState({hasEditedRankingGroup: true});
-    if (this.state.notGroup.length == 0) {
-      this.setState({notHasStuffToDisplay: false});
-    }
+    this.notListChild.current.getList(tempNotGroup);
+    this.setState({
+      notGroup: tempNotGroup,
+    });
+    this.update(tempRankingGroup, this.state.newGroup, tempNotGroup);
   }
   putBackInRankingNew = (e, name) => {
     var tempRankingGroup = this.state.rankingGroup;
     tempRankingGroup.push(name);
     this.setState({rankingGroup: tempRankingGroup});
-    var indexOfUser = this.state.newGroup.indexOf(name);
-    this.state.newGroup.splice(indexOfUser, 1);
+    this.listChild.current.getList(tempRankingGroup);
+
+    var tempNewGroup = this.state.newGroup;
+    var indexOfUser = tempNewGroup.indexOf(name);
+    tempNewGroup.splice(indexOfUser, 1);
+    this.newListChild.current.getList(tempNewGroup);
     this.setState({hasEditedRankingGroup: true});
-    if (this.state.newGroup.length == 0) {
+    this.setState({newGroup: tempNewGroup,});
+    if (tempNewGroup.length == 0) {
       this.setState({newHasStuffToDisplay: false});
     }
+    this.update(tempRankingGroup, tempNewGroup, this.state.notGroup);
   }
 
   // Render the component
@@ -109,7 +149,7 @@ class JudgePreferences extends React.Component {
 
 					<div className="bar-group u-margin-bottom-md draggableList">
 						<List
-              groups={this.state.rankingGroup}
+              ref={this.listChild}
               broadcastSortedList={this.broadcastSortedList}
               removeFromRanking={this.removeFromRanking}
             />
@@ -145,7 +185,7 @@ class JudgePreferences extends React.Component {
 
 					<div className="bar-group draggableList" style={hideNewArray}>
 						<NewList
-              groups={this.state.newGroup}
+              ref={this.newListChild}
               putBackInRanking={this.putBackInRankingNew}
               removeFromRanking={this.removeFromRankingNew}
             />
@@ -162,7 +202,7 @@ class JudgePreferences extends React.Component {
 
 					<div className="bar-group draggableList" style={hideNotArray}>
             <NotList
-              groups={this.state.notGroup}
+              ref={this.notListChild}
               putBackInRanking={this.putBackInRanking}
             />
 					</div>

@@ -10,9 +10,9 @@ const EventSchema = new mongoose.Schema({
   candidateLists: []
 });
 
-module.exports = mongoose.model('Event', EventSchema, 'events');
+module.exports = mongoose.model('Event', EventSchema);
 
-const CandidateRankingSchema = new mongoose.Schema({
+/*const CandidateRankingSchema = new mongoose.Schema({
   user: String,
   rank: String
 });
@@ -25,4 +25,4 @@ const CandidateSchema = new mongoose.Schema({
 });
 
 //TODO LOOK WHY THIS IS events not candidates
-module.exports = mongoose.model('Candidate', CandidateSchema, 'events');
+module.exports = mongoose.model('Candidate', CandidateSchema, 'events');*/

@@ -268,20 +268,15 @@ class App extends Component {
       .then(json => {
         if (json.success) {
           console.log(json);
-          let foundEvent = json.event;
-          foundEvent.candidateLists.forEach((candidateObject) => {
-          if (candidateObject.candidate === localStorage.getItem('username')) {
-            this.candidateChild.current.setEventName(foundEvent.name);
-            this.candidateChild.current.getList(candidateObject.list);
-            this.candidateChild.current.getNotList(candidateObject.notList);
-            // Display the candidate page.
-            this.setState({
-              showDashboard: false,
-              showCandidate: true,
-              showBackButton: true,
-            });
-          }
-      });
+          this.candidateChild.current.setEventName(json.eventName);
+          this.candidateChild.current.getList(json.list);
+          this.candidateChild.current.getNotList(json.notList);
+          // Display the candidate page.
+          this.setState({
+            showDashboard: false,
+            showCandidate: true,
+            showBackButton: true,
+          });
         }
         else {
           console.log(json.message);

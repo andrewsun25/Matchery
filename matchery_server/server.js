@@ -322,40 +322,27 @@ app.post('/api/account/getSingleEvent', (req, res, next) => {
       eventName
     } = body;
 
-    Event.find({
+    Event.findOne({
       name: eventName
-    }, (err, events) => {
+    }, (err, event) => {
       if (err) {
         return res.send({
           success: false,
           message: 'Error: server error'
         });
       }
-      if (events.length != 1) {
-        return res.send({
-          success: false,
-          message: 'Invalid event name',
-          events: events
-        });
-      }
-      let event = events[0];
-      return res.send({
-        success: true,
-        event: event
+
+      let foundEvent = event.toObject();
+      foundEvent.candidateLists.forEach((candidateObject) => {
+          if (candidateObject.candidate === username) {
+            return res.send({
+              success: true,
+              eventName: foundEvent.name,
+              list: candidateObject.list,
+              notList: candidateObject.notList
+            });
+          }
       });
-      // Otherwise correct user
-      /*event.candidateLists.forEach((candidateObject) => {
-        if (candiateObject.candidate === username) {
-          return res.send({
-            success: true,
-            candidateObject: candidateObject
-          });
-        } 
-      });*/
-      return res.send({
-          success: false,
-          message: "Invalid user"
-        });
     });
   });
 
@@ -390,38 +377,11 @@ app.post('/api/account/updateCandidateLists', (req, res, next) => {
       notList
     } = body;
 
-/*    Event.findOne({ name: eventName }, function (err, event){
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: server error'
-        });
-      }
-      let candidateList = event.toObject().candidateLists;
-      for (var index in candidateList) {
-        if (candidateList[index].candidate === username) {
-          console.log(candidateList[index]);
-          candidateList[index].list = list;
-          candidateList[index].notList = notList;
-          console.log(candidateList[index]);
-          break;
-        }
-      }
-      event.toObject().candidateLists = candidateList;
-      event.markModified('candidateLists');
-      event.save(function(err) {
-        if (err) {
-          console.log(err);
-        }
-      });
-    });*/
-
     Event.findOneAndUpdate({'name': eventName, 'candidateLists.candidate': username}, { $set: { 'candidateLists.$.list': list, 'candidateLists.$.notList': notList } }, function (err) {
       if (err) {
         console.log(err);
       }
     });
-
 
     return res.send({
       success: true,

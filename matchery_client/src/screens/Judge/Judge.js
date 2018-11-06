@@ -15,7 +15,7 @@ class Judge extends React.Component {
     this.judgePreferencesChild = React.createRef();
     this.state = {
       showPreferences: true,
-      showResults: false
+      showResults: false,
       eventName: "",
     }
   }

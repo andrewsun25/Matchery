@@ -204,23 +204,38 @@ class App extends Component {
   // page to the candidate page for a specific event
   // given an eventName.
   dashboardToCandidate = (e, eventName) => {
-    this.state.events.candidate.forEach((event) => {
-      if (event.eventName === eventName) {
-
-        // If we have found the right event...
-        // forward the eventName, the list, and the notList
-        // to the candidate page.
-        this.candidateChild.current.setEventName(event.eventName);
-        this.candidateChild.current.getList(event.list);
-        this.candidateChild.current.getNotList(event.notList);
-        // Display the candidate page.
-        this.setState({
-          showDashboard: false,
-          showCandidate: true,
-          showBackButton: true,
-        });
-      }
-    })
+    fetch('/api/account/getSingleEvent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username'),
+        eventName: eventName
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log(json);
+          let foundEvent = json.event;
+          foundEvent.candidateLists.forEach((candidateObject) => {
+          if (candidateObject.candidate === localStorage.getItem('username')) {
+            this.candidateChild.current.setEventName(foundEvent.name);
+            this.candidateChild.current.getList(candidateObject.list);
+            this.candidateChild.current.getNotList(candidateObject.notList);
+            // Display the candidate page.
+            this.setState({
+              showDashboard: false,
+              showCandidate: true,
+              showBackButton: true,
+            });
+          } 
+      });
+        }
+        else {
+          console.log(json.message);
+        }
+      });
   }
 
   closeCreateEvent = (e) => {

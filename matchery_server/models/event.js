@@ -5,10 +5,8 @@ const EventSchema = new mongoose.Schema({
   name: {
     type: String,
     default: ''
-  }/*,
-  Administrators: [User],
-  Judges: [User],
-  Candidates: [User]*/
+  },
+  candidateLists: []
 });
 
 module.exports = mongoose.model('Event', EventSchema, 'events');
@@ -34,4 +32,4 @@ const CandidateSchema = new mongoose.Schema({
   rank: String
 });
 
-module.exports = mongoose.model('Candidate', CandidateSchema, 'candidates');
+module.exports = mongoose.model('Candidate', CandidateSchema, 'events');

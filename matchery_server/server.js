@@ -4,7 +4,7 @@ const parseurl = require('parseurl');
 const bodyParser = require('body-parser');
 const path = require('path');
 const expressValidator = require('express-validator');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose').set('debug', true);
 const app = express();
 const url = 'mongodb+srv://client:fpLr30qu96hmxW3B@matcherydb-dyffe.mongodb.net/matchery?retryWrites=true';
 //=========================//
@@ -93,6 +93,7 @@ app.post('/api/users', function(req, res) {
 
 const User = require('./models/user.js');
 const Session = require('./models/session.js');
+const Event = require('./models/event.js');
 
 app.post('/api/account/signup', (req, res, next) => {
   const {
@@ -309,6 +310,50 @@ app.post('/api/account/getEvents', (req, res, next) => {
       return res.send({
           success: true,
           eventRoles: user.Events
+        });
+    });
+  });
+
+app.post('/api/account/getSingleEvent', (req, res, next) => {
+    const { body } = req;
+    let {
+      username,
+      eventName
+    } = body;
+
+    Event.find({
+      name: eventName
+    }, (err, events) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      if (events.length != 1) {
+        return res.send({
+          success: false,
+          message: 'Invalid event name',
+          events: events
+        });
+      }
+      let event = events[0];
+      return res.send({
+        success: true,
+        event: event
+      });
+      // Otherwise correct user
+      /*event.candidateLists.forEach((candidateObject) => {
+        if (candiateObject.candidate === username) {
+          return res.send({
+            success: true,
+            candidateObject: candidateObject
+          });
+        } 
+      });*/
+      return res.send({
+          success: false,
+          message: "Invalid user"
         });
     });
   });

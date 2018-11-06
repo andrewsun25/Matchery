@@ -201,9 +201,8 @@ class App extends Component {
   // page to the judge page.
   dashboardToJudge = (e, eventName) => {
 
-
-
-    this.judgeChild.current.setEventName("hi");
+    this.judgeChild.current.setEventName(eventName);
+    this.judgeChild.current.setGroupName(groupName);
     this.judgeChild.current.getList(["hi"]);
     this.judgeChild.current.getNewList(["asd"]);
     this.judgeChild.current.getNotList(["hasdfi"]);

@@ -17,12 +17,19 @@ class Judge extends React.Component {
       showPreferences: true,
       showResults: false,
       eventName: "",
+      groupName: "",
     }
   }
 
   setEventName = (eventName) => {
     this.setState({
       eventName: eventName,
+    });
+  }
+
+  setGroupName = (groupName) => {
+    this.setState({
+      groupName: groupName,
     });
   }
 
@@ -54,7 +61,7 @@ class Judge extends React.Component {
     	<div className="main-panel">
 
 				<div className="main-panel__header">
-					<h2 className="heading-secondary">{this.state.eventName} <span className="main-panel__header--user"> - Sensasians Judge</span></h2>
+					<h2 className="heading-secondary">{this.state.eventName} <span className="main-panel__header--user"> - {this.state.groupName} Judge</span></h2>
 				</div>
 
 				<div className="main-panel__nav-and-content">
@@ -106,6 +113,8 @@ class Judge extends React.Component {
 							<div style={showPreferences}>
 			          <JudgePreferences
                   ref={this.judgePreferencesChild}
+                  eventName={this.state.eventName}
+                  groupName={this.state.groupName}
 			          />
 			        </div>
 

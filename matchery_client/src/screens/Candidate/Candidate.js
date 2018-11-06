@@ -104,6 +104,7 @@ class Candidate extends React.Component {
 			          <CandidatePreferences
                   ref={this.candidatePreferencesChild}
                   propagate={this.propagate}
+                  eventName={this.state.eventName}
 			          />
 			        </div>
 

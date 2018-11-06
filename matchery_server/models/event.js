@@ -32,4 +32,5 @@ const CandidateSchema = new mongoose.Schema({
   rank: String
 });
 
+//TODO LOOK WHY THIS IS events not candidates
 module.exports = mongoose.model('Candidate', CandidateSchema, 'events');

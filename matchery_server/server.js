@@ -358,4 +358,51 @@ app.post('/api/account/getSingleEvent', (req, res, next) => {
     });
   });
 
+app.post('/api/account/updateCandidateLists', (req, res, next) => {
+    const { body } = req;
+    let {
+      username,
+      eventName,
+      list,
+      notList
+    } = body;
+
+/*    Event.findOne({ name: eventName }, function (err, event){
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      let candidateList = event.toObject().candidateLists;
+      for (var index in candidateList) {
+        if (candidateList[index].candidate === username) {
+          console.log(candidateList[index]);
+          candidateList[index].list = list;
+          candidateList[index].notList = notList;
+          console.log(candidateList[index]);
+          break;
+        }
+      }
+      event.toObject().candidateLists = candidateList;
+      event.markModified('candidateLists');
+      event.save(function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });*/
+
+    Event.findOneAndUpdate({'name': eventName, 'candidateLists.candidate': username}, { $set: { 'candidateLists.$.list': list, 'candidateLists.$.notList': notList } }, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+
+
+    return res.send({
+      success: true,
+    });
+  });
+
 app.listen(port, () => console.log(`Listening on port ${port}`));

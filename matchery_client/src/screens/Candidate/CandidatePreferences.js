@@ -43,7 +43,23 @@ class CandidatePreferences extends React.Component {
   }
 
   update = (list, notList) => {
-    // TODO
+    fetch('/api/account/updateCandidateLists', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username'),
+        eventName: this.props.eventName,
+        list: list,
+        notList: notList
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+
+        }
+      });
   }
 
   removeFromRanking = (e, name) => {

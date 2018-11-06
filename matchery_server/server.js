@@ -95,6 +95,7 @@ const User = require('./models/user.js');
 const Session = require('./models/session.js');
 const Event = require('./models/event.js');
 const Audition = require('./models/audition.js');
+const EventRole = require('./models/eventRole.js');
 
 app.post('/api/account/signup', (req, res, next) => {
   const {
@@ -368,6 +369,57 @@ app.post('/api/account/getSingleAudition', (req, res, next) => {
     });
   });
 
+app.post('/api/account/createEvent', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      username
+    } = body;
+
+    let newEvent = new Event();
+    newEvent.name = eventName;
+
+    Event.find({
+      name: eventName
+    }, (err, events) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      if (events.length != 0) {
+        return res.send({
+          success: false,
+          message: 'Invalid event name'
+        });
+      }
+      else {
+        newEvent.save((err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: err
+            });
+          }
+          else {
+            let newEventRole = new EventRole();
+            newEventRole.role = "Administrator";
+            newEventRole.eventName = eventName;
+            User.findOneAndUpdate({username: username}, { $push: { Events: newEventRole } }, function (err) {
+              if (err) {
+                console.log(err);
+              }
+              return res.send({
+                success: true,
+              });
+            });
+          }
+        });
+      }
+    });
+  });
+
 app.post('/api/account/updateCandidateLists', (req, res, next) => {
     const { body } = req;
     let {
@@ -396,32 +448,6 @@ app.post('/api/account/updateAuditionLists', (req, res, next) => {
       newList,
       notList
     } = body;
-
-/*    Event.findOne({ name: eventName }, function (err, event){
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: server error'
-        });
-      }
-      let candidateList = event.toObject().candidateLists;
-      for (var index in candidateList) {
-        if (candidateList[index].candidate === username) {
-          console.log(candidateList[index]);
-          candidateList[index].list = list;
-          candidateList[index].notList = notList;
-          console.log(candidateList[index]);
-          break;
-        }
-      }
-      event.toObject().candidateLists = candidateList;
-      event.markModified('candidateLists');
-      event.save(function(err) {
-        if (err) {
-          console.log(err);
-        }
-      });
-    });*/
 
     Audition.findOneAndUpdate({'auditionName': auditionName }, { $set: { list: list, newList: newList, notList: notList } }, function (err) {
       if (err) {

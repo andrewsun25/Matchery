@@ -3,12 +3,6 @@ const bcrypt = require('bcrypt');
 require('./event.js');
 const Event = mongoose.model('Event').schema;
 
-const EventRoleSchema = new mongoose.Schema({
-	role: String,
-	eventName: String,
-  auditionName: String
-});
-
 const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -30,7 +24,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  Events: [EventRoleSchema]
+  Events: []
 });
 
 UserSchema.methods.generateHash = function(password) {
@@ -40,5 +34,4 @@ UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-module.exports = mongoose.model('EventRole', EventRoleSchema);
 module.exports = mongoose.model('User', UserSchema);

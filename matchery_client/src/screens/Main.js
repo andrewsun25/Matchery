@@ -71,6 +71,13 @@ class App extends Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
+          this.setState({
+            events: {
+              'administrator' : [],
+              'judge' : [],
+              'candidate' : []
+            }
+          });
           var username = localStorage.getItem('username');
           // Iterate through all the events
           json.eventRoles.forEach((event) => {
@@ -292,12 +299,27 @@ class App extends Component {
 
   submitCreateEvent = (e, eventName, list) => {
     e.preventDefault();
-    var eventName = eventName;
     var nameArray = list.split(',');
     nameArray = nameArray.map(el => el.trim());
 
-    // Add function here to create a new event based on
-    // eventName and the array of admins nameArray
+    fetch('/api/account/createEvent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: eventName,
+        username: localStorage.getItem('username')
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.fetchUserPermissions();
+        }
+        else {
+          console.log(json.message);
+        }
+      });
 
     this.setState({
       showCreateEvent: false,

@@ -5,7 +5,8 @@ const Event = mongoose.model('Event').schema;
 
 const EventRoleSchema = new mongoose.Schema({
 	role: String,
-	eventName: String
+	eventName: String,
+  auditionName: String
 });
 
 const UserSchema = new mongoose.Schema({

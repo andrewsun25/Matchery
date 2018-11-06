@@ -94,6 +94,7 @@ app.post('/api/users', function(req, res) {
 const User = require('./models/user.js');
 const Session = require('./models/session.js');
 const Event = require('./models/event.js');
+const Audition = require('./models/audition.js');
 
 app.post('/api/account/signup', (req, res, next) => {
   const {
@@ -358,6 +359,28 @@ app.post('/api/account/getSingleEvent', (req, res, next) => {
     });
   });
 
+app.post('/api/account/getSingleAudition', (req, res, next) => {
+    const { body } = req;
+    let {
+      auditionName
+    } = body;
+
+    Audition.findOne({
+      auditionName: auditionName
+    }, (err, audition) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      return res.send({
+        success: true,
+        audition: audition
+      });
+    });
+  });
+
 app.post('/api/account/updateCandidateLists', (req, res, next) => {
     const { body } = req;
     let {
@@ -394,6 +417,53 @@ app.post('/api/account/updateCandidateLists', (req, res, next) => {
     });*/
 
     Event.findOneAndUpdate({'name': eventName, 'candidateLists.candidate': username}, { $set: { 'candidateLists.$.list': list, 'candidateLists.$.notList': notList } }, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+
+
+    return res.send({
+      success: true,
+    });
+  });
+
+app.post('/api/account/updateAuditionLists', (req, res, next) => {
+    const { body } = req;
+    let {
+      auditionName,
+      list,
+      newList,
+      notList
+    } = body;
+
+/*    Event.findOne({ name: eventName }, function (err, event){
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      let candidateList = event.toObject().candidateLists;
+      for (var index in candidateList) {
+        if (candidateList[index].candidate === username) {
+          console.log(candidateList[index]);
+          candidateList[index].list = list;
+          candidateList[index].notList = notList;
+          console.log(candidateList[index]);
+          break;
+        }
+      }
+      event.toObject().candidateLists = candidateList;
+      event.markModified('candidateLists');
+      event.save(function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });*/
+
+    Audition.findOneAndUpdate({'auditionName': auditionName }, { $set: { list: list, newList: newList, notList: notList } }, function (err) {
       if (err) {
         console.log(err);
       }

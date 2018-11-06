@@ -51,7 +51,23 @@ class JudgePreferences extends React.Component {
   }
 
   update = (list, newList, notList) => {
-    console.log(list + "|" + newList + "|" + notList)
+    fetch('/api/account/updateAuditionLists', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        auditionName: this.props.groupName,
+        list: list,
+        newList: newList,
+        notList: notList
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+
+        }
+      });
   }
 
   removeFromRanking = (e, name) => {

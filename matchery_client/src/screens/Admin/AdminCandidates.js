@@ -14,13 +14,39 @@ class AdminCandidates extends React.Component {
     super(props);
     this.adminGroupListChild = React.createRef();
     this.state = {
-      candidates: this.props.candidates,
+      candidates: [],
     }
   }
 
+  setCandidateList = (list) => {
+    this.setState({
+      candidates: list,
+    });
+    this.adminGroupListChild.current.updateList(list);
+  }
+
+  addCandidateSuccess = (candidate) => {
+    var tempGroup = this.state.candidates;
+    var candidateArray = candidate.split(',');
+    tempGroup.push.apply(tempGroup, candidateArray);
+    this.setState({candidates: tempGroup});
+    this.adminGroupListChild.current.updateList(tempGroup);
+    this.update(tempGroup);
+  }
+
+  update = (list) => {
+    // TODO update the list here!
+  }
+
   deleteFromList = (e, item) => {
-    var indexOfGroup = this.state.candidates.indexOf(item);
-    this.state.candidates.splice(indexOfGroup, 1);
+    var tempCandidate = this.state.candidates;
+    var indexOfGroup = tempCandidate.indexOf(item);
+    tempCandidate.splice(indexOfGroup, 1);
+    this.setState({
+      candidates: tempCandidate,
+    });
+    this.adminGroupListChild.current.updateList(tempCandidate);
+    this.update(tempCandidate);
   }
 
   updateSearchInput = (e) => {

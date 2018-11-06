@@ -191,9 +191,25 @@ class App extends Component {
   // page to the admin page.
   dashboardToAdmin = (e, eventName) => {
 
-      // TODO
+    // TODO:  this is dummy data below!
 
-    this.adminChild.current.setEventName();
+    this.adminChild.current.setEventName(eventName);
+    this.adminChild.current.setCandidateList([
+      'Zhi Shen Yong',
+      'Andrew Sun',
+      'Shane Blair',
+      'William Leung',
+    ]);
+    this.adminChild.current.setGroupList([
+      'Sensasions',
+      'After Dark',
+      'The Amateurs',
+      'Mosaic Whispers',
+    ]);
+    this.adminChild.current.setGroupJudgesDict({
+      'Group1': ['Mike'],
+      'Group2': ['Jamie'],
+    });
 
     this.setState({
       showDashboard: false,

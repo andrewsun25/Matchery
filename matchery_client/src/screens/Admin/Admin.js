@@ -20,31 +20,15 @@ class Admin extends React.Component {
     this.addCandidateChild = React.createRef();
     this.addGroupChild = React.createRef();
     this.addJudgeChild = React.createRef();
+    this.showCandidatesChild = React.createRef();
+    this.showJudgesChild = React.createRef();
+    this.showGroupsChild = React.createRef();
     this.state = {
       eventName: "",
-      groups: [
-        'Sensasions',
-        'After Dark',
-        'The Amateurs',
-        'Mosaic Whispers',
-      ],
-      candidates: [
-        'Zhi Shen Yong',
-        'Andrew Sun',
-        'Shane Blair',
-        'William Leung',
-      ],
-      sensasiansJudges: [
-        'Zhi Shen Yong',
-        'Andrew Sun',
-        'Shane Blair',
-        'William Leung',
-      ],
-      afterDarkJudges: [
-        'Jack Black',
-        'Fanny Rosenberg',
-        'Some Guy',
-      ],
+
+      groups: [],
+      candidates: [],
+      groupJudges: {},
 
       showGroups: true,
       showJudges: false,
@@ -61,6 +45,27 @@ class Admin extends React.Component {
     this.setState({
       eventName: eventName,
     });
+  }
+
+  setCandidateList = (list) => {
+    this.setState({
+      candidates: list, // not really used
+    });
+    this.showCandidatesChild.current.setCandidateList(list);
+  }
+
+  setGroupList = (list) => {
+    this.setState({
+      group: list, // not really used
+    });
+    this.showGroupsChild.current.setGroupList(list);
+  }
+
+  setGroupJudgesDict = (dict) => {
+    this.setState({
+      groupJudges: dict, // not really used
+    });
+    this.showJudgesChild.current.setGroupJudgesDict(dict);
   }
 
   showAddGroupModal = (e) => { this.setState({showAddGroupModal: true}); }
@@ -82,10 +87,7 @@ class Admin extends React.Component {
   addCandidateSuccess = (e, candidate) => {
     e.preventDefault();
     this.setState({showAddCandidateModal: false});
-    var tempGroup = this.state.candidates;
-    var candidateArray = candidate.split(',');
-    tempGroup.push.apply(tempGroup, candidateArray);
-    this.setState({candidates: tempGroup});
+    this.showCandidatesChild.current.addCandidateSuccess(candidate);
     this.addCandidateChild.current.resetInput();
   }
   addJudgeSuccess = (e, judges) => {
@@ -283,24 +285,22 @@ class Admin extends React.Component {
 
 							<div style={showGroups}>
 			          <AdminGroups
-                  ref={this.showGroupChild}
+                  ref={this.showGroupsChild}
                   showAddGroupModal={this.showAddGroupModal}
-                  groups={this.state.groups}
 			          />
 			        </div>
 
 			        <div style={showJudges}>
 			          <AdminJudges
-                  sensasiansJudges={this.state.sensasiansJudges}
-                  afterDarkJudges={this.state.afterDarkJudges}
+                  ref={this.showJudgesChild}
                   showAddJudgeModal={this.showAddJudgeModal}
 			          />
 			        </div>
 
 			        <div style={showCandidates}>
 			          <AdminCandidates
+                  ref={this.showCandidatesChild}
                   showAddCandidateModal={this.showAddCandidateModal}
-                  candidates={this.state.candidates}
 			          />
 			        </div>
 

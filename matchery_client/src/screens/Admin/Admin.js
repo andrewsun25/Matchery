@@ -21,6 +21,7 @@ class Admin extends React.Component {
     this.addGroupChild = React.createRef();
     this.addJudgeChild = React.createRef();
     this.state = {
+      eventName: "",
       groups: [
         'Sensasions',
         'After Dark',
@@ -54,6 +55,12 @@ class Admin extends React.Component {
       showAddJudgeModal: false,
       showAddCandidateModal: false
     }
+  }
+
+  setEventName = (eventName) => {
+    this.setState({
+      eventName: eventName,
+    });
   }
 
   showAddGroupModal = (e) => { this.setState({showAddGroupModal: true}); }

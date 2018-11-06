@@ -23,6 +23,7 @@ class App extends Component {
     super(props);
     this.candidateChild = React.createRef();
     this.judgeChild = React.createRef();
+    this.adminChild = React.createRef();
     this.state = {
       showLogin: true,
       showSignUp: false,
@@ -183,7 +184,12 @@ class App extends Component {
 
   // Function to navigate from the dashboard
   // page to the admin page.
-  dashboardToAdmin = (e) => {
+  dashboardToAdmin = (e, eventName) => {
+
+      // TODO
+
+    this.adminChild.current.setEventName();
+
     this.setState({
       showDashboard: false,
       showAdmin: true,
@@ -194,6 +200,7 @@ class App extends Component {
   // Function to navigate from the dashboard
   // page to the judge page.
   dashboardToJudge = (e, eventName) => {
+
 
     this.candidateChild.current.setEventName();
     this.candidateChild.current.getList();
@@ -269,21 +276,6 @@ class App extends Component {
     this.setState({
       showCreateEvent: true,
     });
-  }
-
-  candidatePropagate = (eventName, list, notList) => {
-    var temp_events = this.state.events;
-    temp_events.candidate.forEach((event) => {
-      if (event.eventName === eventName) {
-        event.list = list;
-        event.notList = notList;
-        this.setState({
-          events: temp_events,
-        }, () => {
-          console.dir(this.state.events);
-        });
-      }
-    })
   }
 
   // Render the Main application
@@ -379,7 +371,9 @@ class App extends Component {
         </div>
 
         <div style={showAdmin}>
-          <Admin />
+          <Admin
+          ref={this.adminChild}
+          />
         </div>
 
         <div style={showJudge}>
@@ -398,7 +392,6 @@ class App extends Component {
         <div style={showCandidate}>
           <Candidate
             ref={this.candidateChild}
-            propagate={this.candidatePropagate}
           />
         </div>
 

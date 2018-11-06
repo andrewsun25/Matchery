@@ -17,7 +17,7 @@ class Dashboard extends React.Component {
 
     // List events on each card.
   	const administratorEvents = this.props.events['administrator'].map((eventName, key) =>
-  		<li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToAdmin(e)}}>{eventName}</li>
+  		<li className="panel__content-item" key={key} onClick={(e) => {this.props.dashboardToAdmin(e, eventName)}}>{eventName}</li>
   	);
 
   	const judgeEvents = this.props.events['judge'].map((eventName, key) =>

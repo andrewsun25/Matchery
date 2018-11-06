@@ -32,7 +32,7 @@ class Judge extends React.Component {
   }
 
   getNewList = (list) => {
-    this.judgePreferencesChild.current.getList(list);
+    this.judgePreferencesChild.current.getNewList(list);
   }
 
   // Forwards the notList to CandidatePreferences

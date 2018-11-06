@@ -202,10 +202,11 @@ class App extends Component {
   dashboardToJudge = (e, eventName) => {
 
 
-    this.candidateChild.current.setEventName();
-    this.candidateChild.current.getList();
-    this.judgeChild.current.getNewList();
-    this.candidateChild.current.getNotList();
+
+    this.judgeChild.current.setEventName("hi");
+    this.judgeChild.current.getList(["hi"]);
+    this.judgeChild.current.getNewList(["asd"]);
+    this.judgeChild.current.getNotList(["hasdfi"]);
 
     this.setState({
       showDashboard: false,

@@ -68,10 +68,19 @@ class App extends Component {
       .then(json => {
         if (json.success) {
           var username = localStorage.getItem('username');
-          var eventsList = EventsObject.events;
           // Iterate through all the events
-          eventsList.forEach((event) => {
-
+          json.eventRoles.forEach((event) => {
+            switch(event.role) {
+              case "Administrator":
+              this.state.events['administrator'].push(event.eventName);
+              break;
+              case "Judge":
+              this.state.events['judge'].push(event.eventName);
+              break;
+              case "Candidate":
+              this.state.events['candidate'].push(event.eventName);
+              break;
+            }
           });
           this.setState({
             showLogin: false,

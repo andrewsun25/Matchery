@@ -14,8 +14,17 @@ class AdminGroups extends React.Component {
     super(props);
     this.adminGroupListChild = React.createRef();
     this.state = {
-      groups: this.props.groups,
+      groups: [], // This will be updated by a reference function from Admin.js
     }
+  }
+
+  // Function to set the local state [groups] to its initial value.
+  // This is called whenever an admin clicks on an admin event.
+  setGrouplist = (list) => {
+    this.setState({
+      groups: list,
+    });
+    this.adminGroupListChild.current.updateList(list); 
   }
 
   deleteFromList = (e, item) => {

@@ -76,6 +76,7 @@ class Admin extends React.Component {
   closeAddCandidateModal = (e) => { this.setState({showAddCandidateModal: false}); }
   closeAddJudgeModal = (e) => { this.setState({showAddJudgeModal: false}); }
 
+  // This functi
   addGroupSuccess = (e, group) => {
     e.preventDefault();
     this.setState({showAddGroupModal: false});
@@ -84,10 +85,15 @@ class Admin extends React.Component {
     this.setState({groups: tempGroup});
     this.addGroupChild.current.resetInput();
   }
-  addCandidateSuccess = (e, candidate) => {
+
+  // This function is called when the user attempts to add a candidate, or a
+  // series of candidates.
+  addCandidateSuccess = (e, candidateList) => {
     e.preventDefault();
-    this.setState({showAddCandidateModal: false});
-    this.showCandidatesChild.current.addCandidateSuccess(candidate);
+    this.setState({
+      showAddCandidateModal: false
+    });
+    this.showCandidatesChild.current.addCandidateSuccess(candidateList);
     this.addCandidateChild.current.resetInput();
   }
   addJudgeSuccess = (e, judges) => {

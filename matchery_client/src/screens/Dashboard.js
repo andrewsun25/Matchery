@@ -12,11 +12,6 @@ class Dashboard extends React.Component {
     super(props);
   }
 
-  createEvent = (e) => {
-    e.preventDefault();
-    alert("createEvent");
-  }
-
   // Render the component
   render() {
 
@@ -43,7 +38,7 @@ class Dashboard extends React.Component {
           /h1>
 					<button className="btn-create">
 						<div
-              onClick={(e) => {this.createEvent(e)}}
+              onClick={(e) => {this.props.createEvent(e)}}
               className="btn-create__text">
 							Create Event
 						</div>

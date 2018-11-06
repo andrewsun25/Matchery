@@ -8,6 +8,7 @@ import Matches from './Matches';
 import Admin from './Admin/Admin'; // Admin component
 import Judge from './Judge/Judge'; // Judge component
 import Candidate from './Candidate/Candidate'; // Candidate component
+import CreateEvent from './CreateEvent';
 
 // IMPORT STYLING
 import './Main.css'; // Header and background styling
@@ -29,6 +30,7 @@ class App extends Component {
       showJudge: false,
       showCandidate: false,
       showBackButton: false,
+      showCreateEvent: false,
       candidateGroupList: [],
       events: { // TODO This will need to be pulled from the server
         'administrator' : [],
@@ -204,6 +206,7 @@ class App extends Component {
   dashboardToCandidate = (e, eventName) => {
     this.state.events.candidate.forEach((event) => {
       if (event.eventName === eventName) {
+
         // If we have found the right event...
         // forward the eventName, the list, and the notList
         // to the candidate page.
@@ -218,6 +221,32 @@ class App extends Component {
         });
       }
     })
+  }
+
+  closeCreateEvent = (e) => {
+    this.setState({
+      showCreateEvent: false,
+    });
+  }
+
+  submitCreateEvent = (e, eventName, list) => {
+    e.preventDefault();
+    var eventName = eventName;
+    var nameArray = list.split(',');
+    nameArray = nameArray.map(el => el.trim());
+
+    // Add function here to create a new event based on
+    // eventName and the array of admins nameArray
+
+    this.setState({
+      showCreateEvent: false,
+    });
+  }
+
+  createEvent = (e) => {
+    this.setState({
+      showCreateEvent: true,
+    });
   }
 
   candidatePropagate = (eventName, list, notList) => {
@@ -245,6 +274,7 @@ class App extends Component {
     const showAdmin = this.state.showAdmin ? {display:'block'} : {display:'none'};
     const showJudge = this.state.showJudge ? {display:'block'} : {display:'none'};
     const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
+    const showCreateEvent = this.state.showCreateEvent ? {display:'block'} : {display:'none'};
 
     const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'block'};
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
@@ -321,6 +351,7 @@ class App extends Component {
             dashboardToAdmin={this.dashboardToAdmin}
             dashboardToJudge={this.dashboardToJudge}
             dashboardToCandidate={this.dashboardToCandidate}
+            createEvent={this.createEvent}
             events={this.state.events}
           />
         </div>
@@ -331,6 +362,13 @@ class App extends Component {
 
         <div style={showJudge}>
           <Judge />
+        </div>
+
+        <div style={showCreateEvent}>
+          <CreateEvent
+            closeCreateEvent={this.closeCreateEvent}
+            submitCreateEvent={this.submitCreateEvent}
+          />
         </div>
 
         <div style={showCandidate}>

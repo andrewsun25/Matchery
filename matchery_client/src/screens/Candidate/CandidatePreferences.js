@@ -39,7 +39,11 @@ class CandidatePreferences extends React.Component {
   broadcastSortedList = (e, list) => {
     this.setState({hasEditedRankingGroup: true});
     // update the original json object
-    this.props.propagate(list, this.state.notGroup);
+    this.update(list, this.state.notGroup);
+  }
+
+  update = (list, notList) => {
+    // TODO
   }
 
   removeFromRanking = (e, name) => {
@@ -64,7 +68,7 @@ class CandidatePreferences extends React.Component {
       this.setState({notHasStuffToDisplay: true});
     }
     // Update original json object
-    this.props.propagate(temp_list, temp_notList);
+    this.update(temp_list, temp_notList);
   }
 
   putBackInRanking = (e, name) => {
@@ -89,7 +93,7 @@ class CandidatePreferences extends React.Component {
       this.setState({notHasStuffToDisplay: false});
     }
     // Update the original json object
-    this.props.propagate(temp_list, temp_notList);
+    this.update(temp_list, temp_notList);
   }
 
   // Render the component

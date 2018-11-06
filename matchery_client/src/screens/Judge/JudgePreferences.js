@@ -51,7 +51,7 @@ class JudgePreferences extends React.Component {
   }
 
   update = (list, newList, notList) => {
-
+    console.log(list + "|" + newList + "|" + notList)
   }
 
   removeFromRanking = (e, name) => {
@@ -69,7 +69,7 @@ class JudgePreferences extends React.Component {
     }
     this.listChild.current.getList(tempList);
     this.setState({rankingGroup: tempList,});
-    update(tempList, this.state.newGroup, tempNotGroup);
+    this.update(tempList, this.state.newGroup, tempNotGroup);
   }
 
   removeFromRankingNew = (e, name) => {
@@ -89,7 +89,7 @@ class JudgePreferences extends React.Component {
     if (tempNotGroup.length != 0) {
       this.setState({notHasStuffToDisplay: true});
     }
-    update(this.state.rankingGroup, tempNewList, tempNotGroup);
+    this.update(this.state.rankingGroup, tempNewList, tempNotGroup);
   }
 
   putBackInRanking = (e, name) => {
@@ -106,7 +106,7 @@ class JudgePreferences extends React.Component {
     this.setState({
       notGroup: tempNotGroup,
     });
-    update(tempRankingGroup, this.state.newGroup, tempNotGroup);
+    this.update(tempRankingGroup, this.state.newGroup, tempNotGroup);
   }
   putBackInRankingNew = (e, name) => {
     var tempRankingGroup = this.state.rankingGroup;
@@ -123,7 +123,7 @@ class JudgePreferences extends React.Component {
     if (tempNewGroup.length == 0) {
       this.setState({newHasStuffToDisplay: false});
     }
-    update(tempRankingGroup, tempNewGroup, this.state.notGroup);
+    this.update(tempRankingGroup, tempNewGroup, this.state.notGroup);
   }
 
   // Render the component

@@ -76,13 +76,13 @@ class App extends Component {
           json.eventRoles.forEach((event) => {
             switch(event.role) {
               case "Administrator":
-              this.state.events['administrator'].push(event.eventName);
+              this.state.events['administrator'].push(event);
               break;
               case "Judge":
-              this.state.events['judge'].push(event.eventName);
+              this.state.events['judge'].push(event);
               break;
               case "Candidate":
-              this.state.events['candidate'].push(event.eventName);
+              this.state.events['candidate'].push(event);
               break;
             }
           });
@@ -220,19 +220,35 @@ class App extends Component {
 
   // Function to navigate from the dashboard
   // page to the judge page.
-  dashboardToJudge = (e, eventName) => {
+  dashboardToJudge = (e, eventName, auditionName) => {
 
-    this.judgeChild.current.setEventName(eventName);
-    this.judgeChild.current.setGroupName("groupName");
-    this.judgeChild.current.getList(["hi"]);
-    this.judgeChild.current.getNewList(["asd"]);
-    this.judgeChild.current.getNotList(["hasdfi"]);
+    fetch('/api/account/getSingleAudition', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        auditionName: auditionName
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.judgeChild.current.setEventName(eventName);
+          this.judgeChild.current.setGroupName(auditionName);
+          this.judgeChild.current.getList(json.audition.list);
+          this.judgeChild.current.getNewList(json.audition.newList);
+          this.judgeChild.current.getNotList(json.audition.notList);
 
-    this.setState({
-      showDashboard: false,
-      showJudge: true,
-      showBackButton: true,
-    });
+          this.setState({
+            showDashboard: false,
+            showJudge: true,
+            showBackButton: true,
+          });
+        }
+        else {
+          console.log(json.message);
+        }
+      });
   }
 
   // Function to navigate from the dashboard

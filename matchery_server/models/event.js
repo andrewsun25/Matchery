@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./user.js');
+const Audition = require('./audition.js');
 
 const EventSchema = new mongoose.Schema({
   name: {
@@ -17,15 +18,6 @@ const CandidateRankingSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('CandidateRanking', CandidateRankingSchema);
-
-const AuditionSchema = new mongoose.Schema({
-  auditionName: String,
-  eventName: String,
-  admins: [String],
-  candidates: [CandidateRankingSchema]
-});
-
-module.exports = mongoose.model('Audition', AuditionSchema, 'auditions');
 
 const CandidateSchema = new mongoose.Schema({
   user: String,

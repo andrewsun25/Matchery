@@ -132,6 +132,11 @@ class App extends Component {
             this.setState({
               showLogin: true,
               showDashboard: false,
+              showAdmin: false,
+              showJudge: false,
+              showCandidate: false,
+              showBackButton: false,
+              showCreateEvent: false,
               events: {
                 'administrator' : [],
                 'judge' : [],

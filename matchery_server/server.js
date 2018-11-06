@@ -47,27 +47,57 @@ app.get('/api/users', function(req, res) {
 
 app.get('/match', function(req, res) {
 
+  let applicantPreferences = {};
+  let groupPreferences = {};
+
+  Event.findOne({
+      name: "WashU Diwali Auditions 2018"
+    }, (err, event) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+
+      let candidateLists = event.toObject().candidateLists;
+      candidateLists.forEach((candidateObject) => {
+        applicantPreferences[candidateObject.candidate] = candidateObject.list;
+      });
+
+      console.log(applicantPreferences);
+
+    });
+
+  Audition.find({
+      eventName: "WashU Diwali Auditions 2018"
+    }, (err, auditions) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+
+      auditions.forEach((audition) => {
+        groupPreferences[audition.auditionName] = audition.list;
+      });
+      console.log(groupPreferences);
+
+    });
+
+
   const spawn = require("child_process").spawn;
   data = {
-    "applicantPreferences": {
-      "andrew": ["aristocats", "ghostlights"],
-      "zhi": ["singers", "sensasians"],
-      "will": ["ghostlights", "aristocats"]
-    },
+    "applicantPreferences": applicantPreferences,
+    "groupPreferences": groupPreferences
 
-    "groupPreferences": {
-      "aristocats": ["andrew", "will"],
-      "sensasians": ["zhi"],
-      "singers": ["andrew"],
-      "ghostlights": ["andrew"]
-    },
-
-    "groupQuotas": {
+ /*   "groupQuotas": {
       "aristocats": 2,
       "sensasians": 2,
       "singers": 2,
       "ghostlights": 2
-    }
+    }*/
   }
 
   const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
@@ -78,6 +108,7 @@ app.get('/match', function(req, res) {
     });
   });
 });
+
 //==========================//
 //====POST NEW SIGNATURE===//
 app.post('/api/users', function(req, res) {

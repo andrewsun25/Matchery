@@ -26,16 +26,6 @@ class AdminJudges extends React.Component {
     //this.adminGroupListChild.current.updateList(list);
   }
 
-  deleteFromList = (e, item, key) => {
-    /*var indexOfGroup = this.state.afterDarkJudges.indexOf(item);
-    var tempGroup = this.state.afterDarkJudges;
-    tempGroup.splice(indexOfGroup, 1);
-    this.adminAfterDarkGroupListChild.current.updateList(tempGroup);
-    */
-    console.log(item);
-    console.log(key);
-  }
-
   // Render the component
   render() {
 
@@ -52,8 +42,7 @@ class AdminJudges extends React.Component {
           <AdminJudgesList
             ref={this.adminSensasiansGroupListChild}
             groups={group.slice(1, group.length)}
-            deleteFromList={this.deleteFromList}
-            key={key}
+            groupName={group[0]}
           />
         </div>
 

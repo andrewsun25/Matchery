@@ -21,9 +21,13 @@ class App extends Component {
   // Component constructor
   constructor(props) {
     super(props);
+
+    // Whenever a user clicks on a event they are part of, we need to fetch
+    // certain data and push them to the candidate/judge/admin component.
     this.candidateChild = React.createRef();
     this.judgeChild = React.createRef();
     this.adminChild = React.createRef();
+
     this.state = {
       showLogin: true,
       showSignUp: false,
@@ -353,7 +357,6 @@ class App extends Component {
     // Return the app frame (header and background)
     return (
       <div>
-
         <header className="header">
           <div className="header__container">
             <div
@@ -381,7 +384,6 @@ class App extends Component {
             </div>
           </div>
         </header>
-
         <div style={showBackButton} onClick={(e) => {this.setState({
           showBackButton: false,
           showDashboard: true,
@@ -396,7 +398,6 @@ class App extends Component {
             </button>
           </div>
         </div>
-
         <div style={showLogin}>
           <Login
             parentHandleLogin={this.handleLogIn}
@@ -404,7 +405,6 @@ class App extends Component {
             fetchUserPermissions = {this.fetchUserPermissions}
           />
         </div>
-
         <div style={showSignUp}>
           <SignUp
             parentHandleLogin={this.handleLogIn}
@@ -413,7 +413,6 @@ class App extends Component {
             parentHandleSignupSubmit={this.handleSignUpSubmit}
           />
         </div>
-
         <div style={showDashboard}>
           <Dashboard
             dashboardToAdmin={this.dashboardToAdmin}
@@ -423,32 +422,27 @@ class App extends Component {
             events={this.state.events}
           />
         </div>
-
         <div style={showAdmin}>
           <Admin
           ref={this.adminChild}
           />
         </div>
-
         <div style={showJudge}>
           <Judge
             ref={this.judgeChild}
           />
         </div>
-
         <div style={showCreateEvent}>
           <CreateEvent
             closeCreateEvent={this.closeCreateEvent}
             submitCreateEvent={this.submitCreateEvent}
           />
         </div>
-
         <div style={showCandidate}>
           <Candidate
             ref={this.candidateChild}
           />
         </div>
-
       </div>
     );
   }

@@ -26,8 +26,18 @@ class AdminResults extends React.Component {
   }
 
   regenerateResults = (e) => {
-    e.preventDefault();
-    alert("Results re-generated!");
+    fetch('/api/match', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          let dataString = json.data.replace(/\'/g, '"');
+          console.log(JSON.parse(dataString));
+        }
+      });
   }
 
   // Render the component

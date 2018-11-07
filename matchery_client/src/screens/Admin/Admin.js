@@ -23,6 +23,7 @@ class Admin extends React.Component {
     this.showCandidatesChild = React.createRef();
     this.showJudgesChild = React.createRef();
     this.showGroupsChild = React.createRef();
+    this.adminResultsChild = React.createRef();
     this.state = {
       eventName: "",
 
@@ -153,6 +154,7 @@ class Admin extends React.Component {
                   showCandidates: false,
                   showResults: true,
                 });
+                this.adminResultsChild.current.regenerateResults();
               }}>Results</li>
             </div>
             <div style={showJudges}>
@@ -193,6 +195,7 @@ class Admin extends React.Component {
                   showCandidates: false,
                   showResults: true,
                 });
+                this.adminResultsChild.current.regenerateResults();
               }}>Results</li>
             </div>
             <div style={showCandidates}>
@@ -232,6 +235,7 @@ class Admin extends React.Component {
                   showCandidates: false,
                   showResults: true,
                 });
+                this.adminResultsChild.current.regenerateResults();
               }}>Results</li>
             </div>
             <div style={showResults}>
@@ -271,6 +275,7 @@ class Admin extends React.Component {
                     showCandidates: false,
                     showResults: true,
                   });
+                  this.adminResultsChild.current.regenerateResults();
               }}>Results</li>
             </div>
 					</ul>
@@ -300,7 +305,7 @@ class Admin extends React.Component {
 
 			        <div style={showResults}>
 			          <AdminResults
-
+                  ref={this.adminResultsChild}
 			          />
 			        </div>
 

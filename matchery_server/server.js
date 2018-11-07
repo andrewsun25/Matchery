@@ -45,7 +45,7 @@ app.get('/api/users', function(req, res) {
   });
 });
 
-app.get('/match', function(req, res) {
+app.post('/api/match', function(req, res) {
 
   let applicantPreferences = {};
   let groupPreferences = {};

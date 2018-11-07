@@ -13,7 +13,6 @@ class AdminJudgesList extends React.Component {
     this.state = {
       dragging: undefined,
       list: this.props.groups, // Get from parent
-      key: this.props.key,
     }
   }
 
@@ -39,6 +38,19 @@ class AdminJudgesList extends React.Component {
     this.dragged = Number(group.currentTarget.dataset.id); // Read the data-xx attribute in the DOM element
     group.dataTransfer.effectAllowed = 'move'; // Specifies effect allowed for a drag operation
     group.dataTransfer.setData('text/html', null); // Set drag operation's drag data to data and type
+  }
+
+  deleteFromList = (e, item, key) => {
+    var tempGroup = this.state.list;
+    var indexOfGroup = tempGroup.indexOf(item);
+    tempGroup.splice(indexOfGroup, 1);
+    this.setState({list: tempGroup});
+    this.update(tempGroup);
+  }
+
+  update = (judges) => {
+    console.log(this.props.groupName);
+    // probably also want group name in here
   }
 
   // This function is called when the user drags
@@ -76,7 +88,7 @@ class AdminJudgesList extends React.Component {
                   <ion-icon
                     class="bar-group__icon bar-group__icon--leftmost"
                     name="trash"
-                    onClick={(e) => {this.props.deleteFromList(e, item, this.state.key)}}></ion-icon>
+                    onClick={(e) => {this.deleteFromList(e, item)}}></ion-icon>
                 </div>
               </li>;
             })

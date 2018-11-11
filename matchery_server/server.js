@@ -346,35 +346,62 @@ app.post('/api/account/getEvents', (req, res, next) => {
   });
 
 app.post('/api/account/getSingleEvent', (req, res, next) => {
-    const { body } = req;
-    let {
-      username,
-      eventName
-    } = body;
+  const { body } = req;
+  let {
+    username,
+    eventName
+  } = body;
 
-    Event.findOne({
-      name: eventName
-    }, (err, event) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: server error'
-        });
-      }
-
-      let foundEvent = event.toObject();
-      foundEvent.candidateLists.forEach((candidateObject) => {
-          if (candidateObject.candidate === username) {
-            return res.send({
-              success: true,
-              eventName: foundEvent.name,
-              list: candidateObject.list,
-              notList: candidateObject.notList
-            });
-          }
+  Event.findOne({
+    name: eventName
+  }, (err, event) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: 'Error: server error'
       });
+    }
+
+    let foundEvent = event.toObject();
+    foundEvent.candidateLists.forEach((candidateObject) => {
+        if (candidateObject.candidate === username) {
+          return res.send({
+            success: true,
+            eventName: foundEvent.name,
+            list: candidateObject.list,
+            notList: candidateObject.notList
+          });
+        }
     });
   });
+});
+
+app.post('/api/account/getGroupsInEvent', (req, res, next) => {
+  const { body } = req;
+  let {
+    eventName
+  } = body;
+
+  Audition.find({
+    eventName: eventName
+  }, (err, groups) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: 'Error: server error'
+      });
+    }
+    groupNames = [];
+    groups.forEach((group) => {
+      groupNames.push(group.auditionName)
+    });
+    return res.send({
+      success: true,
+      groups: groupNames
+    });
+
+  });
+});
 
 app.post('/api/account/getSingleAudition', (req, res, next) => {
     const { body } = req;

@@ -32,7 +32,7 @@ class CreateEvent extends React.Component {
       <div className="modal__backdrop">
           <div className="modal">
               <ion-icon
-                className="modal__close-icon" name="close"
+                class="modal__close-icon" name="close"
                 onClick={(e) => {this.props.closeCreateEvent(e)}}>
               </ion-icon>
               <h3 className="heading-secondary u-margin-bottom-sm-md">Create Event</h3>

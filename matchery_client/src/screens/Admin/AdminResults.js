@@ -51,9 +51,9 @@ class AdminResults extends React.Component {
     const hideAfterDarkArray = this.state.hideAfterDark ? {display:'block'} : {display:'none'};
     const hideUngroupedArray = this.state.hideUngrouped ? {display:'block'} : {display:'none'};
 
-    const sensasiansHasStuffToDisplay = this.state.sensasiansHasStuffToDisplay ? <button className="btn-hide u-margin-left-md" onClick={(e) => {this.setState({hideSensasians: !this.state.hideSensasians})}}>{hideSensasians}</button> : <p></p>;
-    const afterDarkHasStuffToDisplay = this.state.afterDarkHasStuffToDisplay ? <button className="btn-hide u-margin-left-md" onClick={(e) => {this.setState({hideAfterDark: !this.state.hideAfterDark})}}>{hideAfterDark}</button> : <p></p>;
-    const ungroupedHasStuffToDisplay = this.state.ungroupedHasStuffToDisplay ? <button className="btn-hide u-margin-left-md" onClick={(e) => {this.setState({hideUngrouped: !this.state.hideUngrouped})}}>{hideUngrouped}</button> : <p></p>;
+    const sensasiansHasStuffToDisplay = this.state.sensasiansHasStuffToDisplay ? <div className="area-section-heading-center__hide-btn-box"><button className="btn-hide" onClick={(e) => {this.setState({hideSensasians: !this.state.hideSensasians})}}>{hideSensasians}</button></div> : <p></p>;
+    const afterDarkHasStuffToDisplay = this.state.afterDarkHasStuffToDisplay ? <div className="area-section-heading-center__hide-btn-box"><button className="btn-hide" onClick={(e) => {this.setState({hideAfterDark: !this.state.hideAfterDark})}}>{hideAfterDark}</button></div> : <p></p>;
+    const ungroupedHasStuffToDisplay = this.state.ungroupedHasStuffToDisplay ? <div className="area-section-heading-center__hide-btn-box"><button className="btn-hide" onClick={(e) => {this.setState({hideUngrouped: !this.state.hideUngrouped})}}>{hideUngrouped}</button></div> : <p></p>;
 
     // Return the component frame
     return (
@@ -62,7 +62,7 @@ class AdminResults extends React.Component {
 
 				<section className="section-generate-and-publish u-margin-bottom-md">
 					<button
-            className="btn btn--high-action-hollowed event-admin-custom-width u-margin-left-md"
+            className="btn btn--high-action-hollowed event-admin-custom-width"
             onClick={(e) => {this.regenerateResults(e)}}>
             Re-Generate Matches
           </button>
@@ -78,53 +78,48 @@ class AdminResults extends React.Component {
 					<p className="timestamp u-center-text">Note: newly generated results differ from published results</p>
 				</section>
 
-				<section className="section-group u-margin-bottom-lg">
-
-					<div className="area-section-heading-center u-margin-bottom-md">
-						<h3 className="heading-tertiary u-center-text">Sensasians</h3>
-						{sensasiansHasStuffToDisplay}
-					</div>
-
-					<div className="bar-group-result">
-            <div style={hideSensasiansArray}>
-						  <div className="bar-group-result__bar bar-group-result__bar--success">Zhi Shen Yong</div>
-						  <div className="bar-group-result__bar bar-group-result__bar--success">William Leung</div>
-					  </div>
+        <section className="section-group u-margin-bottom-lg">
+          <div className="area-section-heading-center u-margin-bottom-md">
+            <div className="area-section-heading-center__container">
+              <h3 className="heading-tertiary">Sensasians</h3>
+              {sensasiansHasStuffToDisplay}
+            </div>
           </div>
-
-				</section>
-
-				<section className="section-group u-margin-bottom-lg">
-
-					<div className="area-section-heading-center u-margin-bottom-md">
-						<h3 className="heading-tertiary u-center-text">After Dark</h3>
-						{afterDarkHasStuffToDisplay}
-					</div>
-
+          <div className="bar-group-result">
+            <div style={hideSensasiansArray}>
+              <div className="bar-group-result__bar bar-group-result__bar--success">Zhi Shen Yong</div>
+              <div className="bar-group-result__bar bar-group-result__bar--success">William Leung</div>
+            </div>
+          </div>
+        </section>
+        <section className="section-group u-margin-bottom-lg">
+          <div className="area-section-heading-center u-margin-bottom-md">
+            <div className="area-section-heading-center__container">
+              <h3 className="heading-tertiary">After Dark</h3>
+              {afterDarkHasStuffToDisplay}
+            </div>
+          </div>
           <div className="bar-group-result">
             <div style={hideAfterDarkArray}>
-  						<div className="bar-group-result__bar bar-group-result__bar--success">Shane Blair</div>
-  						<div className="bar-group-result__bar bar-group-result__bar--success">Andrew Sun</div>
-  					</div>
+              <div className="bar-group-result__bar bar-group-result__bar--success">Shane Blair</div>
+              <div className="bar-group-result__bar bar-group-result__bar--success">Andrew Sun</div>
+            </div>
           </div>
-
-				</section>
-
-				<section className="section-ungrouped u-margin-bottom-lg">
-
-					<div className="area-section-heading-center u-margin-bottom-md">
-						<h3 className="heading-tertiary u-center-text">Ungrouped Candidates</h3>
-						{ungroupedHasStuffToDisplay}
-					</div>
-
-  				<div className="bar-group-result">
+        </section>
+        <section className="section-ungrouped u-margin-bottom-lg">
+          <div className="area-section-heading-center u-margin-bottom-md">
+            <div className="area-section-heading-center__container">
+              <h3 className="heading-tertiary">Ungrouped Candidates</h3>
+              {ungroupedHasStuffToDisplay}
+            </div>
+          </div>
+          <div className="bar-group-result">
             <div style={hideUngroupedArray}>
-  						<div className="bar-group-result__bar bar-group-result__bar--failure">Jack Reacher</div>
-  						<div className="bar-group-result__bar bar-group-result__bar--failure">Jane Eyre</div>
-  					</div>
+              <div className="bar-group-result__bar bar-group-result__bar--failure">Jack Reacher</div>
+              <div className="bar-group-result__bar bar-group-result__bar--failure">Jane Eyre</div>
+            </div>
           </div>
-
-				</section>
+        </section>
 
 			</div>
 

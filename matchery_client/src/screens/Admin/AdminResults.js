@@ -11,6 +11,7 @@ class AdminResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      groupResults: [],
       sensasiansHasStuffToDisplay: true,
       afterDarkHasStuffToDisplay: true,
       ungroupedHasStuffToDisplay: true,
@@ -34,11 +35,40 @@ class AdminResults extends React.Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
-          let dataString = json.data.replace(/\'/g, '"');
-          console.log(JSON.parse(dataString));
+          let dataArray = JSON.parse(json.data.replace(/\'/g, '"'));
+          let resultsArray = [];
+
+          for (var groupName in dataArray) {
+            if (!dataArray.hasOwnProperty(groupName)) continue;
+
+            let list = dataArray[groupName];
+            resultsArray.push({name:groupName, list:list});
+          }
+          resultsArray = resultsArray.map((group, key) => 
+            <section key={key} className="section-group u-margin-bottom-lg">
+
+              <div className="area-section-heading-center u-margin-bottom-md">
+                <h3 className="heading-tertiary u-center-text">{group.name}</h3>
+              </div>
+
+              <div className="bar-group-result">
+                <div>
+                  {group.list.map((name, key) => 
+                    <div key={key} className="bar-group-result__bar bar-group-result__bar--success">{name}</div>
+                    )}                  
+                </div>
+              </div>
+
+            </section>
+            );
+
+          this.setState({
+            groupResults: resultsArray
+          })
         }
       });
   }
+
 
   // Render the component
   render() {
@@ -54,6 +84,10 @@ class AdminResults extends React.Component {
     const sensasiansHasStuffToDisplay = this.state.sensasiansHasStuffToDisplay ? <div className="area-section-heading-center__hide-btn-box"><button className="btn-hide" onClick={(e) => {this.setState({hideSensasians: !this.state.hideSensasians})}}>{hideSensasians}</button></div> : <p></p>;
     const afterDarkHasStuffToDisplay = this.state.afterDarkHasStuffToDisplay ? <div className="area-section-heading-center__hide-btn-box"><button className="btn-hide" onClick={(e) => {this.setState({hideAfterDark: !this.state.hideAfterDark})}}>{hideAfterDark}</button></div> : <p></p>;
     const ungroupedHasStuffToDisplay = this.state.ungroupedHasStuffToDisplay ? <div className="area-section-heading-center__hide-btn-box"><button className="btn-hide" onClick={(e) => {this.setState({hideUngrouped: !this.state.hideUngrouped})}}>{hideUngrouped}</button></div> : <p></p>;
+
+    const arrayResults = this.state.groupResults;
+    console.log("Array results");
+    console.log(arrayResults);
 
     // Return the component frame
     return (
@@ -113,7 +147,7 @@ class AdminResults extends React.Component {
               {ungroupedHasStuffToDisplay}
             </div>
           </div>
-          <div className="bar-group-result">
+  				<div className="bar-group-result">
             <div style={hideUngroupedArray}>
               <div className="bar-group-result__bar bar-group-result__bar--failure">Jack Reacher</div>
               <div className="bar-group-result__bar bar-group-result__bar--failure">Jane Eyre</div>

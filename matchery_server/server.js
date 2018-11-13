@@ -376,31 +376,55 @@ app.post('/api/account/getSingleEvent', (req, res, next) => {
   });
 });
 
-app.post('/api/account/getGroupsInEvent', (req, res, next) => {
+app.post('/api/account/getEventAdminInfo', (req, res, next) => {
   const { body } = req;
   let {
     eventName
   } = body;
 
-  Audition.find({
-    eventName: eventName
-  }, (err, groups) => {
+  let candidates = [];
+  let groupNames = [];
+  let judges = [];
+
+  Event.findOne({
+    name: eventName
+  }, (err, event) => {
     if (err) {
       return res.send({
         success: false,
         message: 'Error: server error'
       });
     }
-    groupNames = [];
-    groups.forEach((group) => {
-      groupNames.push(group.auditionName)
+    event.candidateLists.forEach((candidateObject) => {
+      candidates.push(candidateObject.candidate);
     });
-    return res.send({
-      success: true,
-      groups: groupNames
-    });
+    Audition.find({
+      eventName: eventName
+    }, (err, groups) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      groups.forEach((group) => {
+        groupNames.push(group.auditionName);
+        let judgeArray = [];
+        judgeArray.push(group.auditionName);
+        group.toObject().judges.forEach((judge) => {
+          judgeArray.push(judge);
+        });
+        judges.push(judgeArray);
+      });
+      return res.send({
+        success: true,
+        candidates: candidates,
+        groups: groupNames,
+        judges: judges
+      });
 
-  });
+    });
+    });
 });
 
 app.post('/api/account/getSingleAudition', (req, res, next) => {

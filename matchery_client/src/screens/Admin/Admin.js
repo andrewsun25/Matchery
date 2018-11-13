@@ -112,7 +112,7 @@ class Admin extends React.Component {
 
     	<div className="main-panel">
 				<div className="main-panel__header">
-					<h2 className="heading-secondary">WashU Acappella Auditions 2018 <span className="main-panel__header--user"> - Event Admin</span></h2>
+					<h2 className="heading-secondary">{this.state.eventName}<span className="main-panel__header--user"> - Event Admin</span></h2>
 				</div>
 				<div className="main-panel__nav-and-content">
 					<ul className="main-panel__nav">

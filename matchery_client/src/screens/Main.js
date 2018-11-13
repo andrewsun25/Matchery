@@ -202,31 +202,33 @@ class App extends Component {
   // page to the admin page.
   dashboardToAdmin = (e, eventName) => {
 
-    // TODO:  this is dummy data below!
+    fetch('/api/account/getEventAdminInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: eventName
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.adminChild.current.setEventName(eventName);
+          this.adminChild.current.setCandidateList(json.candidates);
+          this.adminChild.current.setGroupList(json.groups);
+          this.adminChild.current.setGroupJudgesDict(json.judges);
 
-    this.adminChild.current.setEventName(eventName);
-    this.adminChild.current.setCandidateList([
-      'Zhi Shen Yong',
-      'Andrew Sun',
-      'Shane Blair',
-      'William Leung',
-    ]);
-    this.adminChild.current.setGroupList([
-      'Sensasions',
-      'After Dark',
-      'The Amateurs',
-      'Mosaic Whispers',
-    ]);
-    this.adminChild.current.setGroupJudgesDict([
-      ['Group1', 'Mike', 'Jake'],
-      ['Group2', 'Jamie', 'Bob']
-    ]);
+          this.setState({
+            showDashboard: false,
+            showAdmin: true,
+            showBackButton: true,
+          });
+        }
+        else {
+          console.log(json.message);
+        }
+      });
 
-    this.setState({
-      showDashboard: false,
-      showAdmin: true,
-      showBackButton: true,
-    });
   }
 
   // Function to navigate from the dashboard

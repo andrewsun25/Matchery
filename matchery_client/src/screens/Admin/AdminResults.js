@@ -86,8 +86,6 @@ class AdminResults extends React.Component {
     const ungroupedHasStuffToDisplay = this.state.ungroupedHasStuffToDisplay ? <button className="btn-hide u-margin-left-md" onClick={(e) => {this.setState({hideUngrouped: !this.state.hideUngrouped})}}>{hideUngrouped}</button> : <p></p>;
 
     const arrayResults = this.state.groupResults;
-    console.log("Array results");
-    console.log(arrayResults);
 
     // Return the component frame
     return (

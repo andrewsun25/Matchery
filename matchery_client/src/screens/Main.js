@@ -252,6 +252,7 @@ class App extends Component {
           this.judgeChild.current.getList(json.audition.list);
           this.judgeChild.current.getNewList(json.audition.newList);
           this.judgeChild.current.getNotList(json.audition.notList);
+          this.judgeChild.current.generateResults();
 
           this.setState({
             showDashboard: false,
@@ -285,6 +286,7 @@ class App extends Component {
           this.candidateChild.current.setEventName(json.eventName);
           this.candidateChild.current.getList(json.list);
           this.candidateChild.current.getNotList(json.notList);
+          this.candidateChild.current.generateResults();
           // Display the candidate page.
           this.setState({
             showDashboard: false,

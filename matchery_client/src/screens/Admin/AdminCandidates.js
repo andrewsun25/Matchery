@@ -27,15 +27,19 @@ class AdminCandidates extends React.Component {
 
   addCandidateSuccess = (candidate) => {
     var tempGroup = this.state.candidates;
-    var candidateArray = candidate.split(',');
+    var candidateArray = candidate.replace(/ /g,'').split(',');
     tempGroup.push.apply(tempGroup, candidateArray);
     this.setState({candidates: tempGroup});
     this.adminGroupListChild.current.updateList(tempGroup);
-    this.update(tempGroup);
+    this.addCandidates(candidateArray);
   }
 
-  update = (list) => {
-    // TODO update the list here!
+  addCandidates = (list) => {
+    console.log(list);
+  }
+
+  removeCandidate = (removed) => {
+    console.log(removed);
   }
 
   deleteFromList = (e, item) => {
@@ -46,7 +50,7 @@ class AdminCandidates extends React.Component {
       candidates: tempCandidate,
     });
     this.adminGroupListChild.current.updateList(tempCandidate);
-    this.update(tempCandidate);
+    this.removeCandidate(item);
   }
 
   updateSearchInput = (e) => {

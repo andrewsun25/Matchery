@@ -35,7 +35,7 @@ class AdminGroups extends React.Component {
       groups: tempList,
     });
     this.adminGroupListChild.current.updateList(tempList);
-    this.update(tempList);
+    this.removeGroup(item);
   }
 
   updateSearchInput = (e) => {
@@ -59,11 +59,33 @@ class AdminGroups extends React.Component {
     tempGroup.push(group);
     this.setState({groups: tempGroup});
     this.adminGroupListChild.current.updateList(tempGroup);
-    this.update(tempGroup);
+    this.addGroup(group);
   }
 
-  update = (list) => {
-    console.log(list);
+  addGroup = (added) => {
+    console.log(added);
+    fetch('/api/account/createGroup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName,
+        groupName: added
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log("success");
+        }
+        else {
+          console.log(json.message);
+        }
+      });
+  }
+
+  removeGroup = (removed) => {
+    console.log(removed);
   }
 
   // Render the component

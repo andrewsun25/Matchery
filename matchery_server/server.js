@@ -47,11 +47,16 @@ app.get('/api/users', function(req, res) {
 
 app.post('/api/match', function(req, res) {
 
+  const { body } = req;
+  let {
+    eventName
+  } = body;
+
   let applicantPreferences = {};
   let groupPreferences = {};
 
   Event.findOne({
-      name: "WashU Diwali Auditions 2018"
+      name: eventName
     }, (err, event) => {
       if (err) {
         return res.send({
@@ -493,6 +498,51 @@ app.post('/api/account/createEvent', (req, res, next) => {
               return res.send({
                 success: true,
               });
+            });
+          }
+        });
+      }
+    });
+  });
+
+app.post('/api/account/createGroup', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      groupName
+    } = body;
+
+    let newGroup = new Audition();
+    newGroup.auditionName = groupName;
+    newGroup.eventName = eventName;
+
+    Audition.find({
+      auditionName: groupName,
+      eventName: eventName
+    }, (err, groups) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      if (groups.length != 0) {
+        return res.send({
+          success: false,
+          message: 'Group name already exists'
+        });
+      }
+      else {
+        newGroup.save((err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: err
+            });
+          }
+          else {
+            return res.send({
+                success: true,
             });
           }
         });

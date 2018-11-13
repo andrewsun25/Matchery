@@ -415,6 +415,7 @@ class Admin extends React.Component {
 			          <AdminGroups
                   ref={this.showGroupsChild}
                   showAddGroupModal={this.showAddGroupModal}
+                  eventName={this.state.eventName}
 			          />
 			        </div>
 
@@ -422,6 +423,7 @@ class Admin extends React.Component {
 			          <AdminJudges
                   ref={this.showJudgesChild}
                   showAddJudgeModal={this.showAddJudgeModal}
+                  eventName={this.state.eventName}
 			          />
 			        </div>
 
@@ -435,6 +437,7 @@ class Admin extends React.Component {
 			        <div style={showResults}>
 			          <AdminResults
                   ref={this.adminResultsChild}
+                  eventName={this.state.eventName}
 			          />
 			        </div>
               

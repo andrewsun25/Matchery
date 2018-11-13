@@ -12,6 +12,7 @@ class Candidate extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.candidateResultsChild = React.createRef();
     this.candidatePreferencesChild = React.createRef();
     this.state = {
       eventName: "",
@@ -24,6 +25,10 @@ class Candidate extends React.Component {
     this.setState({
       eventName: eventName,
     });
+  }
+
+  generateResults = () => {
+    this.candidateResultsChild.current.regenerateResults();
   }
 
   // Forwards the list to CandidatePreferences
@@ -75,6 +80,7 @@ class Candidate extends React.Component {
                     showPreferences: false,
                     showResults: true,
                   });
+                  this.generateResults();
                 }}>Results</li>
             </div>
             <div style={showResults}>
@@ -93,6 +99,7 @@ class Candidate extends React.Component {
                     showPreferences: false,
                     showResults: true,
                   });
+                  this.generateResults();
                 }}>Results</li>
             </div>
 					</ul>
@@ -109,6 +116,8 @@ class Candidate extends React.Component {
 
 			        <div style={showResults}>
 			          <CandidateResults
+                  ref={this.candidateResultsChild}
+                  eventName={this.state.eventName}
 
 			          />
 			        </div>

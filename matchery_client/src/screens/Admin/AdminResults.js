@@ -31,7 +31,10 @@ class AdminResults extends React.Component {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName
+      })
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
@@ -46,19 +49,18 @@ class AdminResults extends React.Component {
           }
           resultsArray = resultsArray.map((group, key) => 
             <section key={key} className="section-group u-margin-bottom-lg">
-
               <div className="area-section-heading-center u-margin-bottom-md">
-                <h3 className="heading-tertiary u-center-text">{group.name}</h3>
+                <div className="area-section-heading-center__container">
+                  <h3 className="heading-tertiary">{group.name}</h3>
+                </div>
               </div>
-
               <div className="bar-group-result">
                 <div>
                   {group.list.map((name, key) => 
                     <div key={key} className="bar-group-result__bar bar-group-result__bar--success">{name}</div>
-                    )}                  
+                    )}
                 </div>
               </div>
-
             </section>
             );
 
@@ -110,34 +112,8 @@ class AdminResults extends React.Component {
 					<p className="timestamp u-center-text">Note: newly generated results differ from published results</p>
 				</section>
 
-        <section className="section-group u-margin-bottom-lg">
-          <div className="area-section-heading-center u-margin-bottom-md">
-            <div className="area-section-heading-center__container">
-              <h3 className="heading-tertiary">Sensasians</h3>
-              {sensasiansHasStuffToDisplay}
-            </div>
-          </div>
-          <div className="bar-group-result">
-            <div style={hideSensasiansArray}>
-              <div className="bar-group-result__bar bar-group-result__bar--success">Zhi Shen Yong</div>
-              <div className="bar-group-result__bar bar-group-result__bar--success">William Leung</div>
-            </div>
-          </div>
-        </section>
-        <section className="section-group u-margin-bottom-lg">
-          <div className="area-section-heading-center u-margin-bottom-md">
-            <div className="area-section-heading-center__container">
-              <h3 className="heading-tertiary">After Dark</h3>
-              {afterDarkHasStuffToDisplay}
-            </div>
-          </div>
-          <div className="bar-group-result">
-            <div style={hideAfterDarkArray}>
-              <div className="bar-group-result__bar bar-group-result__bar--success">Shane Blair</div>
-              <div className="bar-group-result__bar bar-group-result__bar--success">Andrew Sun</div>
-            </div>
-          </div>
-        </section>
+        {arrayResults}
+
         <section className="section-ungrouped u-margin-bottom-lg">
           <div className="area-section-heading-center u-margin-bottom-md">
             <div className="area-section-heading-center__container">

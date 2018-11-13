@@ -12,6 +12,7 @@ class Judge extends React.Component {
   // Component constructor
   constructor(props) {
     super(props);
+    this.judgeResultsChild = React.createRef();
     this.judgePreferencesChild = React.createRef();
     this.state = {
       showPreferences: true,
@@ -31,6 +32,10 @@ class Judge extends React.Component {
     this.setState({
       groupName: groupName,
     });
+  }
+
+  generateResults = () => {
+    this.judgeResultsChild.current.regenerateResults();
   }
 
   // Forwards the list to CandidatePreferences
@@ -84,6 +89,7 @@ class Judge extends React.Component {
                     showPreferences: false,
                     showResults: true,
                   });
+                  this.judgeResultsChild.current.regenerateResults()
                 }}>Results</li>
             </div>
             <div style={showResults}>
@@ -103,6 +109,7 @@ class Judge extends React.Component {
                   showPreferences: false,
                   showResults: true,
                 });
+                this.judgeResultsChild.current.regenerateResults()
               }}>Results</li>
             </div>
 					</ul>
@@ -120,7 +127,9 @@ class Judge extends React.Component {
 
 			        <div style={showResults}>
 			          <JudgeResults
-
+                  ref={this.judgeResultsChild}
+                  eventName={this.state.eventName}
+                  groupName={this.state.groupName}
 			          />
 			        </div>
 

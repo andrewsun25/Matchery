@@ -11,8 +11,41 @@ class JudgeResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+    	groupResults: []
     }
+  }
+
+    regenerateResults = (e) => {
+    fetch('/api/match', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName
+      })
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          let dataArray = JSON.parse(json.data.replace(/\'/g, '"'));
+          let resultsArray = [];
+
+          for (var groupName in dataArray) {
+            if (!dataArray.hasOwnProperty(groupName)) continue;
+
+            if (groupName == this.props.groupName) {
+	            resultsArray = dataArray[groupName];
+            }
+          }
+          resultsArray = resultsArray.map((name, key) => 
+				<div className="bar-group-result__bar bar-group-result__bar--success">{name}</div>
+            );
+
+          this.setState({
+            groupResults: resultsArray
+          })
+        }
+      });
   }
 
   // Render the component
@@ -26,8 +59,7 @@ class JudgeResults extends React.Component {
 				<section className="section-matches u-margin-bottom-lg">
 					<h3 className="heading-tertiary u-center-text u-margin-bottom-md">Matches</h3>
 					<div className="bar-group-result">
-						<div className="bar-group-result__bar bar-group-result__bar--success">Zhi Shen Yong</div>
-						<div className="bar-group-result__bar bar-group-result__bar--success">William Leung</div>
+						{this.state.groupResults}
 					</div>
 				</section>
 

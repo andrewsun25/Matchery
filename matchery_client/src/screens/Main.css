@@ -234,26 +234,49 @@ input:focus {outline:0;}
     font-size: 2rem;
     font-weight: 600;
     color: #fff; }
-  .header__logo-box-clickable {
-    margin-left: 2rem;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-  }
   .header__my-account-box {
+    position: relative;
     margin-right: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    cursor: pointer; }
+    .header__my-account-box--drop-down-active {
+      background-color: rgba(0, 0, 0, 0.12); }
+  .header__my-account-text {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #ea8839;
-    cursor: pointer; }
-    .header__my-account-box:hover {
+    color: #ea8839; }
+    .header__my-account-text:hover {
       color: #d96e17; }
-    .header__my-account-box:active {
+    .header__my-account-text:active {
       color: #efa467; }
   .header__down-arrow-icon {
     font-size: 2rem;
     transform: translateY(0.5rem); }
+  .header__drop-down {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #e0e0e0;
+    box-shadow: 0 0.2rem 0.8rem #000;
+    list-style: none; }
+  .header__drop-down-item, .header__drop-down-item:link, .header__drop-down-item:visited {
+    padding-top: 1.5rem;
+    padding-left: 3rem;
+    padding-bottom: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #222;
+    transition: background-color .15s;
+    cursor: pointer; }
+  .header__drop-down-item:hover {
+    background-color: #ccc; }
+  .header__drop-down-item:active {
+    color: #6f6f6f; }
 
 /*------------ back-button ------------*/
 
@@ -315,6 +338,13 @@ input:focus {outline:0;}
   display: flex;
   justify-content: center;
   align-items: center; }
+  .area-section-heading-center__container {
+    position: relative; }
+  .area-section-heading-center__hide-btn-box {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 2rem);
+    transform: translateY(-50%); }
 
 .area-search-bar-with-add {
   display: flex;

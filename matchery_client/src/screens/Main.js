@@ -31,6 +31,7 @@ class App extends Component {
     this.state = {
       showLogin: true,
       showSignUp: false,
+      showDropdown: false,
       showDashboard: false, // Main screen
       showAdmin: false,
       showJudge: false,
@@ -344,13 +345,14 @@ class App extends Component {
     // Styling constants for showing different screens
     const showLogin = this.state.showLogin ? {display:'block'} : {display:'none'};
     const showSignUp = this.state.showSignUp ? {display:'block'} : {display:'none'};
+    const showDropdown = this.state.showDropdown ? {display:'block'} : {display:'none'};
     const showDashboard = this.state.showDashboard ? {display:'block'} : {display:'none'};
     const showAdmin = this.state.showAdmin ? {display:'block'} : {display:'none'};
     const showJudge = this.state.showJudge ? {display:'block'} : {display:'none'};
     const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
     const showCreateEvent = this.state.showCreateEvent ? {display:'block'} : {display:'none'};
 
-    const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'block'};
+    const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'flex'};
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const inDashboardOrNotLoggedIn = (this.state.showLogin || this.state.showSignUp || this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const showBackButton = this.state.showBackButton ? {display:'block'} : {display:'none'};
@@ -362,7 +364,7 @@ class App extends Component {
         <header className="header">
           <div className="header__container">
             <div
-              className="header__logo-box-clickable"
+              className="header__logo-box"
               style={notInDashboardButLoggedIn}
               onClick={(e) => {this.setState({
                 showBackButton: false,
@@ -378,11 +380,17 @@ class App extends Component {
               style={inDashboardOrNotLoggedIn}>
               Matchery
             </div>
-            <div style={loggedIn}
-              onClick={(e) => {this.handleLogOut(e)}}
-              className="header__my-account-box">
-              LogOut
-              <ion-icon className="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
+            <div style={loggedIn} 
+              onClick={(e) => {this.setState({showDropdown: true})}} 
+              className="header__my-account-box header__my-account-box--drop-down-active">
+              <div className="header__my-account-text">
+                My Account
+                <ion-icon class="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
+              </div>
+              <ul style={showDropdown} className="header__drop-down">
+                <li className="header__drop-down-item">My Profile</li>
+                <li onClick={(e) => {this.handleLogOut(e)}} className="header__drop-down-item">Logout</li>
+              </ul>
             </div>
           </div>
         </header>

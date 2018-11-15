@@ -65,12 +65,13 @@ class AdminAdmins extends React.Component {
     // TODO add fetch methods here
     // view addGroup in AdminGroups.js for your previous work!
     // except this time it's an array of admins, not a single group
+
   }
 
   removeGroup = (removed) => {
     // TODO
     // ADD the function to remove the function
-    // then call this.props.getEventAgain();
+
   }
 
   // Render the component

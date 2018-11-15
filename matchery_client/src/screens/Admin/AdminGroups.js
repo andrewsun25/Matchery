@@ -88,7 +88,7 @@ class AdminGroups extends React.Component {
   removeGroup = (removed) => {
     // TODO
     // ADD the function to remove the function
-    // then call this.props.getEventAgain();
+    // then call this.props.getEventAgain(); <============================
   }
 
   // Render the component

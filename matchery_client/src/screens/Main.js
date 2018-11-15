@@ -219,6 +219,13 @@ class App extends Component {
       .then(json => {
         if (json.success) {
           this.adminChild.current.setEventName(eventName);
+          // TODO get real admins
+          this.adminChild.current.setAdminList([
+            'Shane Blair',
+            'Andrew Sun',
+            'Zhi Shen Yong',
+            'William Leung',
+          ]);
           this.adminChild.current.setCandidateList(json.candidates);
           this.adminChild.current.setGroupList(json.groups);
           this.adminChild.current.setGroupJudgesDict(json.judges);

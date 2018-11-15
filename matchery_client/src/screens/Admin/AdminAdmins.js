@@ -12,6 +12,22 @@ class AdminAdmins extends React.Component {
     }
   }
 
+  updateSearchInput = (e) => {
+    var keyword = e.target.value;
+    if (keyword.length == 0) {
+      this.adminGroupListChild.current.updateList(this.state.groups);
+    } else {
+      var tempGroups = this.state.groups;
+      var sendGroups = [];
+      tempGroups.forEach((group) => {
+        if (group.toLowerCase().includes(keyword)) {
+          sendGroups.push(group);
+        }
+      });
+      this.adminGroupListChild.current.updateList(sendGroups);
+    }
+  }
+
   // Render the component
   render() {
 
@@ -21,7 +37,13 @@ class AdminAdmins extends React.Component {
     	<section className="section-admins">
         <div className="area-search-bar-with-add u-margin-bottom-md">
           <form action="#" className="search-bar__form">
-            <input type="text" className="search-bar" placeholder="Search administrators" required></input>
+            <input
+              type="text"
+              className="search-bar"
+              placeholder="Search administrators"
+              onChange={this.updateSearchInput}
+              required>
+            </input>
             <ion-icon class="search-bar__icon" name="search"></ion-icon>
           </form>
           <button className="btn btn--action btn--with-icon"

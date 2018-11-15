@@ -51,6 +51,10 @@ class Admin extends React.Component {
     });
   }
 
+  setAdminList = (list) => {
+    
+  }
+
   setCandidateList = (list) => {
     this.showCandidatesChild.current.setCandidateList(list);
   }

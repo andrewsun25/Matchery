@@ -52,7 +52,7 @@ class Admin extends React.Component {
   }
 
   setAdminList = (list) => {
-    
+    this.showAdminsChild.current.setAdminList(list);
   }
 
   setCandidateList = (list) => {
@@ -88,6 +88,15 @@ class Admin extends React.Component {
     });
     this.showGroupsChild.current.addGroupSuccess(group);
     this.addGroupChild.current.resetInput();
+  }
+
+  addAdminSuccess = (e, admin) => {
+    e.preventDefault();
+    this.setState({
+      showAddAdminModal: false,
+    });
+    this.showAdminsChild.current.addAdminSuccess(admin);
+    this.addAdminChild.current.resetInput();
   }
 
   addJudgeSuccess = (e, judges, group) => {

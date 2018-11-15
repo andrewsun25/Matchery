@@ -28,7 +28,7 @@ class Admin extends React.Component {
     this.showGroupsChild = React.createRef();
     this.showCandidatesChild = React.createRef();
     this.adminResultsChild = React.createRef();
-    
+
     this.state = {
       eventName: "",
 
@@ -65,7 +65,10 @@ class Admin extends React.Component {
 
   showAddAdminModal = (e) => { this.setState({showAddAdminModal: true}); }
   showAddGroupModal = (e) => { this.setState({showAddGroupModal: true}); }
-  showAddJudgeModal = (e) => { this.setState({showAddJudgeModal: true}); }
+  showAddJudgeModal = (e, group) => {
+    this.addJudgeChild.current.focusGroup(group);
+    this.setState({showAddJudgeModal: true});
+  }
   showAddCandidateModal = (e) => { this.setState({showAddCandidateModal: true}); }
 
   closeAddAdminModal = (e) => { this.setState({showAddAdminModal: false}); }
@@ -83,14 +86,11 @@ class Admin extends React.Component {
     this.addGroupChild.current.resetInput();
   }
 
-  addJudgeSuccess = (e, judges) => {
+  addJudgeSuccess = (e, judges, group) => {
     e.preventDefault();
     this.setState({showAddJudgeModal: false});
-    var tempGroup = this.state.sensasiansJudges;
-    var judgeArray = judges.split(',');
-    tempGroup.push.apply(tempGroup, judgeArray);
-    this.setState({sensasiansJudges: tempGroup});
     this.addJudgeChild.current.resetInput();
+    this.showJudgesChild.current.addAJudge(judges, group);
   }
 
   // This function is called when the user attempts to add a candidate, or a
@@ -102,6 +102,10 @@ class Admin extends React.Component {
     });
     this.showCandidatesChild.current.addCandidateSuccess(candidateList);
     this.addCandidateChild.current.resetInput();
+  }
+
+  getEventAgain = () => {
+    this.props.getEventAgainAdmin(this.state.eventName);
   }
 
   // Render the component
@@ -414,6 +418,7 @@ class Admin extends React.Component {
 							<div style={showGroups}>
 			          <AdminGroups
                   ref={this.showGroupsChild}
+                  getEventAgain={this.getEventAgain}
                   showAddGroupModal={this.showAddGroupModal}
                   eventName={this.state.eventName}
 			          />
@@ -440,7 +445,7 @@ class Admin extends React.Component {
                   eventName={this.state.eventName}
 			          />
 			        </div>
-              
+
               <div style={showAddAdminModal}>
                 <AddAdminModal
                   ref={this.addAdminChild}

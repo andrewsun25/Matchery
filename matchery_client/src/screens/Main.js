@@ -39,7 +39,7 @@ class App extends Component {
       showBackButton: false,
       showCreateEvent: false,
       candidateGroupList: [],
-      events: { // TODO This will need to be pulled from the server
+      events: {
         'administrator' : [],
         'judge' : [],
         'candidate' : []
@@ -197,6 +197,10 @@ class App extends Component {
           console.log('json', json);
           // alert(json.message);
         });
+  }
+
+  getEventAgainAdmin = (eventName) => {
+    this.dashboardToAdmin(null, eventName);
   }
 
   // Function to navigate from the dashboard
@@ -358,7 +362,6 @@ class App extends Component {
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const inDashboardOrNotLoggedIn = (this.state.showLogin || this.state.showSignUp || this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const showBackButton = this.state.showBackButton ? {display:'block'} : {display:'none'};
-    // TODO: make the Matchery logo clickable
 
     // Return the app frame (header and background)
     return (
@@ -384,7 +387,7 @@ class App extends Component {
             </div>
             <div style={loggedIn}
               onMouseEnter={(e) => {this.setState({showDropdown: true})}}
-              onMouseLeave={(e) => {this.setState({showDropdown: false})}} 
+              onMouseLeave={(e) => {this.setState({showDropdown: false})}}
               className="header__my-account-box header__my-account-box--drop-down-active">
               <div className="header__my-account-text">
                 My Account
@@ -438,6 +441,7 @@ class App extends Component {
         <div style={showAdmin}>
           <Admin
           ref={this.adminChild}
+          getEventAgainAdmin={this.getEventAgainAdmin}
           />
         </div>
         <div style={showJudge}>

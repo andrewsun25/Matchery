@@ -13,7 +13,12 @@ class AdminJudgesList extends React.Component {
     this.state = {
       dragging: undefined,
       list: this.props.groups, // Get from parent
+      name: this.props.groupName,
     }
+  }
+
+  test = () => {
+    console.log(this.state.list);
   }
 
   updateList = (groups) => {
@@ -46,6 +51,7 @@ class AdminJudgesList extends React.Component {
     tempGroup.splice(indexOfGroup, 1);
     this.setState({list: tempGroup});
     this.update(tempGroup);
+    this.props.propagateDelete(this.state.name, tempGroup);
   }
 
   update = (judges) => {

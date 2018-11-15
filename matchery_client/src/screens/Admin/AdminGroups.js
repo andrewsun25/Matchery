@@ -77,6 +77,7 @@ class AdminGroups extends React.Component {
       .then(json => {
         if (json.success) {
           console.log("success");
+          this.props.getEventAgain();
         }
         else {
           console.log(json.message);
@@ -85,7 +86,9 @@ class AdminGroups extends React.Component {
   }
 
   removeGroup = (removed) => {
-    console.log(removed);
+    // TODO
+    // ADD the function to remove the function
+    // then call this.props.getEventAgain();
   }
 
   // Render the component

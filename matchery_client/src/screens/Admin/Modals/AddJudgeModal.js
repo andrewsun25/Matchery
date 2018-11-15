@@ -12,7 +12,14 @@ class AddJudgeModal extends React.Component {
     super(props);
     this.state = {
       inputValue: "",
+      group: "",
     }
+  }
+
+  focusGroup = (group) => {
+    this.setState({
+      group: group,
+    })
   }
 
   updateInputValue = (e) => {
@@ -39,7 +46,7 @@ class AddJudgeModal extends React.Component {
             class="modal__close-icon"
             name="close"
             onClick={(e) => {this.props.closeAddJudgeModal(e)}}></ion-icon>
-          <h3 className="heading-secondary u-margin-bottom-sm-md">Sensasians Judge Invitation</h3>
+          <h3 className="heading-secondary u-margin-bottom-sm-md">{this.state.group} Judge Invitation</h3>
 
           <form action="#">
 
@@ -65,7 +72,7 @@ class AddJudgeModal extends React.Component {
                 type="submit"
                 className="modal__form-submit"
                 value="Add Judges"
-                onClick={(e) => {this.props.addJudgeSuccess(e, this.state.inputValue)}}></input>
+                onClick={(e) => {this.props.addJudgeSuccess(e, this.state.inputValue, this.state.group)}}></input>
             </div>
 
           </form>

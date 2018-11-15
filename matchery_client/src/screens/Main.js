@@ -382,8 +382,9 @@ class App extends Component {
               style={inDashboardOrNotLoggedIn}>
               Matchery
             </div>
-            <div style={loggedIn} 
-              onClick={(e) => {this.setState({showDropdown: true})}} 
+            <div style={loggedIn}
+              onMouseEnter={(e) => {this.setState({showDropdown: true})}}
+              onMouseLeave={(e) => {this.setState({showDropdown: false})}} 
               className="header__my-account-box header__my-account-box--drop-down-active">
               <div className="header__my-account-text">
                 My Account

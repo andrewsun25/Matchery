@@ -429,7 +429,7 @@ app.post('/api/account/getEventAdminInfo', (req, res, next) => {
       });
 
     });
-    });
+  });
 });
 
 app.post('/api/account/getSingleAudition', (req, res, next) => {
@@ -541,8 +541,27 @@ app.post('/api/account/createGroup', (req, res, next) => {
             });
           }
           else {
-            return res.send({
+/*            Event.findOneAndUpdate({'name': eventName}, { $push: { 'candidateLists.$.notList': groupName } }, function (err) {
+              if (err) {
+                console.log(err);
+              }
+              else {
+                return res.send({
+                  success: true,
+                });
+              }
+            });*/
+            Event.findOne({
+              name: eventName
+            }, (err, event) => {
+              event.candidateLists.forEach((element) => {
+                element.notList.push(groupName);
+              });
+              event.markModified('candidateLists');
+              event.save();
+              return res.send({
                 success: true,
+              });
             });
           }
         });

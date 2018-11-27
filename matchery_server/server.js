@@ -533,37 +533,28 @@ app.post('/api/account/createGroup', (req, res, next) => {
         });
       }
       else {
-        newGroup.save((err) => {
-          if (err) {
-            return res.send({
-              success: false,
-              message: err
-            });
-          }
-          else {
-/*            Event.findOneAndUpdate({'name': eventName}, { $push: { 'candidateLists.$.notList': groupName } }, function (err) {
-              if (err) {
-                console.log(err);
-              }
-              else {
-                return res.send({
-                  success: true,
-                });
-              }
-            });*/
-            Event.findOne({
-              name: eventName
-            }, (err, event) => {
-              event.candidateLists.forEach((element) => {
-                element.notList.push(groupName);
+       Event.findOne({
+          name: eventName
+        }, (err, event) => {
+          event.candidateLists.forEach((element) => {
+            newGroup.newList.push(element.candidate);
+            element.notList.push(groupName);
+          });
+          event.markModified('candidateLists');
+          event.save();
+          newGroup.save((err) => {
+            if (err) {
+              return res.send({
+                success: false,
+                message: err
               });
-              event.markModified('candidateLists');
-              event.save();
+            }
+            else {
               return res.send({
                 success: true,
               });
-            });
-          }
+            }
+          });
         });
       }
     });

@@ -49,7 +49,7 @@ class AdminJudges extends React.Component {
       body: JSON.stringify({
         eventName: this.props.eventName,
         groupName: group,
-        judges: judges
+        judges: judgeArray
       }),
     }).then(res => res.json())
       .then(json => {

@@ -787,7 +787,7 @@ app.post('/api/account/deleteGroup', (req, res, next) => {
     Audition.findOneAndDelete({
       auditionName: groupName,
       eventName: eventName
-    }, (err) => {
+    }, (err, removed) => {
       if (err) {
         return res.send({
           success: false,
@@ -795,6 +795,18 @@ app.post('/api/account/deleteGroup', (req, res, next) => {
         });
       }
       else {
+        let judges = removed.judges;
+        User.updateMany(
+          {username: { $in: judges } }, 
+          { $pull: { Events: { role: "Judge", eventName: eventName, auditionName: groupName } } },
+          (err) => {
+            if (err) {
+              return res.send({
+                success: false,
+                message: 'Error: server error'
+              });
+            }
+          });
        Event.findOne({
           name: eventName
         }, (err, event) => {
@@ -825,7 +837,7 @@ app.post('/api/account/deleteJudge', (req, res, next) => {
     } = body;
 
     User.findOneAndUpdate(
-    { username: judge }, { $pull: { Events: { role: "Judge", auditionName: groupName } } }, (err) => {
+    { username: judge }, { $pull: { Events: { role: "Judge", auditionName: groupName, eventName: eventName } } }, (err) => {
       if (err) {
         return res.send({
           success: false,

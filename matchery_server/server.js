@@ -560,6 +560,58 @@ app.post('/api/account/createGroup', (req, res, next) => {
     });
   });
 
+app.post('/api/account/addJudges', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      groupName,
+      judges
+    } = body;
+
+    var foundUsers = [];
+
+    User.find({
+      username: { $in: judges }
+    }, (err, users) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      else {
+        users.forEach((user) => {
+          user.Events.push({
+            role: "Judge",
+            eventName: eventName,
+            auditionName: groupName
+          });
+          user.save();
+          foundUsers.push(user.username);
+        });
+
+        Audition.findOneAndUpdate({
+          auditionName: groupName,
+          eventName: eventName
+        },
+        { $push: { judges: foundUsers } },
+         (err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
+          else {
+            return res.send({
+              success: true
+            });
+          }
+        });
+      }
+    });
+});
+
 app.post('/api/account/updateCandidateLists', (req, res, next) => {
     const { body } = req;
     let {

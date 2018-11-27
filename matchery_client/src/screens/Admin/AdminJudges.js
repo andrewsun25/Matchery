@@ -41,6 +41,25 @@ class AdminJudges extends React.Component {
         tempGroup: is the array of judges WITHOUT the 0 index being the name of the group
         !!! if you want the 0 index to be the name of the group, you gotta add it yourself below!
     */
+    fetch('/api/account/addJudges', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName,
+        groupName: group,
+        judges: judges
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log("success");
+        }
+        else {
+          console.log(json.message);
+        }
+      });
   }
 
   propagateDelete = (groupName, list) => {

@@ -54,6 +54,7 @@ app.post('/api/match', function(req, res) {
 
   let applicantPreferences = {};
   let groupPreferences = {};
+  let allCandidates = [];
 
   Event.findOne({
       name: eventName
@@ -68,6 +69,7 @@ app.post('/api/match', function(req, res) {
       let candidateLists = event.toObject().candidateLists;
       candidateLists.forEach((candidateObject) => {
         applicantPreferences[candidateObject.candidate] = candidateObject.list;
+        allCandidates.push(candidateObject.candidate);
       });
 
         Audition.find({
@@ -91,20 +93,15 @@ app.post('/api/match', function(req, res) {
             data = {
               "applicantPreferences": applicantPreferences,
               "groupPreferences": groupPreferences
-
-           /*   "groupQuotas": {
-                "aristocats": 2,
-                "sensasians": 2,
-                "singers": 2,
-                "ghostlights": 2
-              }*/
             }
 
             const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
             pythonProcess.stdout.on('data', (data) => {
+              console.log(data.toString().trim().replace(/\'/g, '"'));
               return res.send({
                 success: true,
-                data: data.toString().trim()
+                data: data.toString().trim().replace(/\'/g, '"'),
+                allCandidates: allCandidates
               });
             });
     });

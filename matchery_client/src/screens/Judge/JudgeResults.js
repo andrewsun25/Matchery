@@ -11,7 +11,8 @@ class JudgeResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    	groupResults: []
+    	groupResults: [],
+    	failedCandidates: []
     }
   }
 
@@ -29,6 +30,7 @@ class JudgeResults extends React.Component {
         if (json.success) {
           let dataArray = JSON.parse(json.data.replace(/\'/g, '"'));
           let resultsArray = [];
+          let failedCandidates = [];
 
           for (var groupName in dataArray) {
             if (!dataArray.hasOwnProperty(groupName)) continue;
@@ -37,12 +39,17 @@ class JudgeResults extends React.Component {
 	            resultsArray = dataArray[groupName];
             }
           }
+          failedCandidates = failedCandidates.filter((element) => !resultsArray.includes(element));
           resultsArray = resultsArray.map((name, key) => 
 				<div className="bar-group-result__bar bar-group-result__bar--success">{name}</div>
             );
+          failedCandidates = failedCandidates.map((name, key) =>
+          		<div className="bar-group-result__bar bar-group-result__bar--failure">{name}</div>
+          	);
 
           this.setState({
-            groupResults: resultsArray
+            groupResults: resultsArray,
+            failedCandidates: failedCandidates
           })
         }
       });
@@ -66,8 +73,7 @@ class JudgeResults extends React.Component {
 				<section className="section-misses u-margin-bottom-lg">
 					<h3 className="heading-tertiary u-center-text u-margin-bottom-md">Misses</h3>
 					<div className="bar-group-result">
-						<div className="bar-group-result__bar bar-group-result__bar--failure">Andrew Sun</div>
-						<div className="bar-group-result__bar bar-group-result__bar--failure">Shane Blair</div>
+						{this.state.failedCandidates}
 					</div>
 				</section>
 

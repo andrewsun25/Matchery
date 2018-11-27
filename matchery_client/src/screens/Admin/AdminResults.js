@@ -12,6 +12,7 @@ class AdminResults extends React.Component {
     super(props);
     this.state = {
       groupResults: [],
+      failedCandidates: [],
       sensasiansHasStuffToDisplay: true,
       afterDarkHasStuffToDisplay: true,
       ungroupedHasStuffToDisplay: true,
@@ -38,14 +39,16 @@ class AdminResults extends React.Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
-          let dataArray = JSON.parse(json.data.replace(/\'/g, '"'));
+          let dataArray = JSON.parse(json.data);
           let resultsArray = [];
+          let failedCandidates = json.allCandidates;
 
           for (var groupName in dataArray) {
             if (!dataArray.hasOwnProperty(groupName)) continue;
 
             let list = dataArray[groupName];
             resultsArray.push({name:groupName, list:list});
+            failedCandidates = failedCandidates.filter((element) => !list.includes(element));
           }
           resultsArray = resultsArray.map((group, key) => 
             <section key={key} className="section-group u-margin-bottom-lg">
@@ -63,9 +66,13 @@ class AdminResults extends React.Component {
               </div>
             </section>
             );
+          failedCandidates = failedCandidates.map((candidate, key) => 
+            <div className="bar-group-result__bar bar-group-result__bar--failure">{candidate}</div>
+            );
 
           this.setState({
-            groupResults: resultsArray
+            groupResults: resultsArray,
+            failedCandidates: failedCandidates
           })
         }
       });
@@ -123,8 +130,7 @@ class AdminResults extends React.Component {
           </div>
   				<div className="bar-group-result">
             <div style={hideUngroupedArray}>
-              <div className="bar-group-result__bar bar-group-result__bar--failure">Jack Reacher</div>
-              <div className="bar-group-result__bar bar-group-result__bar--failure">Jane Eyre</div>
+              {this.state.failedCandidates}
             </div>
           </div>
         </section>

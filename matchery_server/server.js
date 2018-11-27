@@ -661,23 +661,23 @@ app.post('/api/account/addCandidates', (req, res, next) => {
                 }
               });
             });
-          }
-        });
 
-        Audition.updateMany({
-          eventName: eventName
-        },
-        { $push: { newList: foundUsers } },
-         (err) => {
-          if (err) {
-            return res.send({
-              success: false,
-              message: 'Error: server error'
-            });
-          }
-          else {
-            return res.send({
-              success: true
+            Audition.updateMany({
+              eventName: eventName
+            },
+            { $push: { newList: foundUsers } },
+             (err) => {
+              if (err) {
+                return res.send({
+                  success: false,
+                  message: 'Error: server error'
+                });
+              }
+              else {
+                return res.send({
+                  success: true
+                });
+              }
             });
           }
         });

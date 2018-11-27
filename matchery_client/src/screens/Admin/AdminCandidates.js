@@ -56,7 +56,24 @@ class AdminCandidates extends React.Component {
   }
 
   removeCandidate = (removed) => {
-    console.log(removed);
+    fetch('/api/account/deleteCandidate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName,
+        candidate: removed
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log("success");
+        }
+        else {
+          console.log(json.message);
+        }
+      });
   }
 
   deleteFromList = (e, item) => {

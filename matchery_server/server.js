@@ -802,4 +802,57 @@ app.post('/api/account/deleteJudge', (req, res, next) => {
     });
 });
 
+app.post('/api/account/deleteCandidate', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      candidate
+    } = body;
+
+   User.findOneAndUpdate(
+    { username: candidate }, { $pull: { Events: { role: "Candidate", eventName: eventName } } }, (err) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      else {
+        Audition.updateMany({
+          eventName: eventName
+        },
+        { $pull: { newList: candidate, list: candidate, notList: candidate } },
+        { multi: true },
+         (err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
+          else {
+            Event.findOneAndUpdate({
+              name: eventName
+            }, { $pull: { candidateLists: { candidate: candidate } } },
+            (err) => {
+              if (err) {
+                return res.send({
+                  success: false,
+                  message: 'Error: server error'
+                });
+              }
+              else {
+                return res.send({
+                  success: true
+                });
+              }
+            });
+          }
+        });
+
+
+      }
+    });
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));

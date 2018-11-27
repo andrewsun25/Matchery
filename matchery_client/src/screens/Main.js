@@ -29,7 +29,8 @@ class App extends Component {
     this.adminChild = React.createRef();
 
     this.state = {
-      showLogin: true,
+      showLoading: true,
+      showLogin: false,
       showSignUp: false,
       showDropdown: false,
       showDashboard: false, // Main screen
@@ -57,6 +58,12 @@ class App extends Component {
         .then(json => {
           if (json.success) {
             this.fetchUserPermissions();
+          } else {
+            this.setState({
+              showLogin: true,
+              showLoading: false,
+              showDashboard: false,
+            });
           }
         });
     }
@@ -100,6 +107,7 @@ class App extends Component {
           });
           this.setState({
             showLogin: false,
+            showLoading: false,
             showDashboard: true,
           });
         }
@@ -352,19 +360,132 @@ class App extends Component {
   render() {
 
     // Styling constants for showing different screens
-    const showLogin = this.state.showLogin ? {display:'block'} : {display:'none'};
-    const showSignUp = this.state.showSignUp ? {display:'block'} : {display:'none'};
+    const showLogin = this.state.showLogin ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
+    const showSignUp = this.state.showSignUp ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
     const showDropdown = this.state.showDropdown ? {display:'block'} : {display:'none'};
-    const showDashboard = this.state.showDashboard ? {display:'block'} : {display:'none'};
-    const showAdmin = this.state.showAdmin ? {display:'block'} : {display:'none'};
-    const showJudge = this.state.showJudge ? {display:'block'} : {display:'none'};
-    const showCandidate = this.state.showCandidate ? {display:'block'} : {display:'none'};
-    const showCreateEvent = this.state.showCreateEvent ? {display:'block'} : {display:'none'};
+    const showDashboard = this.state.showDashboard ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
+    const showAdmin = this.state.showAdmin ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
+    const showJudge = this.state.showJudge ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
+    const showCandidate = this.state.showCandidate ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
+    const showCreateEvent = this.state.showCreateEvent ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
 
+    const showLoading = this.state.showLoading ? {display:'block'} : {display:'none'};
     const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'flex'};
     const notInDashboardButLoggedIn = (!this.state.showLogin && !this.state.showSignUp && !this.state.showDashboard) ? {display:'block'} : {display: 'none'};
     const inDashboardOrNotLoggedIn = (this.state.showLogin || this.state.showSignUp || this.state.showDashboard) ? {display:'block'} : {display: 'none'};
-    const showBackButton = this.state.showBackButton ? {display:'block'} : {display:'none'};
+    const showBackButton = this.state.showBackButton ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
 
     // Return the app frame (header and background)
     return (
@@ -415,6 +536,15 @@ class App extends Component {
               <ion-icon className="btn-back__icon" name="arrow-dropleft"></ion-icon>
               Back
             </button>
+          </div>
+        </div>
+        <div style={showLoading}>
+          <div class="load-wrapp">
+              <div class="load-1">
+                  <div class="line"></div>
+                  <div class="line"></div>
+                  <div class="line"></div>
+              </div>
           </div>
         </div>
         <div style={showLogin}>

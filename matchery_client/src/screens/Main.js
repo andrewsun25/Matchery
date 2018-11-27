@@ -316,6 +316,7 @@ class App extends Component {
     e.preventDefault();
     var nameArray = list.split(',');
     nameArray = nameArray.map(el => el.trim());
+    nameArray.push(localStorage.getItem('username'));
 
     fetch('/api/account/createEvent', {
       method: 'POST',
@@ -324,7 +325,7 @@ class App extends Component {
       },
       body: JSON.stringify({
         eventName: eventName,
-        username: localStorage.getItem('username')
+        admins: nameArray
       }),
     }).then(res => res.json())
       .then(json => {

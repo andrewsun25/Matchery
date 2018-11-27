@@ -71,7 +71,7 @@ app.post('/api/match', function(req, res) {
       });
 
         Audition.find({
-          eventName: "WashU Diwali Auditions 2018"
+          eventName: eventName
         }, (err, auditions) => {
           if (err) {
             return res.send({
@@ -459,11 +459,12 @@ app.post('/api/account/createEvent', (req, res, next) => {
     const { body } = req;
     let {
       eventName,
-      username
+      admins
     } = body;
 
     let newEvent = new Event();
     newEvent.name = eventName;
+    newEvent.admins = admins;
 
     Event.find({
       name: eventName
@@ -492,7 +493,7 @@ app.post('/api/account/createEvent', (req, res, next) => {
             let newEventRole = new EventRole();
             newEventRole.role = "Administrator";
             newEventRole.eventName = eventName;
-            User.findOneAndUpdate({username: username}, { $push: { Events: newEventRole } }, function (err) {
+            User.updateMany({ username: { $in: admins } }, { $push: { Events: newEventRole } }, function (err) {
               if (err) {
                 console.log(err);
               }

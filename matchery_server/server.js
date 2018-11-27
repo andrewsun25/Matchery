@@ -660,10 +660,6 @@ app.post('/api/account/deleteGroup', (req, res, next) => {
       groupName
     } = body;
 
-    let newGroup = new Audition();
-    newGroup.auditionName = groupName;
-    newGroup.eventName = eventName;
-
     Audition.findOneAndDelete({
       auditionName: groupName,
       eventName: eventName
@@ -695,5 +691,42 @@ app.post('/api/account/deleteGroup', (req, res, next) => {
       }
     });
   });
+
+app.post('/api/account/deleteJudge', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      groupName,
+      judge
+    } = body;
+
+    User.findOneAndUpdate(
+    { username: judge }, { $pull: { Events: { role: "Judge", auditionName: groupName } } }, (err) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      else {
+        Audition.findOneAndUpdate({
+          eventName: eventName,
+          auditionName: groupName
+        }, { $pull: { judges: judge } }, (err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
+          else {
+            return res.send({
+              success: true
+            });
+          }
+        });
+      }
+    });
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

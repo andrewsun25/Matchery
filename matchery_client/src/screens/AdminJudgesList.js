@@ -51,7 +51,7 @@ class AdminJudgesList extends React.Component {
     tempGroup.splice(indexOfGroup, 1);
     this.setState({list: tempGroup});
     this.update(tempGroup);
-    this.props.propagateDelete(this.state.name, tempGroup);
+    this.props.propagateDelete(this.state.name, item);
   }
 
   update = (judges) => {

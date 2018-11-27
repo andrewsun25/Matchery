@@ -224,6 +224,7 @@ class App extends Component {
           this.adminChild.current.setCandidateList(json.candidates);
           this.adminChild.current.setGroupList(json.groups);
           this.adminChild.current.setGroupJudgesDict(json.judges);
+          this.adminChild.current.parentRegenerateResults();
 
           this.setState({
             showDashboard: false,

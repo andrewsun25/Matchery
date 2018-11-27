@@ -121,6 +121,10 @@ class Admin extends React.Component {
     this.props.getEventAgainAdmin(this.state.eventName);
   }
 
+  parentRegenerateResults = () => {
+    this.adminResultsChild.current.regenerateResults();
+  }
+
   // Render the component
   render() {
 

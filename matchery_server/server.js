@@ -425,7 +425,8 @@ app.post('/api/account/getEventAdminInfo', (req, res, next) => {
         success: true,
         candidates: candidates,
         groups: groupNames,
-        judges: judges
+        judges: judges,
+        admins: event.admins
       });
 
     });
@@ -685,6 +686,55 @@ app.post('/api/account/addCandidates', (req, res, next) => {
     });
 });
 
+app.post('/api/account/addAdmins', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      admins
+    } = body;
+
+    var foundUsers = [];
+
+    User.find({
+      username: { $in: admins }
+    }, (err, users) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      else {
+        users.forEach((user) => {
+          user.Events.push({
+            role: "Administrator",
+            eventName: eventName
+          });
+          user.save();
+          foundUsers.push(user.username);
+        });
+
+        Event.findOneAndUpdate({
+          name: eventName
+        },
+        { $push: { admins: foundUsers } },
+         (err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
+          else {
+            return res.send({
+              success: true
+            });
+          }
+        });
+      }
+    });
+});
+
 app.post('/api/account/updateCandidateLists', (req, res, next) => {
     const { body } = req;
     let {
@@ -854,5 +904,40 @@ app.post('/api/account/deleteCandidate', (req, res, next) => {
       }
     });
 });
+
+app.post('/api/account/deleteAdmin', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      admin
+    } = body;
+
+    User.findOneAndUpdate(
+    { username: admin }, { $pull: { Events: { role: "Administrator", eventName: eventName } } }, (err) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      else {
+        Event.findOneAndUpdate({
+          name: eventName,
+        }, { $pull: { admins: admin } }, (err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
+          else {
+            return res.send({
+              success: true
+            });
+          }
+        });
+      }
+    });
+}); 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

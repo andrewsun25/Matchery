@@ -58,19 +58,50 @@ class AdminAdmins extends React.Component {
     this.setState({admins: tempGroup});
     this.adminGroupListChild.current.updateList(tempGroup);
 
-    this.addAdmin(tempGroup);
+    this.addAdmin(adminArray);
   }
 
-  addAdmin = (updatedAdminGroup) => {
-    // TODO add fetch methods here
-    // view addGroup in AdminGroups.js for your previous work!
-    // except this time it's an array of admins, not a single group
+  addAdmin = (newAdmins) => {
+    fetch('/api/account/addAdmins', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName,
+        admins: newAdmins
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log("success");
+        }
+        else {
+          console.log(json.message);
+        }
+      });
 
   }
 
   removeGroup = (removed) => {
-    // TODO
-    // ADD the function to remove the function
+    fetch('/api/account/deleteAdmin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName,
+        admin: removed
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log("success");
+        }
+        else {
+          console.log(json.message);
+        }
+      });
 
   }
 

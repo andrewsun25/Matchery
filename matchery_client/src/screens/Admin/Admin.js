@@ -425,6 +425,7 @@ class Admin extends React.Component {
                 <AdminAdmins
                   ref={this.showAdminsChild}
                   showAddAdminModal={this.showAddAdminModal}
+                  eventName={this.state.eventName}
                 />
               </div>
 

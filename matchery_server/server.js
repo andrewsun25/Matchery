@@ -601,4 +601,47 @@ app.post('/api/account/updateAuditionLists', (req, res, next) => {
     });
   });
 
+app.post('/api/account/deleteGroup', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      groupName
+    } = body;
+
+    let newGroup = new Audition();
+    newGroup.auditionName = groupName;
+    newGroup.eventName = eventName;
+
+    Audition.findOneAndDelete({
+      auditionName: groupName,
+      eventName: eventName
+    }, (err) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      else {
+       Event.findOne({
+          name: eventName
+        }, (err, event) => {
+          event.candidateLists.forEach((element) => {
+            if (element.notList.includes(groupName)) {
+              var index = element.notList.indexOf(groupName);
+              element.notList.splice(index, 1);
+            }
+            if (element.list.includes(groupName)) {
+              var index = element.list.indexOf(groupName);
+              element.list.splice(index, 1);
+            }
+            
+          });
+          event.markModified('candidateLists');
+          event.save();
+        });
+      }
+    });
+  });
+
 app.listen(port, () => console.log(`Listening on port ${port}`));

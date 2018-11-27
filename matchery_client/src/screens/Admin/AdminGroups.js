@@ -86,9 +86,25 @@ class AdminGroups extends React.Component {
   }
 
   removeGroup = (removed) => {
-    // TODO
-    // ADD the function to remove the function
-    // then call this.props.getEventAgain(); <============================
+    fetch('/api/account/deleteGroup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName,
+        groupName: removed
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log("success");
+          this.props.getEventAgain();
+        }
+        else {
+          console.log(json.message);
+        }
+      });
   }
 
   // Render the component

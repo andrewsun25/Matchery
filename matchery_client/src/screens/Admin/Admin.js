@@ -448,6 +448,7 @@ class Admin extends React.Component {
 			        <div style={showCandidates}>
 			          <AdminCandidates
                   ref={this.showCandidatesChild}
+                  eventName={this.state.eventName}
                   showAddCandidateModal={this.showAddCandidateModal}
 			          />
 			        </div>

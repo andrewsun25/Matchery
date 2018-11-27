@@ -612,6 +612,79 @@ app.post('/api/account/addJudges', (req, res, next) => {
     });
 });
 
+app.post('/api/account/addCandidates', (req, res, next) => {
+    const { body } = req;
+    let {
+      eventName,
+      candidates
+    } = body;
+
+    var foundUsers = [];
+
+    User.find({
+      username: { $in: candidates }
+    }, (err, users) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      else {
+        Audition.find({
+          eventName: eventName
+        }, (err, groups) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
+          else {
+            var groupNames = groups.map((group) => group.auditionName);
+
+            users.forEach((user) => {
+              user.Events.push({
+                role: "Candidate",
+                eventName: eventName,
+              });
+              user.save();
+              foundUsers.push(user.username);
+              Event.findOneAndUpdate({
+                name: eventName
+              }, { $push: { candidateLists: { candidate: user.username, list: [], notList: groupNames } } }, (err) => {
+                if (err) {
+                  return res.send({
+                    success: false,
+                    message: 'Error: server error'
+                  });
+                }
+              });
+            });
+          }
+        });
+
+        Audition.updateMany({
+          eventName: eventName
+        },
+        { $push: { newList: foundUsers } },
+         (err) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: server error'
+            });
+          }
+          else {
+            return res.send({
+              success: true
+            });
+          }
+        });
+      }
+    });
+});
+
 app.post('/api/account/updateCandidateLists', (req, res, next) => {
     const { body } = req;
     let {

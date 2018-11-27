@@ -35,7 +35,24 @@ class AdminCandidates extends React.Component {
   }
 
   addCandidates = (list) => {
-    console.log(list);
+    fetch('/api/account/addCandidates', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.props.eventName,
+        candidates: list
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          console.log("success");
+        }
+        else {
+          console.log(json.message);
+        }
+      });
   }
 
   removeCandidate = (removed) => {

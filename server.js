@@ -7,6 +7,7 @@ const expressValidator = require('express-validator');
 const mongoose = require('mongoose').set('debug', true);
 const app = express();
 const url = 'mongodb+srv://client:fpLr30qu96hmxW3B@matcherydb-dyffe.mongodb.net/matchery?retryWrites=true';
+const dotenv = require("dotenv").config();
 //=========================//
 
 const port = process.env.PORT || 5000;
@@ -30,11 +31,6 @@ app.get('/api/hello', (req, res) => {
   res.send({
     express: 'Hello From Express'
   });
-});
-
-//====ROOT DIRECTORY===//
-app.get('/', function(req, res) {
-  res.json('you did it');
 });
 
 //==========================//
@@ -949,5 +945,11 @@ app.post('/api/account/deleteAdmin', (req, res, next) => {
       }
     });
 }); 
+
+app.use(express.static(path.join(__dirname, "matchery_client", "build")))
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "matchery_client", "build", "index.html"));
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

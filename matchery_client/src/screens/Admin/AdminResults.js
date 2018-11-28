@@ -28,6 +28,10 @@ class AdminResults extends React.Component {
   }
 
   regenerateResults = (e) => {
+    this.setState({
+      groupResults: [],
+      failedCandidates: []
+    });
     fetch('/api/match', {
       method: 'POST',
       headers: {

@@ -117,6 +117,10 @@ class App extends Component {
   // Function to logIn a user.
   handleLogIn = (e, username, password) => {
     e.preventDefault();
+    this.setState({
+        showLoading: true,
+        showLogin: false
+    });
     // Login request
     fetch('/api/account/signin', {
       method: 'POST',
@@ -135,6 +139,12 @@ class App extends Component {
           localStorage.setItem('session', json.token);
           localStorage.setItem('username', json.username);
           this.fetchUserPermissions(e);
+        }
+        else {
+          this.setState({
+              showLoading: false,
+              showLogin: true
+          });
         }
       });
   }

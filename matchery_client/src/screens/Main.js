@@ -9,6 +9,7 @@ import Admin from './Admin/Admin'; // Admin component
 import Judge from './Judge/Judge'; // Judge component
 import Candidate from './Candidate/Candidate'; // Candidate component
 import CreateEvent from './CreateEvent';
+import MyProfile from './MyProfile';
 
 // IMPORT STYLING
 import './Main.css'; // Header and background styling
@@ -39,6 +40,7 @@ class App extends Component {
       showCandidate: false,
       showBackButton: false,
       showCreateEvent: false,
+      showMyProfile: false,
       candidateGroupList: [],
       events: {
         'administrator' : [],
@@ -477,6 +479,21 @@ class App extends Component {
       display: 'inline !important',
       pointerEvents: 'none',
     };
+    const showMyProfile = this.state.showMyProfile ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
 
     const showLoading = this.state.showLoading ? {display:'block'} : {display:'none'};
     const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'flex'};
@@ -597,6 +614,11 @@ class App extends Component {
           <CreateEvent
             closeCreateEvent={this.closeCreateEvent}
             submitCreateEvent={this.submitCreateEvent}
+          />
+        </div>
+        <div style={showMyProfile}>
+          <MyProfile
+            
           />
         </div>
         <div style={showCandidate}>

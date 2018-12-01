@@ -485,6 +485,8 @@ input:focus {outline:0;}
   .modal--sm {
     padding-top: 3rem;
     padding-bottom: 2.5rem; }
+  .modal--profile {
+    width: 40rem; }
   .modal__backdrop {
     height: 100vh;
     width: 100%;
@@ -556,3 +558,21 @@ input:focus {outline:0;}
     color: #e6e6e6; }
   .modal__form-submit:hover {
     background-color: #d96e17; }
+  .modal__form-delete, .modal__form-delete:link, .modal__form-delete:visited {
+    float: right;
+    width: 16rem;
+    border: none;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    margin-left: 1rem;
+    background-color: #ab2424;
+    font-family: inherit;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+    transition: background-color .15s;
+    cursor: pointer; }
+  .modal__form-delete:focus, .modal__form-delete:active {
+    color: #e6e6e6; }
+  .modal__form-delete:hover {
+    background-color: #811b1b; }

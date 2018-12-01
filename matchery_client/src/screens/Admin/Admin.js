@@ -9,6 +9,10 @@ import AddAdminModal from './Modals/AddAdminModal'; // AddAdminModal component
 import AddGroupModal from './Modals/AddGroupModal'; // AddGroupModal component
 import AddJudgeModal from './Modals/AddJudgeModal'; // AddJudgeModal component
 import AddCandidateModal from './Modals/AddCandidateModal'; // AddCandidateModal component
+import DeleteAdminModal from './Modals/DeleteAdminModal'; // DeleteAdminModal component
+import DeleteGroupModal from './Modals/DeleteGroupModal'; // DeleteGroupModal component
+import DeleteJudgeModal from './Modals/DeleteJudgeModal'; // DeleteJudgeModal component
+import DeleteCandidateModal from './Modals/DeleteCandidateModal'; // DeleteCandidateModal component
 
 // IMPORT STYLING
 import './Admin.css';
@@ -41,7 +45,12 @@ class Admin extends React.Component {
       showAddAdminModal: false,
       showAddGroupModal: false,
       showAddJudgeModal: false,
-      showAddCandidateModal: false
+      showAddCandidateModal: false,
+
+      showDeleteAdminModal: false,
+      showDeleteGroupModal: false,
+      showDeleteJudgeModal: false,
+      showDeleteCandidateModal: false
     }
   }
 
@@ -138,6 +147,11 @@ class Admin extends React.Component {
   	const showAddGroupModal = this.state.showAddGroupModal ? {display:'block'} : {display:'none'};
   	const showAddJudgeModal = this.state.showAddJudgeModal ? {display:'block'} : {display:'none'};
   	const showAddCandidateModal = this.state.showAddCandidateModal ? {display:'block'} : {display:'none'};
+
+    const showDeleteAdminModal = this.state.showDeleteAdminModal ? {display:'block'} : {display:'none'};
+    const showDeleteGroupModal = this.state.showDeleteGroupModal ? {display:'block'} : {display:'none'};
+    const showDeleteJudgeModal = this.state.showDeleteJudgeModal ? {display:'block'} : {display:'none'};
+    const showDeleteCandidateModal = this.state.showDeleteCandidateModal ? {display:'block'} : {display:'none'};
 
     // Return the component frame
     return (
@@ -496,6 +510,30 @@ class Admin extends React.Component {
                   addCandidateSuccess={this.addCandidateSuccess}
 			          />
 			        </div>
+
+              <div style={showDeleteAdminModal}>
+                <DeleteAdminModal
+                  
+                />
+              </div>
+
+              <div style={showDeleteGroupModal}>
+                <DeleteGroupModal
+                  
+                />
+              </div>
+
+              <div style={showDeleteJudgeModal}>
+                <DeleteJudgeModal
+                  
+                />
+              </div>
+
+              <div style={showDeleteCandidateModal}>
+                <DeleteCandidateModal
+                  
+                />
+              </div>
 
 						</div>
 					</div>

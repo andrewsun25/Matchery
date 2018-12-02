@@ -75,7 +75,7 @@ class AdminGroupList extends React.Component {
                   <ion-icon
                     class="bar-group__icon bar-group__icon--leftmost"
                     name="trash"
-                    onClick={(e) => {this.props.deleteFromList(e, item)}}></ion-icon>
+                    onClick={(e) => {this.props.confirmDelete(e, item)}}></ion-icon>
                 </div>
               </li>;
             })

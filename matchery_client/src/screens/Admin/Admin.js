@@ -33,6 +33,8 @@ class Admin extends React.Component {
     this.showCandidatesChild = React.createRef();
     this.adminResultsChild = React.createRef();
 
+    this.adminDeleteChild = React.createRef();
+
     this.state = {
       eventName: "",
 
@@ -124,6 +126,30 @@ class Admin extends React.Component {
     });
     this.showCandidatesChild.current.addCandidateSuccess(candidateList);
     this.addCandidateChild.current.resetInput();
+  }
+
+  confirmDeleteAdmin = (e, item) => {
+    this.adminDeleteChild.current.setInputValue(e, item);
+    this.setState({
+      showDeleteAdminModal: true
+    });
+  }
+
+  deleteAdmin = (e, item) => {
+    e.preventDefault();
+    this.showAdminsChild.current.deleteFromList(e, item);
+    this.setState({
+      showDeleteAdminModal: false
+    });
+  }
+
+  closeDeleteModal = (e) => {
+    this.setState({
+      showDeleteAdminModal: false,
+      showDeleteGroupModal: false,
+      showDeleteJudgeModal: false,
+      showDeleteCandidateModal: false
+    });
   }
 
   getEventAgain = () => {
@@ -443,6 +469,7 @@ class Admin extends React.Component {
                 <AdminAdmins
                   ref={this.showAdminsChild}
                   showAddAdminModal={this.showAddAdminModal}
+                  confirmDelete={this.confirmDeleteAdmin}
                   eventName={this.state.eventName}
                 />
               </div>
@@ -513,6 +540,9 @@ class Admin extends React.Component {
 
               <div style={showDeleteAdminModal}>
                 <DeleteAdminModal
+                  ref={this.adminDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteAdmin}
                   
                 />
               </div>

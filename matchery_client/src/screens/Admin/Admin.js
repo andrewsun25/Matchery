@@ -34,6 +34,7 @@ class Admin extends React.Component {
     this.adminResultsChild = React.createRef();
 
     this.adminDeleteChild = React.createRef();
+    this.groupDeleteChild = React.createRef();
 
     this.state = {
       eventName: "",
@@ -143,7 +144,23 @@ class Admin extends React.Component {
     });
   }
 
+  confirmDeleteGroup = (e, item) => {
+    this.groupDeleteChild.current.setInputValue(e, item);
+    this.setState({
+      showDeleteGroupModal: true
+    });
+  }
+
+  deleteGroup = (e, item) => {
+    e.preventDefault();
+    this.showGroupsChild.current.deleteFromList(e, item);
+    this.setState({
+      showDeleteGroupModal: false
+    });
+  }
+
   closeDeleteModal = (e) => {
+    e.preventDefault();
     this.setState({
       showDeleteAdminModal: false,
       showDeleteGroupModal: false,
@@ -479,6 +496,7 @@ class Admin extends React.Component {
                   ref={this.showGroupsChild}
                   getEventAgain={this.getEventAgain}
                   showAddGroupModal={this.showAddGroupModal}
+                  confirmDelete={this.confirmDeleteGroup}
                   eventName={this.state.eventName}
 			          />
 			        </div>
@@ -543,13 +561,14 @@ class Admin extends React.Component {
                   ref={this.adminDeleteChild}
                   closeDeleteModal={this.closeDeleteModal}
                   delete={this.deleteAdmin}
-                  
                 />
               </div>
 
               <div style={showDeleteGroupModal}>
                 <DeleteGroupModal
-                  
+                  ref={this.groupDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteGroup}
                 />
               </div>
 

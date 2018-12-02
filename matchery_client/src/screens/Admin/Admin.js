@@ -35,6 +35,8 @@ class Admin extends React.Component {
 
     this.adminDeleteChild = React.createRef();
     this.groupDeleteChild = React.createRef();
+    this.judgeDeleteChild = React.createRef();
+    this.candidateDeleteChild = React.createRef();
 
     this.state = {
       eventName: "",
@@ -156,6 +158,36 @@ class Admin extends React.Component {
     this.showGroupsChild.current.deleteFromList(e, item);
     this.setState({
       showDeleteGroupModal: false
+    });
+  }
+
+  confirmDeleteJudge = (e, item, groupName) => {
+    this.judgeDeleteChild.current.setInputValue(e, item, groupName);
+    this.setState({
+      showDeleteJudgeModal: true
+    });
+  }
+
+  deleteJudge = (e, item, groupName) => {
+    e.preventDefault();
+    this.showJudgesChild.current.propagateDelete(e, item, groupName);
+    this.setState({
+      showDeleteJudgeModal: false
+    });
+  }
+
+  confirmDeleteCandidate = (e, item) => {
+    this.candidateDeleteChild.current.setInputValue(e, item);
+    this.setState({
+      showDeleteCandidateModal: true
+    });
+  }
+
+  deleteCandidate = (e, item) => {
+    e.preventDefault();
+    this.showCandidatesChild.current.deleteFromList(e, item);
+    this.setState({
+      showDeleteCandidateModal: false
     });
   }
 
@@ -505,6 +537,7 @@ class Admin extends React.Component {
 			          <AdminJudges
                   ref={this.showJudgesChild}
                   showAddJudgeModal={this.showAddJudgeModal}
+                  confirmDelete={this.confirmDeleteJudge}
                   eventName={this.state.eventName}
 			          />
 			        </div>
@@ -512,6 +545,7 @@ class Admin extends React.Component {
 			        <div style={showCandidates}>
 			          <AdminCandidates
                   ref={this.showCandidatesChild}
+                  confirmDelete={this.confirmDeleteCandidate}
                   eventName={this.state.eventName}
                   showAddCandidateModal={this.showAddCandidateModal}
 			          />
@@ -574,13 +608,17 @@ class Admin extends React.Component {
 
               <div style={showDeleteJudgeModal}>
                 <DeleteJudgeModal
-                  
+                  ref={this.judgeDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteJudge}
                 />
               </div>
 
               <div style={showDeleteCandidateModal}>
                 <DeleteCandidateModal
-                  
+                  ref={this.candidateDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteCandidate}
                 />
               </div>
 

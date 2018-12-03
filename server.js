@@ -109,19 +109,6 @@ app.post('/api/match', function(req, res) {
 
 });
 
-//==========================//
-//====POST NEW SIGNATURE===//
-app.post('/api/users', function(req, res) {
-  console.log(req.body);
-  User.create({
-    username: req.body.username,
-    password: req.body.password,
-  }).then(user => {
-    res.json(user)
-  });
-});
-//==========================//
-
 const User = require('./models/user.js');
 const Session = require('./models/session.js');
 const Event = require('./models/event.js');
@@ -277,7 +264,6 @@ app.get('/api/account/verify', (req, res, next) => {
           message: 'Error: Invalid'
         });
       } else {
-        // DO ACTION
         return res.send({
           success: true,
           message: 'Verified'
@@ -448,6 +434,30 @@ app.post('/api/account/getSingleAudition', (req, res, next) => {
       return res.send({
         success: true,
         audition: audition
+      });
+    });
+  });
+
+app.post('/api/account/getUserInfo', (req, res, next) => {
+    const { body } = req;
+    let {
+      username
+    } = body;
+
+    User.findOne({
+      username: username
+    }, (err, user) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      return res.send({
+        success: true,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
       });
     });
   });

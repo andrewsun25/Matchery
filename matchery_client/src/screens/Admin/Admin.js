@@ -162,18 +162,36 @@ class Admin extends React.Component {
   }
 
   confirmDeleteJudge = (e, item, groupName) => {
-    console.log(item + " " + groupName);
-    /*this.judgeDeleteChild.current.setInputValue(e, item, groupName);
+    this.judgeDeleteChild.current.setInputValue(e, item, groupName);
     this.setState({
       showDeleteJudgeModal: true
-    });*/
+    });
   }
 
   deleteJudge = (e, item, groupName) => {
     e.preventDefault();
-    this.showJudgesChild.current.propagateDelete(e, item, groupName);
-    this.setState({
-      showDeleteJudgeModal: false
+    fetch('/api/account/deleteJudge', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.state.eventName,
+        groupName: groupName,
+        judge: item
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.setGroupJudgesDict(json.judges);
+          this.showJudgesChild.current.updateAllLists();
+        }
+        else {
+          console.log(json.message);
+        }
+        this.setState({
+          showDeleteJudgeModal: false
+        });
     });
   }
 

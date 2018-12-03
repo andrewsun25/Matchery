@@ -9,6 +9,10 @@ import AddAdminModal from './Modals/AddAdminModal'; // AddAdminModal component
 import AddGroupModal from './Modals/AddGroupModal'; // AddGroupModal component
 import AddJudgeModal from './Modals/AddJudgeModal'; // AddJudgeModal component
 import AddCandidateModal from './Modals/AddCandidateModal'; // AddCandidateModal component
+import DeleteAdminModal from './Modals/DeleteAdminModal'; // DeleteAdminModal component
+import DeleteGroupModal from './Modals/DeleteGroupModal'; // DeleteGroupModal component
+import DeleteJudgeModal from './Modals/DeleteJudgeModal'; // DeleteJudgeModal component
+import DeleteCandidateModal from './Modals/DeleteCandidateModal'; // DeleteCandidateModal component
 
 // IMPORT STYLING
 import './Admin.css';
@@ -29,6 +33,11 @@ class Admin extends React.Component {
     this.showCandidatesChild = React.createRef();
     this.adminResultsChild = React.createRef();
 
+    this.adminDeleteChild = React.createRef();
+    this.groupDeleteChild = React.createRef();
+    this.judgeDeleteChild = React.createRef();
+    this.candidateDeleteChild = React.createRef();
+
     this.state = {
       eventName: "",
 
@@ -41,7 +50,12 @@ class Admin extends React.Component {
       showAddAdminModal: false,
       showAddGroupModal: false,
       showAddJudgeModal: false,
-      showAddCandidateModal: false
+      showAddCandidateModal: false,
+
+      showDeleteAdminModal: false,
+      showDeleteGroupModal: false,
+      showDeleteJudgeModal: false,
+      showDeleteCandidateModal: false
     }
   }
 
@@ -117,6 +131,95 @@ class Admin extends React.Component {
     this.addCandidateChild.current.resetInput();
   }
 
+  confirmDeleteAdmin = (e, item) => {
+    this.adminDeleteChild.current.setInputValue(e, item);
+    this.setState({
+      showDeleteAdminModal: true
+    });
+  }
+
+  deleteAdmin = (e, item) => {
+    e.preventDefault();
+    this.showAdminsChild.current.deleteFromList(e, item);
+    this.setState({
+      showDeleteAdminModal: false
+    });
+  }
+
+  confirmDeleteGroup = (e, item) => {
+    this.groupDeleteChild.current.setInputValue(e, item);
+    this.setState({
+      showDeleteGroupModal: true
+    });
+  }
+
+  deleteGroup = (e, item) => {
+    e.preventDefault();
+    this.showGroupsChild.current.deleteFromList(e, item);
+    this.setState({
+      showDeleteGroupModal: false
+    });
+  }
+
+  confirmDeleteJudge = (e, item, groupName) => {
+    this.judgeDeleteChild.current.setInputValue(e, item, groupName);
+    this.setState({
+      showDeleteJudgeModal: true
+    });
+  }
+
+  deleteJudge = (e, item, groupName) => {
+    e.preventDefault();
+    fetch('/api/account/deleteJudge', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        eventName: this.state.eventName,
+        groupName: groupName,
+        judge: item
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.setGroupJudgesDict(json.judges);
+          this.showJudgesChild.current.updateAllLists();
+        }
+        else {
+          console.log(json.message);
+        }
+        this.setState({
+          showDeleteJudgeModal: false
+        });
+    });
+  }
+
+  confirmDeleteCandidate = (e, item) => {
+    this.candidateDeleteChild.current.setInputValue(e, item);
+    this.setState({
+      showDeleteCandidateModal: true
+    });
+  }
+
+  deleteCandidate = (e, item) => {
+    e.preventDefault();
+    this.showCandidatesChild.current.deleteFromList(e, item);
+    this.setState({
+      showDeleteCandidateModal: false
+    });
+  }
+
+  closeDeleteModal = (e) => {
+    e.preventDefault();
+    this.setState({
+      showDeleteAdminModal: false,
+      showDeleteGroupModal: false,
+      showDeleteJudgeModal: false,
+      showDeleteCandidateModal: false
+    });
+  }
+
   getEventAgain = () => {
     this.props.getEventAgainAdmin(this.state.eventName);
   }
@@ -138,6 +241,11 @@ class Admin extends React.Component {
   	const showAddGroupModal = this.state.showAddGroupModal ? {display:'block'} : {display:'none'};
   	const showAddJudgeModal = this.state.showAddJudgeModal ? {display:'block'} : {display:'none'};
   	const showAddCandidateModal = this.state.showAddCandidateModal ? {display:'block'} : {display:'none'};
+
+    const showDeleteAdminModal = this.state.showDeleteAdminModal ? {display:'block'} : {display:'none'};
+    const showDeleteGroupModal = this.state.showDeleteGroupModal ? {display:'block'} : {display:'none'};
+    const showDeleteJudgeModal = this.state.showDeleteJudgeModal ? {display:'block'} : {display:'none'};
+    const showDeleteCandidateModal = this.state.showDeleteCandidateModal ? {display:'block'} : {display:'none'};
 
     // Return the component frame
     return (
@@ -429,6 +537,7 @@ class Admin extends React.Component {
                 <AdminAdmins
                   ref={this.showAdminsChild}
                   showAddAdminModal={this.showAddAdminModal}
+                  confirmDelete={this.confirmDeleteAdmin}
                   eventName={this.state.eventName}
                 />
               </div>
@@ -438,6 +547,7 @@ class Admin extends React.Component {
                   ref={this.showGroupsChild}
                   getEventAgain={this.getEventAgain}
                   showAddGroupModal={this.showAddGroupModal}
+                  confirmDelete={this.confirmDeleteGroup}
                   eventName={this.state.eventName}
 			          />
 			        </div>
@@ -446,6 +556,7 @@ class Admin extends React.Component {
 			          <AdminJudges
                   ref={this.showJudgesChild}
                   showAddJudgeModal={this.showAddJudgeModal}
+                  confirmDelete={this.confirmDeleteJudge}
                   eventName={this.state.eventName}
 			          />
 			        </div>
@@ -453,6 +564,7 @@ class Admin extends React.Component {
 			        <div style={showCandidates}>
 			          <AdminCandidates
                   ref={this.showCandidatesChild}
+                  confirmDelete={this.confirmDeleteCandidate}
                   eventName={this.state.eventName}
                   showAddCandidateModal={this.showAddCandidateModal}
 			          />
@@ -496,6 +608,38 @@ class Admin extends React.Component {
                   addCandidateSuccess={this.addCandidateSuccess}
 			          />
 			        </div>
+
+              <div style={showDeleteAdminModal}>
+                <DeleteAdminModal
+                  ref={this.adminDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteAdmin}
+                />
+              </div>
+
+              <div style={showDeleteGroupModal}>
+                <DeleteGroupModal
+                  ref={this.groupDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteGroup}
+                />
+              </div>
+
+              <div style={showDeleteJudgeModal}>
+                <DeleteJudgeModal
+                  ref={this.judgeDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteJudge}
+                />
+              </div>
+
+              <div style={showDeleteCandidateModal}>
+                <DeleteCandidateModal
+                  ref={this.candidateDeleteChild}
+                  closeDeleteModal={this.closeDeleteModal}
+                  delete={this.deleteCandidate}
+                />
+              </div>
 
 						</div>
 					</div>

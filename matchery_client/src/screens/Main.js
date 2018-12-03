@@ -9,6 +9,7 @@ import Admin from './Admin/Admin'; // Admin component
 import Judge from './Judge/Judge'; // Judge component
 import Candidate from './Candidate/Candidate'; // Candidate component
 import CreateEvent from './CreateEvent';
+import MyProfile from './MyProfile';
 
 // IMPORT STYLING
 import './Main.css'; // Header and background styling
@@ -27,6 +28,7 @@ class App extends Component {
     this.candidateChild = React.createRef();
     this.judgeChild = React.createRef();
     this.adminChild = React.createRef();
+    this.myProfileChild = React.createRef();
 
     this.state = {
       showLoading: true,
@@ -39,6 +41,7 @@ class App extends Component {
       showCandidate: false,
       showBackButton: false,
       showCreateEvent: false,
+      showMyProfile: false,
       candidateGroupList: [],
       events: {
         'administrator' : [],
@@ -53,19 +56,35 @@ class App extends Component {
   componentDidMount() {
     const token = localStorage.getItem('session');
     if (token) {
-      fetch('/api/account/verify?token=' + token)
-        .then(res => res.json())
-        .then(json => {
-          if (json.success) {
-            this.fetchUserPermissions();
-          } else {
-            this.setState({
-              showLogin: true,
-              showLoading: false,
-              showDashboard: false,
-            });
-          }
-        });
+      fetch('/api/account/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username'),
+        token: token
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.fetchUserPermissions();
+        } else {
+          localStorage.clear();
+          this.setState({
+            showLogin: true,
+            showLoading: false,
+            showDashboard: false,
+          });
+        }
+      });
+    }
+    else {
+      this.setState({
+        showLogin: true,
+        showLoading: false,
+        showDashboard: false,
+      });
     }
   }
 
@@ -176,6 +195,32 @@ class App extends Component {
           }
         });
     }
+  }
+
+  handleMyProfile = (e) => {
+    fetch('/api/account/getUserInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username')
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.myProfileChild.current.setValues(e, json.firstName, json.lastName, json.email);
+          this.setState({
+            showMyProfile: true
+          });
+        }
+      });
+  }
+
+  closeMyProfile = (e) => {
+    this.setState({
+      showMyProfile: false
+    });
   }
 
   // Function to open the signUp page.
@@ -477,6 +522,21 @@ class App extends Component {
       display: 'inline !important',
       pointerEvents: 'none',
     };
+    const showMyProfile = this.state.showMyProfile ? {
+      position: 'static',
+      opacity: '1',
+      transition: 'opacity 0.25s linear',
+    } : {
+      opacity: '0',
+      position: 'fixed',
+      height: '0px !important',
+      width: '0px !important',
+      bottom: '0 !important',
+      left: '0 !important',
+      zIndex: '-999 !important',
+      display: 'inline !important',
+      pointerEvents: 'none',
+    };
 
     const showLoading = this.state.showLoading ? {display:'block'} : {display:'none'};
     const loggedIn = (this.state.showLogin || this.state.showSignUp) ? {display:'none'} : {display:'flex'};
@@ -529,7 +589,7 @@ class App extends Component {
                 <ion-icon class="header__down-arrow-icon" name="arrow-dropdown"></ion-icon>
               </div>
               <ul style={showDropdown} className="header__drop-down">
-                <li className="header__drop-down-item">My Profile</li>
+                <li onClick={(e) => {this.handleMyProfile(e)}} className="header__drop-down-item">My Profile</li>
                 <li onClick={(e) => {this.handleLogOut(e)}} className="header__drop-down-item">Logout</li>
               </ul>
             </div>
@@ -597,6 +657,12 @@ class App extends Component {
           <CreateEvent
             closeCreateEvent={this.closeCreateEvent}
             submitCreateEvent={this.submitCreateEvent}
+          />
+        </div>
+        <div style={showMyProfile}>
+          <MyProfile
+            ref={this.myProfileChild}
+            closeMyProfile={this.closeMyProfile}
           />
         </div>
         <div style={showCandidate}>

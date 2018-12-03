@@ -26,21 +26,6 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
-app.get('/api/hello', (req, res) => {
-  res.send({
-    express: 'Hello From Express'
-  });
-});
-
-//==========================//
-//====GET ALL SIGNATURES===//
-app.get('/api/users', function(req, res) {
-  User.find({}).then(eachOne => {
-    res.json(eachOne);
-  });
-});
-
 app.post('/api/match', function(req, res) {
 
   const { body } = req;
@@ -104,19 +89,6 @@ app.post('/api/match', function(req, res) {
     });
 
 });
-
-//==========================//
-//====POST NEW SIGNATURE===//
-app.post('/api/users', function(req, res) {
-  console.log(req.body);
-  User.create({
-    username: req.body.username,
-    password: req.body.password,
-  }).then(user => {
-    res.json(user)
-  });
-});
-//==========================//
 
 const User = require('./models/user.js');
 const Session = require('./models/session.js');
@@ -252,10 +224,13 @@ app.post('/api/account/signin', (req, res, next) => {
     });
   });
 
-app.get('/api/account/verify', (req, res, next) => {
-    const { query } = req;
-    const { token } = query;
-    // Verify the token is one of a kind and it's not deleted.
+app.post('/api/account/verify', (req, res, next) => {
+    const { body } = req;
+    let {
+      token,
+      username
+    } = body;
+
     Session.find({
       _id: token,
       isActive: true
@@ -273,10 +248,36 @@ app.get('/api/account/verify', (req, res, next) => {
           message: 'Error: Invalid'
         });
       } else {
-        // DO ACTION
-        return res.send({
-          success: true,
-          message: 'Verified'
+        User.find({
+          _id: mongoose.Types.ObjectId(sessions[0].userId)
+        }, (err, users) => {
+          if (err) {
+            console.log(err);
+            return res.send({
+              success: false,
+              message: 'Error: Server error'
+            });
+          }
+          if (users.length != 1) {
+            return res.send({
+              success: false,
+              message: 'Error: Invalid'
+            });
+          }
+          else {
+            if (username != users[0].username) {
+              return res.send({
+                success: false,
+                message: 'Error: Token mismatch'
+              });
+            }
+            else {
+              return res.send({
+                success: true,
+                message: 'Verified'
+              });
+            }
+          }
         });
       }
     });
@@ -444,6 +445,30 @@ app.post('/api/account/getSingleAudition', (req, res, next) => {
       return res.send({
         success: true,
         audition: audition
+      });
+    });
+  });
+
+app.post('/api/account/getUserInfo', (req, res, next) => {
+    const { body } = req;
+    let {
+      username
+    } = body;
+
+    User.findOne({
+      username: username
+    }, (err, user) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      return res.send({
+        success: true,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
       });
     });
   });
@@ -841,7 +866,7 @@ app.post('/api/account/deleteJudge', (req, res, next) => {
         Audition.findOneAndUpdate({
           eventName: eventName,
           auditionName: groupName
-        }, { $pull: { judges: judge } }, (err) => {
+        }, { $pull: { judges: judge } }, (err, audition) => {
           if (err) {
             return res.send({
               success: false,
@@ -849,8 +874,29 @@ app.post('/api/account/deleteJudge', (req, res, next) => {
             });
           }
           else {
-            return res.send({
-              success: true
+            Audition.find({
+              eventName: eventName
+            }, (err, groups) => {
+              if (err) {
+                return res.send({
+                  success: false,
+                  message: 'Error: server error'
+                });
+              }
+              let judges = [];
+              groups.forEach((group) => {
+                let judgeArray = [];
+                judgeArray.push(group.auditionName);
+                group.toObject().judges.forEach((judge) => {
+                  judgeArray.push(judge);
+                });
+                judges.push(judgeArray);
+              });
+              return res.send({
+                success: true,
+                judges: judges
+              });
+
             });
           }
         });

@@ -27,6 +27,10 @@ class AdminGroups extends React.Component {
     this.adminGroupListChild.current.updateList(list);
   }
 
+  confirmDelete = (e, item) => {
+    this.props.confirmDelete(e, item);
+  }
+
   deleteFromList = (e, item) => {
     var tempList = this.state.groups;
     var indexOfItem = tempList.indexOf(item);
@@ -138,7 +142,7 @@ class AdminGroups extends React.Component {
 					<AdminGroupList
             ref={this.adminGroupListChild}
             groups={this.state.groups}
-            deleteFromList={this.deleteFromList}
+            confirmDelete={this.confirmDelete}
           />
 				</div>
 

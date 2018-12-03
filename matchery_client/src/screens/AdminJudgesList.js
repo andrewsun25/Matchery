@@ -94,7 +94,7 @@ class AdminJudgesList extends React.Component {
                   <ion-icon
                     class="bar-group__icon bar-group__icon--leftmost"
                     name="trash"
-                    onClick={(e) => {this.deleteFromList(e, item)}}></ion-icon>
+                    onClick={(e) => {this.props.confirmDelete(e, item, this.state.name)}}></ion-icon>
                 </div>
               </li>;
             })

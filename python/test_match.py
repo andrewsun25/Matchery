@@ -26,6 +26,13 @@ class TestMatch(unittest.TestCase):
 
 		print(match.match(applicantPreferences, groupPreferences))
   
+	def testEmptyGroupPreferences(self):
+		applicantPreferences = {
+		}
+
+		groupPreferences = {
+		}
+		print(match.match(applicantPreferences, groupPreferences))
 
 	# def check_optimal(self, groupsAcceptances, applicantRankings, groupRankings):
 	# 	for applicant, applicantRanking in enumerate(applicantRankings):

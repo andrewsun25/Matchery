@@ -90,6 +90,10 @@ class AdminJudges extends React.Component {
     */
   }
 
+  confirmDelete = (e, item, groupName) => {
+    this.props.confirmDelete(e, item, groupName);
+  }
+
   setGroupJudgesList = (list) => {
     this.setState({
       groupJudges: list,
@@ -121,7 +125,7 @@ class AdminJudges extends React.Component {
                 <AdminJudgesList
                   groups={group.slice(1, group.length)}
                   groupName={group[0]}
-                  propagateDelete={this.propagateDelete}
+                  confirmDelete={this.confirmDelete}
                   ref={(instance) => {this.refsCollection[group[0].replace(/\s/g, '')] = instance;}}
                 />
               </div>

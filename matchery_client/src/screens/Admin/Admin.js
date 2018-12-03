@@ -162,10 +162,11 @@ class Admin extends React.Component {
   }
 
   confirmDeleteJudge = (e, item, groupName) => {
-    this.judgeDeleteChild.current.setInputValue(e, item, groupName);
+    console.log(item + " " + groupName);
+    /*this.judgeDeleteChild.current.setInputValue(e, item, groupName);
     this.setState({
       showDeleteJudgeModal: true
-    });
+    });*/
   }
 
   deleteJudge = (e, item, groupName) => {

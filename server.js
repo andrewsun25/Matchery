@@ -865,7 +865,7 @@ app.post('/api/account/deleteJudge', (req, res, next) => {
         Audition.findOneAndUpdate({
           eventName: eventName,
           auditionName: groupName
-        }, { $pull: { judges: judge } }, (err) => {
+        }, { $pull: { judges: judge } }, (err, audition) => {
           if (err) {
             return res.send({
               success: false,
@@ -873,8 +873,29 @@ app.post('/api/account/deleteJudge', (req, res, next) => {
             });
           }
           else {
-            return res.send({
-              success: true
+            Audition.find({
+              eventName: eventName
+            }, (err, groups) => {
+              if (err) {
+                return res.send({
+                  success: false,
+                  message: 'Error: server error'
+                });
+              }
+              let judges = [];
+              groups.forEach((group) => {
+                let judgeArray = [];
+                judgeArray.push(group.auditionName);
+                group.toObject().judges.forEach((judge) => {
+                  judgeArray.push(judge);
+                });
+                judges.push(judgeArray);
+              });
+              return res.send({
+                success: true,
+                judges: judges
+              });
+
             });
           }
         });

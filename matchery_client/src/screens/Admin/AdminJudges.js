@@ -64,25 +64,6 @@ class AdminJudges extends React.Component {
 
   propagateDelete = (groupName, removed) => {
     console.log(removed);
-    fetch('/api/account/deleteJudge', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        eventName: this.props.eventName,
-        groupName: groupName,
-        judge: removed
-      }),
-    }).then(res => res.json())
-      .then(json => {
-        if (json.success) {
-          console.log("success");
-        }
-        else {
-          console.log(json.message);
-        }
-      });
     /*
       TODO 2: update a group's judge list here from DELETING judges
         groupName: the group's name
@@ -100,6 +81,21 @@ class AdminJudges extends React.Component {
     });
     //console.log(dict);
     //this.adminGroupListChild.current.updateList(list);
+  }
+
+  updateAllLists = () => {
+    var tempGroupJudges = this.state.groupJudges;
+    tempGroupJudges.forEach((element) => {
+      var tempGroup = [];
+      var group = element[0];
+      tempGroup = element.slice(1, element.length);
+      var noSpaceGroup = group.replace(/\s/g, '');
+      for (const [key, value] of Object.entries(this.refsCollection)) {
+        if (key == noSpaceGroup) {
+          this.refsCollection[key].updateList(tempGroup);
+        }
+      }
+    });
   }
 
   // Render the component

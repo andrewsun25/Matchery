@@ -56,19 +56,35 @@ class App extends Component {
   componentDidMount() {
     const token = localStorage.getItem('session');
     if (token) {
-      fetch('/api/account/verify?token=' + token)
-        .then(res => res.json())
-        .then(json => {
-          if (json.success) {
-            this.fetchUserPermissions();
-          } else {
-            this.setState({
-              showLogin: true,
-              showLoading: false,
-              showDashboard: false,
-            });
-          }
-        });
+      fetch('/api/account/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: localStorage.getItem('username'),
+        token: token
+      }),
+    }).then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.fetchUserPermissions();
+        } else {
+          localStorage.clear();
+          this.setState({
+            showLogin: true,
+            showLoading: false,
+            showDashboard: false,
+          });
+        }
+      });
+    }
+    else {
+      this.setState({
+        showLogin: true,
+        showLoading: false,
+        showDashboard: false,
+      });
     }
   }
 

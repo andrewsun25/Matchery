@@ -25,26 +25,6 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
-app.get('/api/hello', (req, res) => {
-  res.send({
-    express: 'Hello From Express'
-  });
-});
-
-//====ROOT DIRECTORY===//
-app.get('/', function(req, res) {
-  res.json('you did it');
-});
-
-//==========================//
-//====GET ALL SIGNATURES===//
-app.get('/api/users', function(req, res) {
-  User.find({}).then(eachOne => {
-    res.json(eachOne);
-  });
-});
-
 app.post('/api/match', function(req, res) {
 
   const { body } = req;
@@ -243,10 +223,13 @@ app.post('/api/account/signin', (req, res, next) => {
     });
   });
 
-app.get('/api/account/verify', (req, res, next) => {
-    const { query } = req;
-    const { token } = query;
-    // Verify the token is one of a kind and it's not deleted.
+app.post('/api/account/verify', (req, res, next) => {
+    const { body } = req;
+    let {
+      token,
+      username
+    } = body;
+
     Session.find({
       _id: token,
       isActive: true
@@ -264,9 +247,36 @@ app.get('/api/account/verify', (req, res, next) => {
           message: 'Error: Invalid'
         });
       } else {
-        return res.send({
-          success: true,
-          message: 'Verified'
+        User.find({
+          _id: mongoose.Types.ObjectId(sessions[0].userId)
+        }, (err, users) => {
+          if (err) {
+            console.log(err);
+            return res.send({
+              success: false,
+              message: 'Error: Server error'
+            });
+          }
+          if (users.length != 1) {
+            return res.send({
+              success: false,
+              message: 'Error: Invalid'
+            });
+          }
+          else {
+            if (username != users[0].username) {
+              return res.send({
+                success: false,
+                message: 'Error: Token mismatch'
+              });
+            }
+            else {
+              return res.send({
+                success: true,
+                message: 'Verified'
+              });
+            }
+          }
         });
       }
     });

@@ -24,15 +24,35 @@ class TestMatch(unittest.TestCase):
 			"ghostlights": 2
 		}
 
+		# print(match.match(applicantPreferences, groupPreferences))
+
+	def testGroupNoMatchApplicant(self):
+		applicantPreferences = {
+			"sblair": ["WashU Diwali 1", "WashU Diwali 2"],
+			"zhuyuanzhang": ["WashU Diwali 1", "WashU Diwali 2"],
+			"admin": ["WashU Diwali 2", "WashU Diwali 1"]
+		}
+
+		groupPreferences = {
+			"WashU Diwali 1": ["sblair", "zhuyuanzhang"],
+			"WashU Diwali 2": ["sblair"],
+		}
+
+		groupQuotas = {
+		"aristocats": 2,
+		"sensasians": 2,
+		"singers": 2,
+		"ghostlights": 2
+		}
 		print(match.match(applicantPreferences, groupPreferences))
-  
+
 	def testEmptyGroupPreferences(self):
 		applicantPreferences = {
 		}
 
 		groupPreferences = {
 		}
-		print(match.match(applicantPreferences, groupPreferences))
+		# print(match.match(applicantPreferences, groupPreferences))
 
 	# def check_optimal(self, groupsAcceptances, applicantRankings, groupRankings):
 	# 	for applicant, applicantRanking in enumerate(applicantRankings):

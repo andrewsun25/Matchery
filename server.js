@@ -9,6 +9,7 @@ const app = express();
 const url = 'mongodb+srv://client:fpLr30qu96hmxW3B@matcherydb-dyffe.mongodb.net/matchery?retryWrites=true';
 var dateFormat = require('dateformat');
 var timeago = require("timeago.js");
+const nodemailer = require('nodemailer');
 //=========================//
 
 const port = process.env.PORT || 5000;
@@ -32,6 +33,15 @@ const Session = require('./models/session.js');
 const Event = require('./models/event.js');
 const Audition = require('./models/audition.js');
 const EventRole = require('./models/eventRole.js');
+const Invite = require('./models/invite.js');
+
+app.get('/join', (req, res) => {
+  var id = req.query.id;
+  return res.send({
+    hello: id,
+    host: req.headers.host
+  });
+});
 
 app.post('/api/match', function(req, res) {
 
@@ -251,7 +261,8 @@ app.post('/api/account/signup', (req, res, next) => {
     username,
     firstName,
     lastName,
-    email
+    email,
+    invite
   } = body;
 
   if (!username) {
@@ -294,6 +305,15 @@ app.post('/api/account/signup', (req, res, next) => {
         return res.send({
           success: false,
           message: 'Error: Server error'
+        });
+      }
+      if (invite != "") {
+        Invite.findOne({
+          _id: mongoose.Types.ObjectId(invite)
+        }, (err, invite) => {
+          if (invite != null) {
+            console.log(invite);
+          }
         });
       }
       return res.send({
@@ -622,15 +642,22 @@ app.post('/api/account/createEvent', (req, res, next) => {
     let {
       eventName,
       username,
-      admins
+      admins,
+      message
     } = body;
 
+    let emails = [];
     admins.forEach((admin, key) => {
       if (admin == username || admin == "") {
         admins.splice(key, 1);
       }
+      else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(admin)) {
+        emails.push(admins[key]);
+        admins.splice(key, 1);
+      }
     });
     admins.push(username);
+    handleEmail(emails, message, eventName, "Administrator", "");
 
     let newEvent = new Event();
     newEvent.name = eventName;
@@ -679,6 +706,47 @@ app.post('/api/account/createEvent', (req, res, next) => {
       }
     });
   });
+
+handleEmail = (emails, message, eventName, role, auditionName) => {
+    emails.forEach((email) => {
+      let invite = new Invite();
+      invite.eventName = eventName;
+      invite.role = role;
+      invite.auditionName = auditionName;
+      invite.save();
+
+    let transporter = nodemailer.createTransport({
+            host: 'smtp.ethereal.email',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: 'zrv7zrvs43tjusqn@ethereal.email', // generated ethereal user
+                pass: 'KhwjjfgMCAYNqbJXEb' // generated ethereal password
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: '"Matchery" <matchery@example.com>', // sender address
+            to: email, // list of receivers
+            subject: 'You have been invited to Matchery!', // Subject line
+            html: `<div><b>${message}</b></div><div>Someone has invited you to be a ${role} for ${eventName}!</div><div><a href="localhost:3000">Join Matchery!</a></div><div>And enter invite code: ${invite._id}</div>` // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            // Preview only available when sending through an Ethereal account
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+        });
+  });
+}
 
 app.post('/api/account/createGroup', (req, res, next) => {
     const { body } = req;

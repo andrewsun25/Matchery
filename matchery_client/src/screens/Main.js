@@ -242,7 +242,7 @@ class App extends Component {
 
   // Function to register a new user
   // in the database.
-  handleSignUpSubmit = (e, firstName, lastName, email, username, password) => {
+  handleSignUpSubmit = (e, firstName, lastName, email, username, password, inviteId) => {
     //Insert in database
     fetch('/api/account/signup', {
       method: 'POST',
@@ -254,7 +254,8 @@ class App extends Component {
         lastName: lastName,
         email: email,
         username: username,
-        password: password
+        password: password,
+        invite: inviteId
       }),
     }).then(res => res.json())
       .then(json => {
@@ -399,7 +400,7 @@ class App extends Component {
     });
   }
 
-  submitCreateEvent = (e, eventName, list) => {
+  submitCreateEvent = (e, eventName, list, message) => {
     e.preventDefault();
     var nameArray = list.split(',');
     nameArray = nameArray.map(el => el.trim());
@@ -412,7 +413,8 @@ class App extends Component {
       body: JSON.stringify({
         eventName: eventName,
         username: localStorage.getItem('username'),
-        admins: nameArray
+        admins: nameArray, 
+        message: message
       }),
     }).then(res => res.json())
       .then(json => {

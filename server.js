@@ -636,6 +636,8 @@ app.post('/api/account/createEvent', (req, res, next) => {
     newEvent.name = eventName;
     newEvent.admins = admins;
     newEvent.resultsReady = false;
+    newEvent.matchList = [];
+    newEvent.updated = 0;
 
     Event.find({
       name: eventName

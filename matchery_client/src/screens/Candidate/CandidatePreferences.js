@@ -138,7 +138,7 @@ class CandidatePreferences extends React.Component {
             />
 					</div>
 
-          <div style={hasEditedRankingGroup}>
+{/*          <div style={hasEditedRankingGroup}>
             <div className="area-action">
               <button
                 className="btn btn--notdisabled u-margin-left-md"
@@ -155,7 +155,7 @@ class CandidatePreferences extends React.Component {
                 Save Preferences
               </button>
             </div>
-          </div>
+          </div>*/}
 
 				</section>
 

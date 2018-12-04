@@ -67,6 +67,9 @@ class Applicant:
         self.preferences.pop(0)
 
 def match(applicantPreferences, groupPreferences):
+    if len(applicantPreferences) == 0 or len(groupPreferences) == 0:
+        return {}
+        
     applicants = {}
     for name in applicantPreferences:
         applicants[name] = Applicant(name, applicantPreferences[name])

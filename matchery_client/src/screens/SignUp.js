@@ -17,6 +17,7 @@ class SignUp extends React.Component {
       username: "",
       password: "",
       retypePassword: "",
+      inviteId: ""
     }
   }
 
@@ -46,7 +47,8 @@ class SignUp extends React.Component {
       this.state.lastName,
       this.state.email,
       this.state.username,
-      this.state.password
+      this.state.password,
+      this.state.inviteId
     );
     this.props.parentHandleExitSignup(e);
   }
@@ -91,6 +93,10 @@ class SignUp extends React.Component {
 
               <div className="auth-form__form-group u-margin-bottom-hg">
                   <input type="password" className="auth-form__form-input" placeholder="Retype password" name="retypePassword" value={this.state.retypePassword} onChange={this.handleChange} required />
+              </div>
+
+              <div className="auth-form__form-group u-margin-bottom-hg">
+                  <input type="text" className="auth-form__form-input" placeholder="Invite Id (optional)" name="inviteId" value={this.state.inviteId} onChange={this.handleChange} />
               </div>
 
               <div className="auth-form__form-group">

@@ -25,16 +25,23 @@ class AdminCandidates extends React.Component {
     this.adminGroupListChild.current.updateList(list);
   }
 
-  addCandidateSuccess = (candidate) => {
+  addCandidateSuccess = (candidate, message) => {
     var tempGroup = this.state.candidates;
     var candidateArray = candidate.replace(/ /g,'').split(',');
-    tempGroup.push.apply(tempGroup, candidateArray);
+    let candidateNoEmail = [];
+    candidateArray.forEach((item, key) => {
+      if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(item))) {
+        candidateNoEmail.push(item);
+        candidateArray.splice(key, 1);
+      }
+    })
+    tempGroup.push.apply(tempGroup, candidateNoEmail);
     this.setState({candidates: tempGroup});
     this.adminGroupListChild.current.updateList(tempGroup);
-    this.addCandidates(candidateArray);
+    this.addCandidates(candidateArray, message);
   }
 
-  addCandidates = (list) => {
+  addCandidates = (list, message) => {
     fetch('/api/account/addCandidates', {
       method: 'POST',
       headers: {
@@ -42,7 +49,7 @@ class AdminCandidates extends React.Component {
       },
       body: JSON.stringify({
         eventName: this.props.eventName,
-        candidates: list
+        candidates: list, message
       }),
     }).then(res => res.json())
       .then(json => {

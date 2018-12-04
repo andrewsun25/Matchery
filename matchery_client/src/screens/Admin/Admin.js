@@ -104,30 +104,30 @@ class Admin extends React.Component {
     this.addGroupChild.current.resetInput();
   }
 
-  addAdminSuccess = (e, admin) => {
+  addAdminSuccess = (e, admin, message) => {
     e.preventDefault();
     this.setState({
       showAddAdminModal: false,
     });
-    this.showAdminsChild.current.addAdminSuccess(admin);
+    this.showAdminsChild.current.addAdminSuccess(admin, message);
     this.addAdminChild.current.resetInput();
   }
 
-  addJudgeSuccess = (e, judges, group) => {
+  addJudgeSuccess = (e, judges, group, message) => {
     e.preventDefault();
     this.setState({showAddJudgeModal: false});
     this.addJudgeChild.current.resetInput();
-    this.showJudgesChild.current.addAJudge(judges, group);
+    this.showJudgesChild.current.addAJudge(judges, group, message);
   }
 
   // This function is called when the user attempts to add a candidate, or a
   // series of candidates.
-  addCandidateSuccess = (e, candidateList) => {
+  addCandidateSuccess = (e, candidateList, message) => {
     e.preventDefault();
     this.setState({
       showAddCandidateModal: false,
     });
-    this.showCandidatesChild.current.addCandidateSuccess(candidateList);
+    this.showCandidatesChild.current.addCandidateSuccess(candidateList, message);
     this.addCandidateChild.current.resetInput();
   }
 
@@ -156,6 +156,7 @@ class Admin extends React.Component {
   deleteGroup = (e, item) => {
     e.preventDefault();
     this.showGroupsChild.current.deleteFromList(e, item);
+    this.getEventAgain();
     this.setState({
       showDeleteGroupModal: false
     });

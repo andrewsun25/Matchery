@@ -48,6 +48,7 @@ class App extends Component {
         'judge' : [],
         'candidate' : []
       },
+      recents: []
     };
   }
 
@@ -241,7 +242,7 @@ class App extends Component {
 
   // Function to register a new user
   // in the database.
-  handleSignUpSubmit = (e, firstName, lastName, email, username, password) => {
+  handleSignUpSubmit = (e, firstName, lastName, email, username, password, inviteId) => {
     //Insert in database
     fetch('/api/account/signup', {
       method: 'POST',
@@ -253,12 +254,14 @@ class App extends Component {
         lastName: lastName,
         email: email,
         username: username,
-        password: password
+        password: password,
+        invite: inviteId
       }),
     }).then(res => res.json())
       .then(json => {
-          console.log('json', json);
-          // alert(json.message);
+          if(json.success) {
+            this.handleLogIn(e, username, password);
+          }
         });
   }
 
@@ -266,9 +269,28 @@ class App extends Component {
     this.dashboardToAdmin(null, eventName);
   }
 
+  handleRecents = (eventName, eventRole, auditionName) => {
+    let tempList = JSON.parse(sessionStorage.getItem('recents'));
+    if (tempList == null) {
+      tempList = [];
+    }
+    let recent = { eventName: eventName, auditionName: auditionName, eventRole: eventRole };
+    if (!tempList.some((e) => e.eventName == recent.eventName && e.auditionName == recent.auditionName && e.eventRole == recent.eventRole)) {
+      tempList.push(recent);
+      if (tempList.length > 5) {
+        tempList.shift();
+      }
+      sessionStorage.setItem('recents', JSON.stringify(tempList));
+      this.setState({
+        recents: tempList
+      });
+    }
+  }
+
   // Function to navigate from the dashboard
   // page to the admin page.
   dashboardToAdmin = (e, eventName) => {
+    this.handleRecents(eventName, "Administrator");
 
     fetch('/api/account/getEventAdminInfo', {
       method: 'POST',
@@ -305,6 +327,7 @@ class App extends Component {
   // Function to navigate from the dashboard
   // page to the judge page.
   dashboardToJudge = (e, eventName, auditionName) => {
+    this.handleRecents(eventName, "Judge", auditionName);
 
     fetch('/api/account/getSingleAudition', {
       method: 'POST',
@@ -340,6 +363,8 @@ class App extends Component {
   // page to the candidate page for a specific event
   // given an eventName.
   dashboardToCandidate = (e, eventName) => {
+    this.handleRecents(eventName, "Candidate");
+
     fetch('/api/account/getSingleEvent', {
       method: 'POST',
       headers: {
@@ -376,11 +401,10 @@ class App extends Component {
     });
   }
 
-  submitCreateEvent = (e, eventName, list) => {
+  submitCreateEvent = (e, eventName, list, message) => {
     e.preventDefault();
     var nameArray = list.split(',');
     nameArray = nameArray.map(el => el.trim());
-    nameArray.push(localStorage.getItem('username'));
 
     fetch('/api/account/createEvent', {
       method: 'POST',
@@ -389,7 +413,9 @@ class App extends Component {
       },
       body: JSON.stringify({
         eventName: eventName,
-        admins: nameArray
+        username: localStorage.getItem('username'),
+        admins: nameArray, 
+        message: message
       }),
     }).then(res => res.json())
       .then(json => {
@@ -640,6 +666,7 @@ class App extends Component {
             dashboardToCandidate={this.dashboardToCandidate}
             createEvent={this.createEvent}
             events={this.state.events}
+            recents={this.state.recents}
           />
         </div>
         <div style={showAdmin}>

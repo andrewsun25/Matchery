@@ -8,6 +8,9 @@ const mongoose = require('mongoose').set('debug', true);
 const app = express();
 const url = 'mongodb+srv://client:fpLr30qu96hmxW3B@matcherydb-dyffe.mongodb.net/matchery?retryWrites=true';
 const dotenv = require("dotenv").config();
+var dateFormat = require('dateformat');
+var timeago = require("timeago.js");
+const nodemailer = require('nodemailer');
 //=========================//
 
 const port = process.env.PORT || 5000;
@@ -26,36 +29,42 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+const User = require('./models/user.js');
+const Session = require('./models/session.js');
+const Event = require('./models/event.js');
+const Audition = require('./models/audition.js');
+const EventRole = require('./models/eventRole.js');
+const Invite = require('./models/invite.js');
+
+app.get('/join', (req, res) => {
+  var id = req.query.id;
+  return res.send({
+    hello: id,
+    host: req.headers.host
+  });
+});
+
 app.post('/api/match', function(req, res) {
 
   const { body } = req;
   let {
-    eventName
+    eventName,
+    publish,
+    username
   } = body;
 
-  let applicantPreferences = {};
-  let groupPreferences = {};
-  let allCandidates = [];
+  User.findOne({
+    username: username
+  }, (err, user) => {
+    let event = user.Events.find((e) => e.eventName == eventName);
+    if (event.role == "Administrator") {
+      let applicantPreferences = {};
+      let groupPreferences = {};
+      let allCandidates = [];
 
-  Event.findOne({
-      name: eventName
-    }, (err, event) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: server error'
-        });
-      }
-
-      let candidateLists = event.toObject().candidateLists;
-      candidateLists.forEach((candidateObject) => {
-        applicantPreferences[candidateObject.candidate] = candidateObject.list;
-        allCandidates.push(candidateObject.candidate);
-      });
-
-        Audition.find({
-          eventName: eventName
-        }, (err, auditions) => {
+      Event.findOne({
+          name: eventName
+        }, (err, event) => {
           if (err) {
             return res.send({
               success: false,
@@ -63,38 +72,184 @@ app.post('/api/match', function(req, res) {
             });
           }
 
-          auditions.forEach((audition) => {
-            groupPreferences[audition.auditionName] = audition.list;
+          let updated = "never";
+          if (event.resultsReady == true) {
+            let date = (new Date(event.updated));
+            updated = dateFormat(date, "h:MMtt, dS mmmm yyyy ");
+            updated += `(${timeago().format(date)})`;
+          }
+
+          let candidateLists = event.toObject().candidateLists;
+          candidateLists.forEach((candidateObject) => {
+            applicantPreferences[candidateObject.candidate] = candidateObject.list;
+            allCandidates.push(candidateObject.candidate);
           });
 
-          console.log(groupPreferences);
-          console.log(applicantPreferences);
+            Audition.find({
+              eventName: eventName
+            }, (err, auditions) => {
+              if (err) {
+                return res.send({
+                  success: false,
+                  message: 'Error: server error'
+                });
+              }
 
-            const spawn = require("child_process").spawn;
-            data = {
-              "applicantPreferences": applicantPreferences,
-              "groupPreferences": groupPreferences
-            }
-
-            const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
-            pythonProcess.stdout.on('data', (data) => {
-              console.log(data.toString().trim().replace(/\'/g, '"'));
-              return res.send({
-                success: true,
-                data: data.toString().trim().replace(/\'/g, '"'),
-                allCandidates: allCandidates
+              auditions.forEach((audition) => {
+                groupPreferences[audition.auditionName] = audition.list;
               });
-            });
-    });
-    });
 
+              console.log(groupPreferences);
+              console.log(applicantPreferences);
+
+                const spawn = require("child_process").spawn;
+                data = {
+                  "applicantPreferences": applicantPreferences,
+                  "groupPreferences": groupPreferences
+                }
+
+                const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
+                pythonProcess.stdout.on('data', (data) => {
+                  let dataArray = JSON.parse(data.toString().trim().replace(/\'/g, '"'));
+                  let resultsArray = [];
+                  for (var groupName in dataArray) {
+                    if (!dataArray.hasOwnProperty(groupName)) continue;
+
+                    let list = dataArray[groupName];
+                    resultsArray.push({name:groupName, list:list});
+                  }
+                  if (publish) {
+                    Event.findOneAndUpdate(
+                      { name: eventName },
+                      { $currentDate: { updated: true }, $set: { resultsReady: true, matchList: resultsArray } },
+                      (err) => {
+                        if (!err) {
+                          return res.send({
+                            success: true,
+                            data: resultsArray,
+                            allCandidates: allCandidates,
+                            updated: updated
+                          });
+                        }
+                      });
+                  }
+                  else {
+                    return res.send({
+                      success: true,
+                      data: resultsArray,
+                      allCandidates: allCandidates,
+                      updated: updated
+                    });
+                  }
+                });
+        });
+        });
+    }
+  });
 });
 
-const User = require('./models/user.js');
-const Session = require('./models/session.js');
-const Event = require('./models/event.js');
-const Audition = require('./models/audition.js');
-const EventRole = require('./models/eventRole.js');
+app.post('/api/getResultsCandidate', function(req, res) {
+
+  const { body } = req;
+  let {
+    eventName,
+    username
+  } = body;
+
+  Event.findOne({
+    name: eventName
+  }, (err, event) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    else {
+      if(event.resultsReady == true) {
+        let resultGroup = "";
+        event.matchList.forEach((audition) => {
+          if (audition.list.includes(username)) {
+            resultGroup = audition.name;
+          }
+        });
+        let date = (new Date(event.updated));
+        let dateString = dateFormat(date, "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(date)})`;
+        return res.send({
+          success: true,
+          published: true,
+          resultGroup: resultGroup,
+          updated: dateString
+        });
+      }
+      else {
+        let dateString = dateFormat(Date.now(), "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(Date.now())})`;
+        return res.send({
+          success: true,
+          published: false,
+          resultGroup: "",
+          updated: dateString
+        });
+      }
+    }
+  });
+});
+
+app.post('/api/getResultsJudge', function(req, res) {
+
+  const { body } = req;
+  let {
+    eventName,
+    groupName
+  } = body;
+
+  Event.findOne({
+    name: eventName
+  }, (err, event) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    else {
+      if (event.resultsReady == true) {
+        let allCandidates = [];
+        let candidateLists = event.toObject().candidateLists;
+        candidateLists.forEach((candidateObject) => {
+          allCandidates.push(candidateObject.candidate);
+        });
+
+        let groupResults = event.matchList.find((e) => e.name == groupName).list;
+        let failedCandidates = allCandidates.filter((e) => !groupResults.includes(e));
+
+        let date = (new Date(event.updated));
+        let dateString = dateFormat(date, "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(date)})`;
+        return res.send({
+          success: true,
+          published: true,
+          groupResults: groupResults,
+          failedCandidates: failedCandidates,
+          updated: dateString
+        });
+      }
+      else {
+        let dateString = dateFormat(Date.now(), "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(Date.now())})`;
+        return res.send({
+          success: true,
+          published: false,
+          groupResults: [],
+          failedCandidates: [],
+          updated: dateString
+        });
+      }
+    }
+  });
+});
 
 app.post('/api/account/signup', (req, res, next) => {
   const {
@@ -107,7 +262,8 @@ app.post('/api/account/signup', (req, res, next) => {
     username,
     firstName,
     lastName,
-    email
+    email,
+    invite
   } = body;
 
   if (!username) {
@@ -152,10 +308,31 @@ app.post('/api/account/signup', (req, res, next) => {
           message: 'Error: Server error'
         });
       }
-      return res.send({
-        success: true,
-        message: 'Signed up'
-      });
+      if (invite != "") {
+        Invite.findOneAndDelete({
+          _id: mongoose.Types.ObjectId(invite)
+        }, (err, invite) => {
+          if (invite != null) {
+            switch(invite.role) {
+              case "Administrator":
+              addAdmins(res, invite.eventName, username);
+              break;
+              case "Judge":
+              addJudges(res, invite.eventName, invite.auditionName, username);
+              break;
+              case "Candidate":
+              addCandidates(res, invite.eventName, username);
+              break;
+            }
+          }
+        });
+      }
+      else {
+        return res.send({
+          success: true,
+          message: 'Signed up'
+        });
+      }
     });
   });
 });
@@ -477,12 +654,30 @@ app.post('/api/account/createEvent', (req, res, next) => {
     const { body } = req;
     let {
       eventName,
-      admins
+      username,
+      admins,
+      message
     } = body;
+
+    let emails = [];
+    admins.forEach((admin, key) => {
+      if (admin == username || admin == "") {
+        admins.splice(key, 1);
+      }
+      else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(admin)) {
+        emails.push(admins[key]);
+        admins.splice(key, 1);
+      }
+    });
+    admins.push(username);
+    handleEmail(req, emails, message, eventName, "Administrator", "");
 
     let newEvent = new Event();
     newEvent.name = eventName;
     newEvent.admins = admins;
+    newEvent.resultsReady = false;
+    newEvent.matchList = [];
+    newEvent.updated = 0;
 
     Event.find({
       name: eventName
@@ -524,6 +719,47 @@ app.post('/api/account/createEvent', (req, res, next) => {
       }
     });
   });
+
+handleEmail = (req, emails, message, eventName, role, auditionName) => {
+    emails.forEach((email) => {
+      let invite = new Invite();
+      invite.eventName = eventName;
+      invite.role = role;
+      invite.auditionName = auditionName;
+      invite.save();
+
+    let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: 'matchery.production@gmail.com', // generated ethereal user
+                pass: 'matchery12#$' // generated ethereal password
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: '"Matchery" <matchery@example.com>', // sender address
+            to: email, // list of receivers
+            subject: 'You have been invited to Matchery!', // Subject line
+            html: `<div><b>${message}</b></div><div>Someone has invited you to be a ${role} for ${eventName}!</div><div><a href="${req.protocol + '://' + req.get('host')}">Join Matchery!</a></div><div>And enter invite code: ${invite._id}</div>` // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            // Preview only available when sending through an Ethereal account
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+        });
+  });
+}
 
 app.post('/api/account/createGroup', (req, res, next) => {
     const { body } = req;
@@ -585,10 +821,24 @@ app.post('/api/account/addJudges', (req, res, next) => {
     let {
       eventName,
       groupName,
-      judges
+      judges,
+      message
     } = body;
 
-    var foundUsers = [];
+    let emails = [];
+    judges.forEach((item, key) => {
+      if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(item)) {
+        emails.push(judges[key]);
+        judges.splice(key, 1);
+      }
+    });
+    handleEmail(req, emails, message, eventName, "Judge", groupName);
+
+    addJudges(res, eventName, groupName, judges);
+});
+
+addJudges = (res, eventName, groupName, judges) => {
+  var foundUsers = [];
 
     User.find({
       username: { $in: judges }
@@ -630,16 +880,30 @@ app.post('/api/account/addJudges', (req, res, next) => {
         });
       }
     });
-});
+}
 
 app.post('/api/account/addCandidates', (req, res, next) => {
     const { body } = req;
     let {
       eventName,
-      candidates
+      candidates,
+      message
     } = body;
 
-    var foundUsers = [];
+    let emails = [];
+    candidates.forEach((item, key) => {
+      if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(item)) {
+        emails.push(candidates[key]);
+        candidates.splice(key, 1);
+      }
+    });
+    handleEmail(req, emails, message, eventName, "Candidate", "");
+
+    addCandidates(res, eventName, candidates);
+});
+
+addCandidates = (res, eventName, candidates) => {
+  var foundUsers = [];
 
     User.find({
       username: { $in: candidates }
@@ -703,15 +967,29 @@ app.post('/api/account/addCandidates', (req, res, next) => {
         });
       }
     });
-});
+}
 
 app.post('/api/account/addAdmins', (req, res, next) => {
     const { body } = req;
     let {
       eventName,
-      admins
+      admins,
+      message
     } = body;
 
+    let emails = [];
+    admins.forEach((admin, key) => {
+      if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(admin)) {
+        emails.push(admins[key]);
+        admins.splice(key, 1);
+      }
+    });
+    handleEmail(req, emails, message, eventName, "Administrator", "");
+
+    addAdmins(res, eventName, admins);
+});
+
+addAdmins = (res, eventName, admins) => {
     var foundUsers = [];
 
     User.find({
@@ -752,7 +1030,7 @@ app.post('/api/account/addAdmins', (req, res, next) => {
         });
       }
     });
-});
+}
 
 app.post('/api/account/updateCandidateLists', (req, res, next) => {
     const { body } = req;

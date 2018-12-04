@@ -52,20 +52,27 @@ class AdminAdmins extends React.Component {
     }
   }
 
-  addAdminSuccess = (admin) => {
+  addAdminSuccess = (admin, message) => {
     var tempGroup = this.state.admins;
     var adminArray = admin.split(',');
     adminArray = adminArray.map((el) => {
       return el.trim();
     });
-    tempGroup.push.apply(tempGroup, adminArray);
+    let adminNoEmail = [];
+    adminArray.forEach((item, key) => {
+      if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(item))) {
+        adminNoEmail.push(item);
+        adminArray.splice(key, 1);
+      }
+    })
+    tempGroup.push.apply(tempGroup, adminNoEmail);
     this.setState({admins: tempGroup});
     this.adminGroupListChild.current.updateList(tempGroup);
 
-    this.addAdmin(adminArray);
+    this.addAdmin(adminArray, message);
   }
 
-  addAdmin = (newAdmins) => {
+  addAdmin = (newAdmins, message) => {
     fetch('/api/account/addAdmins', {
       method: 'POST',
       headers: {
@@ -73,7 +80,8 @@ class AdminAdmins extends React.Component {
       },
       body: JSON.stringify({
         eventName: this.props.eventName,
-        admins: newAdmins
+        admins: newAdmins,
+        message: message
       }),
     }).then(res => res.json())
       .then(json => {

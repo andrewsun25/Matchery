@@ -67,6 +67,9 @@ class Applicant:
         self.preferences.pop(0)
 
 def match(applicantPreferences, groupPreferences):
+    if len(applicantPreferences) == 0 or len(groupPreferences) == 0:
+        return {}
+        
     applicants = {}
     for name in applicantPreferences:
         applicants[name] = Applicant(name, applicantPreferences[name])
@@ -79,9 +82,9 @@ def match(applicantPreferences, groupPreferences):
     # while exists applicant such that applicant hasn't been rejected by everyone or accepted anywhere:
     while eligibleApplicants:
         # All eligibleApplicants apply to their top choice
-        for applicantName, eligibleApplicant in eligibleApplicants.items():
+        for applicantName, eligibleApplicant in eligibleApplicants.copy().items():
             if not eligibleApplicant.preferences:
-                eligibleApplicants.pop(eligibleApplicant)
+                eligibleApplicants.pop(applicantName)
                 continue
 
             bestGroupName = eligibleApplicant.getBestGroup()
@@ -96,7 +99,7 @@ def match(applicantPreferences, groupPreferences):
 
             for applicantName in accepted:
                 if applicantName in eligibleApplicants:
-                    eligibleApplicants.pop(applicantName)
+                    eligibleApplicants.pop(applicantName) 
 
             
     groupAcceptances = {}

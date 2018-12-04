@@ -10,6 +10,7 @@ class CreateEvent extends React.Component {
     this.state = {
       eventName: "",
       list: "",
+      message: ""
     }
   }
 
@@ -24,6 +25,13 @@ class CreateEvent extends React.Component {
     var myList = e.target.value;
     this.setState({
       list: myList,
+    });
+  }
+
+  updateMessage = (e) => {
+    var myMessage = e.target.value;
+    this.setState({
+      message: myMessage,
     });
   }
 
@@ -54,7 +62,7 @@ class CreateEvent extends React.Component {
                         onChange={this.updateList} ></input>
                   </div>
                   <div className="modal__form-group u-margin-bottom-md">
-                      <textarea className="modal__form-input modal__form-input--textarea" placeholder="A personal message..."></textarea>
+                      <textarea className="modal__form-input modal__form-input--textarea" placeholder="A personal message..." onChange={this.updateMessage}></textarea>
                   </div>
                   <div className="modal__submit-area">
                     <button
@@ -66,7 +74,7 @@ class CreateEvent extends React.Component {
                       type="submit"
                       className="modal__form-submit"
                       value="Create Event"
-                      onClick={(e) => {this.props.submitCreateEvent(e, this.state.eventName, this.state.list)}}>
+                      onClick={(e) => {this.props.submitCreateEvent(e, this.state.eventName, this.state.list, this.state.message)}}>
                     </input>
                   </div>
               </form>

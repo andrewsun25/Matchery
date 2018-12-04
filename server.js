@@ -308,7 +308,7 @@ app.post('/api/account/signup', (req, res, next) => {
           message: 'Error: Server error'
         });
       }
-      if (invite != "" && ObjectId.isValid(invite)) {
+      if (invite != "" && mongoose.Types.ObjectId.isValid(invite)) {
         Invite.findOneAndDelete({
           _id: mongoose.Types.ObjectId(invite)
         }, (err, invite) => {

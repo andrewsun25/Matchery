@@ -56,6 +56,7 @@ class App extends Component {
   // already exists.
   componentDidMount() {
     const token = localStorage.getItem('session');
+    sessionStorage.removeItem('recents');
     if (token) {
       fetch('/api/account/verify', {
       method: 'POST',

@@ -259,8 +259,9 @@ class App extends Component {
       }),
     }).then(res => res.json())
       .then(json => {
-          console.log('json', json);
-          // alert(json.message);
+          if(json.success) {
+            this.handleLogIn(e, username, password);
+          }
         });
   }
 

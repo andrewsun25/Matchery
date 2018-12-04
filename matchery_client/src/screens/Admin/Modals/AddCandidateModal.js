@@ -12,6 +12,7 @@ class AddCandidateModal extends React.Component {
     super(props);
     this.state = {
     	inputValue: "",
+      message: ""
     }
   }
 
@@ -23,6 +24,13 @@ class AddCandidateModal extends React.Component {
 
   resetInput = () => {
     this.setState({inputValue: ""});
+  }
+
+  updateMessage = (e) => {
+    var myMessage = e.target.value;
+    this.setState({
+      message: myMessage,
+    });
   }
 
   // Render the component
@@ -55,7 +63,7 @@ class AddCandidateModal extends React.Component {
             </div>
 
             <div className="modal__form-group u-margin-bottom-md">
-              <textarea className="modal__form-input modal__form-input--textarea" placeholder="A personal message..."></textarea>
+              <textarea className="modal__form-input modal__form-input--textarea" placeholder="A personal message..." onChange={this.updateMessage}></textarea>
             </div>
 
             <div className="modal__submit-area">
@@ -68,7 +76,7 @@ class AddCandidateModal extends React.Component {
                 type="submit"
                 className="modal__form-submit"
                 value="Add Candidates"
-                onClick={(e) => {this.props.addCandidateSuccess(e, this.state.inputValue)}}></input>
+                onClick={(e) => {this.props.addCandidateSuccess(e, this.state.inputValue, this.state.message)}}></input>
             </div>
 
           </form>

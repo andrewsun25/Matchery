@@ -52,7 +52,7 @@ class AdminAdmins extends React.Component {
     }
   }
 
-  addAdminSuccess = (admin) => {
+  addAdminSuccess = (admin, message) => {
     var tempGroup = this.state.admins;
     var adminArray = admin.split(',');
     adminArray = adminArray.map((el) => {
@@ -62,10 +62,10 @@ class AdminAdmins extends React.Component {
     this.setState({admins: tempGroup});
     this.adminGroupListChild.current.updateList(tempGroup);
 
-    this.addAdmin(adminArray);
+    this.addAdmin(adminArray, message);
   }
 
-  addAdmin = (newAdmins) => {
+  addAdmin = (newAdmins, message) => {
     fetch('/api/account/addAdmins', {
       method: 'POST',
       headers: {
@@ -73,7 +73,8 @@ class AdminAdmins extends React.Component {
       },
       body: JSON.stringify({
         eventName: this.props.eventName,
-        admins: newAdmins
+        admins: newAdmins,
+        message: message
       }),
     }).then(res => res.json())
       .then(json => {

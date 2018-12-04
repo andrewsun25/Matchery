@@ -16,7 +16,7 @@ class AdminJudges extends React.Component {
     }
   }
 
-  addAJudge = (judges, group) => {
+  addAJudge = (judges, group, message) => {
     var tempGroup = [];
     var tempGroupJudges = this.state.groupJudges;
     tempGroupJudges.forEach((element) => {
@@ -49,7 +49,8 @@ class AdminJudges extends React.Component {
       body: JSON.stringify({
         eventName: this.props.eventName,
         groupName: group,
-        judges: judgeArray
+        judges: judgeArray, 
+        message: message
       }),
     }).then(res => res.json())
       .then(json => {

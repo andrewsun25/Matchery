@@ -308,11 +308,21 @@ app.post('/api/account/signup', (req, res, next) => {
         });
       }
       if (invite != "") {
-        Invite.findOne({
+        Invite.findOneAndDelete({
           _id: mongoose.Types.ObjectId(invite)
         }, (err, invite) => {
           if (invite != null) {
-            console.log(invite);
+            switch(invite.role) {
+              case "Administrator":
+              addAdmins(res, invite.eventName, username);
+              break;
+              case "Judge":
+              addJudges(res, invite.eventName, invite.auditionName, username);
+              break;
+              case "Candidate":
+              addCandidates(res, invite.eventName, username);
+              break;
+            }
           }
         });
       }
@@ -808,10 +818,24 @@ app.post('/api/account/addJudges', (req, res, next) => {
     let {
       eventName,
       groupName,
-      judges
+      judges,
+      message
     } = body;
 
-    var foundUsers = [];
+    let emails = [];
+    judges.forEach((item, key) => {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(item)) {
+        emails.push(judges[key]);
+        judges.splice(key, 1);
+      }
+    });
+    handleEmail(emails, message, eventName, "Judge", groupName);
+
+    addJudges(res, eventName, groupName, judges);
+});
+
+addJudges = (res, eventName, groupName, judges) => {
+  var foundUsers = [];
 
     User.find({
       username: { $in: judges }
@@ -853,16 +877,30 @@ app.post('/api/account/addJudges', (req, res, next) => {
         });
       }
     });
-});
+}
 
 app.post('/api/account/addCandidates', (req, res, next) => {
     const { body } = req;
     let {
       eventName,
-      candidates
+      candidates,
+      message
     } = body;
 
-    var foundUsers = [];
+    let emails = [];
+    candidates.forEach((item, key) => {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(item)) {
+        emails.push(candidates[key]);
+        candidates.splice(key, 1);
+      }
+    });
+    handleEmail(emails, message, eventName, "Candidate", "");
+
+    addCandidates(res, eventName, candidates);
+});
+
+addCandidates = (res, eventName, candidates) => {
+  var foundUsers = [];
 
     User.find({
       username: { $in: candidates }
@@ -926,15 +964,29 @@ app.post('/api/account/addCandidates', (req, res, next) => {
         });
       }
     });
-});
+}
 
 app.post('/api/account/addAdmins', (req, res, next) => {
     const { body } = req;
     let {
       eventName,
-      admins
+      admins,
+      message
     } = body;
 
+    let emails = [];
+    admins.forEach((admin, key) => {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(admin)) {
+        emails.push(admins[key]);
+        admins.splice(key, 1);
+      }
+    });
+    handleEmail(emails, message, eventName, "Administrator", "");
+
+    addAdmins(res, eventName, admins);
+});
+
+addAdmins = (res, eventName, admins) => {
     var foundUsers = [];
 
     User.find({
@@ -975,7 +1027,7 @@ app.post('/api/account/addAdmins', (req, res, next) => {
         });
       }
     });
-});
+}
 
 app.post('/api/account/updateCandidateLists', (req, res, next) => {
     const { body } = req;

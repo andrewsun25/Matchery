@@ -174,6 +174,7 @@ class App extends Component {
   handleLogOut = (e) => {
     e.preventDefault();
     const token = localStorage.getItem('session');
+    sessionStorage.removeItem('recents');
     if (token) {
       fetch('/api/account/logout?token=' + token)
         .then(res => res.json())

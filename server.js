@@ -232,7 +232,7 @@ app.post('/api/getResultsJudge', function(req, res) {
           success: true,
           published: false,
           groupResults: [],
-          failedCandidates: failedCandidates,
+          failedCandidates: [],
           updated: dateString
         });
       }
@@ -621,8 +621,16 @@ app.post('/api/account/createEvent', (req, res, next) => {
     const { body } = req;
     let {
       eventName,
+      username,
       admins
     } = body;
+
+    admins.forEach((admin, key) => {
+      if (admin == username || admin == "") {
+        admins.splice(key, 1);
+      }
+    });
+    admins.push(username);
 
     let newEvent = new Event();
     newEvent.name = eventName;

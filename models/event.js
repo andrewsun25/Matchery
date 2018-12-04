@@ -16,7 +16,10 @@ const EventSchema = new mongoose.Schema({
     default: ''
   },
   candidateLists: [CandidateListSchema],
-  admins: [String]
+  admins: [String],
+  resultsReady: Boolean,
+  matchList: [],
+  updated: Date
 });
 
 module.exports = mongoose.model('Event', EventSchema);

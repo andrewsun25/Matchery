@@ -7,6 +7,8 @@ const expressValidator = require('express-validator');
 const mongoose = require('mongoose').set('debug', true);
 const app = express();
 const url = 'mongodb+srv://client:fpLr30qu96hmxW3B@matcherydb-dyffe.mongodb.net/matchery?retryWrites=true';
+var dateFormat = require('dateformat');
+var timeago = require("timeago.js");
 //=========================//
 
 const port = process.env.PORT || 5000;
@@ -25,36 +27,33 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+const User = require('./models/user.js');
+const Session = require('./models/session.js');
+const Event = require('./models/event.js');
+const Audition = require('./models/audition.js');
+const EventRole = require('./models/eventRole.js');
+
 app.post('/api/match', function(req, res) {
 
   const { body } = req;
   let {
-    eventName
+    eventName,
+    publish,
+    username
   } = body;
 
-  let applicantPreferences = {};
-  let groupPreferences = {};
-  let allCandidates = [];
+  User.findOne({
+    username: username
+  }, (err, user) => {
+    let event = user.Events.find((e) => e.eventName == eventName);
+    if (event.role == "Administrator") {
+      let applicantPreferences = {};
+      let groupPreferences = {};
+      let allCandidates = [];
 
-  Event.findOne({
-      name: eventName
-    }, (err, event) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: server error'
-        });
-      }
-
-      let candidateLists = event.toObject().candidateLists;
-      candidateLists.forEach((candidateObject) => {
-        applicantPreferences[candidateObject.candidate] = candidateObject.list;
-        allCandidates.push(candidateObject.candidate);
-      });
-
-        Audition.find({
-          eventName: eventName
-        }, (err, auditions) => {
+      Event.findOne({
+          name: eventName
+        }, (err, event) => {
           if (err) {
             return res.send({
               success: false,
@@ -62,38 +61,121 @@ app.post('/api/match', function(req, res) {
             });
           }
 
-          auditions.forEach((audition) => {
-            groupPreferences[audition.auditionName] = audition.list;
+          let candidateLists = event.toObject().candidateLists;
+          candidateLists.forEach((candidateObject) => {
+            applicantPreferences[candidateObject.candidate] = candidateObject.list;
+            allCandidates.push(candidateObject.candidate);
           });
 
-          console.log(groupPreferences);
-          console.log(applicantPreferences);
+            Audition.find({
+              eventName: eventName
+            }, (err, auditions) => {
+              if (err) {
+                return res.send({
+                  success: false,
+                  message: 'Error: server error'
+                });
+              }
 
-            const spawn = require("child_process").spawn;
-            data = {
-              "applicantPreferences": applicantPreferences,
-              "groupPreferences": groupPreferences
-            }
-
-            const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
-            pythonProcess.stdout.on('data', (data) => {
-              console.log(data.toString().trim().replace(/\'/g, '"'));
-              return res.send({
-                success: true,
-                data: data.toString().trim().replace(/\'/g, '"'),
-                allCandidates: allCandidates
+              auditions.forEach((audition) => {
+                groupPreferences[audition.auditionName] = audition.list;
               });
-            });
-    });
-    });
 
+              console.log(groupPreferences);
+              console.log(applicantPreferences);
+
+                const spawn = require("child_process").spawn;
+                data = {
+                  "applicantPreferences": applicantPreferences,
+                  "groupPreferences": groupPreferences
+                }
+
+                const pythonProcess = spawn('python', ["python/match.py", JSON.stringify(data)]);
+                pythonProcess.stdout.on('data', (data) => {
+                  let dataArray = JSON.parse(data.toString().trim().replace(/\'/g, '"'));
+                  let resultsArray = [];
+                  for (var groupName in dataArray) {
+                    if (!dataArray.hasOwnProperty(groupName)) continue;
+
+                    let list = dataArray[groupName];
+                    resultsArray.push({name:groupName, list:list});
+                  }
+                  if (publish) {
+                    Event.findOneAndUpdate(
+                      { name: eventName },
+                      { $currentDate: { updated: true }, $set: { resultsReady: true, matchList: resultsArray } },
+                      (err) => {
+                        if (!err) {
+                          return res.send({
+                            success: true,
+                            data: resultsArray,
+                            allCandidates: allCandidates
+                          });
+                        }
+                      });
+                  }
+                  else {
+                    return res.send({
+                      success: true,
+                      data: resultsArray,
+                      allCandidates: allCandidates
+                    });
+                  }
+                });
+        });
+        });
+    }
+  });
 });
 
-const User = require('./models/user.js');
-const Session = require('./models/session.js');
-const Event = require('./models/event.js');
-const Audition = require('./models/audition.js');
-const EventRole = require('./models/eventRole.js');
+app.post('/api/getResults', function(req, res) {
+
+  const { body } = req;
+  let {
+    eventName,
+    username
+  } = body;
+
+  Event.findOne({
+    name: eventName
+  }, (err, event) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    else {
+      if(event.resultsReady == true) {
+        let resultGroup = "";
+        event.matchList.forEach((audition) => {
+          if (audition.list.includes(username)) {
+            resultGroup = audition.name;
+          }
+        });
+        let date = (new Date(event.updated));
+        let dateString = dateFormat(date, "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(date)})`;
+        return res.send({
+          success: true,
+          published: true,
+          resultGroup: resultGroup,
+          updated: dateString
+        });
+      }
+      else {
+        let dateString = dateFormat(Date.now(), "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(Date.now())})`;
+        return res.send({
+          success: true,
+          published: false,
+          resultGroup: "",
+          updated: dateString
+        });
+      }
+    }
+  });
+});
 
 app.post('/api/account/signup', (req, res, next) => {
   const {
@@ -482,6 +564,7 @@ app.post('/api/account/createEvent', (req, res, next) => {
     let newEvent = new Event();
     newEvent.name = eventName;
     newEvent.admins = admins;
+    newEvent.resultsReady = false;
 
     Event.find({
       name: eventName

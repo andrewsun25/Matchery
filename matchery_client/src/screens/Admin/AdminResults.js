@@ -22,12 +22,7 @@ class AdminResults extends React.Component {
     }
   }
 
-  publishResults = (e) => {
-    e.preventDefault();
-    alert("Results published!");
-  }
-
-  regenerateResults = (e) => {
+  regenerateResults = (e, publish) => {
     this.setState({
       groupResults: [],
       failedCandidates: []
@@ -38,22 +33,20 @@ class AdminResults extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        eventName: this.props.eventName
+        eventName: this.props.eventName,
+        publish: publish,
+        username: localStorage.getItem('username')
       })
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
-          let dataArray = JSON.parse(json.data);
-          let resultsArray = [];
+          let resultsArray = json.data;
           let failedCandidates = json.allCandidates;
 
-          for (var groupName in dataArray) {
-            if (!dataArray.hasOwnProperty(groupName)) continue;
+          resultsArray.forEach((element) => {
+            failedCandidates = failedCandidates.filter((e) => !element.list.includes(e));
+          });
 
-            let list = dataArray[groupName];
-            resultsArray.push({name:groupName, list:list});
-            failedCandidates = failedCandidates.filter((element) => !list.includes(element));
-          }
           resultsArray = resultsArray.map((group, key) => 
             <section key={key} className="section-group u-margin-bottom-lg">
               <div className="area-section-heading-center u-margin-bottom-md">
@@ -108,12 +101,12 @@ class AdminResults extends React.Component {
 				<section className="section-generate-and-publish u-margin-bottom-md">
 					<button
             className="btn btn--high-action-hollowed event-admin-custom-width"
-            onClick={(e) => {this.regenerateResults(e)}}>
+            onClick={(e) => {this.regenerateResults(e, false)}}>
             Re-Generate Matches
           </button>
 					<button
             className="btn btn--high-action event-admin-custom-width u-margin-left-sm"
-            onClick={(e) => {this.publishResults(e)}}>
+            onClick={(e) => {this.regenerateResults(e, true)}}>
             Publish Results
           </button>
 				</section>

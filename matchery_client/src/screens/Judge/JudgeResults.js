@@ -28,7 +28,7 @@ class JudgeResults extends React.Component {
     }).then(res => res.json())
       .then(json => {
         if (json.success) {
-          let dataArray = JSON.parse(json.data.replace(/\'/g, '"'));
+          let dataArray = JSON.parse(json.data);
           let resultsArray = [];
           let failedCandidates = [];
 

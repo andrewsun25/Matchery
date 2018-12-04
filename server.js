@@ -669,7 +669,7 @@ app.post('/api/account/createEvent', (req, res, next) => {
       }
     });
     admins.push(username);
-    handleEmail(emails, message, eventName, "Administrator", "");
+    handleEmail(req, emails, message, eventName, "Administrator", "");
 
     let newEvent = new Event();
     newEvent.name = eventName;
@@ -719,7 +719,7 @@ app.post('/api/account/createEvent', (req, res, next) => {
     });
   });
 
-handleEmail = (emails, message, eventName, role, auditionName) => {
+handleEmail = (req, emails, message, eventName, role, auditionName) => {
     emails.forEach((email) => {
       let invite = new Invite();
       invite.eventName = eventName;
@@ -728,12 +728,12 @@ handleEmail = (emails, message, eventName, role, auditionName) => {
       invite.save();
 
     let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
+            host: 'smtp.gmail.com',
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: 'zrv7zrvs43tjusqn@ethereal.email', // generated ethereal user
-                pass: 'KhwjjfgMCAYNqbJXEb' // generated ethereal password
+                user: 'matchery.production@gmail.com', // generated ethereal user
+                pass: 'matchery12#$' // generated ethereal password
             }
         });
 
@@ -742,7 +742,7 @@ handleEmail = (emails, message, eventName, role, auditionName) => {
             from: '"Matchery" <matchery@example.com>', // sender address
             to: email, // list of receivers
             subject: 'You have been invited to Matchery!', // Subject line
-            html: `<div><b>${message}</b></div><div>Someone has invited you to be a ${role} for ${eventName}!</div><div><a href="localhost:3000">Join Matchery!</a></div><div>And enter invite code: ${invite._id}</div>` // html body
+            html: `<div><b>${message}</b></div><div>Someone has invited you to be a ${role} for ${eventName}!</div><div><a href="${req.protocol + '://' + req.get('host')}">Join Matchery!</a></div><div>And enter invite code: ${invite._id}</div>` // html body
         };
 
         // send mail with defined transport object
@@ -831,7 +831,7 @@ app.post('/api/account/addJudges', (req, res, next) => {
         judges.splice(key, 1);
       }
     });
-    handleEmail(emails, message, eventName, "Judge", groupName);
+    handleEmail(req, emails, message, eventName, "Judge", groupName);
 
     addJudges(res, eventName, groupName, judges);
 });
@@ -896,7 +896,7 @@ app.post('/api/account/addCandidates', (req, res, next) => {
         candidates.splice(key, 1);
       }
     });
-    handleEmail(emails, message, eventName, "Candidate", "");
+    handleEmail(req, emails, message, eventName, "Candidate", "");
 
     addCandidates(res, eventName, candidates);
 });
@@ -983,7 +983,7 @@ app.post('/api/account/addAdmins', (req, res, next) => {
         admins.splice(key, 1);
       }
     });
-    handleEmail(emails, message, eventName, "Administrator", "");
+    handleEmail(req, emails, message, eventName, "Administrator", "");
 
     addAdmins(res, eventName, admins);
 });

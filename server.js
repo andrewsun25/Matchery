@@ -326,10 +326,12 @@ app.post('/api/account/signup', (req, res, next) => {
           }
         });
       }
-      return res.send({
-        success: true,
-        message: 'Signed up'
-      });
+      else {
+        return res.send({
+          success: true,
+          message: 'Signed up'
+        });
+      }
     });
   });
 });
@@ -661,7 +663,7 @@ app.post('/api/account/createEvent', (req, res, next) => {
       if (admin == username || admin == "") {
         admins.splice(key, 1);
       }
-      else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(admin)) {
+      else if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(admin)) {
         emails.push(admins[key]);
         admins.splice(key, 1);
       }
@@ -824,7 +826,7 @@ app.post('/api/account/addJudges', (req, res, next) => {
 
     let emails = [];
     judges.forEach((item, key) => {
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(item)) {
+      if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(item)) {
         emails.push(judges[key]);
         judges.splice(key, 1);
       }
@@ -889,7 +891,7 @@ app.post('/api/account/addCandidates', (req, res, next) => {
 
     let emails = [];
     candidates.forEach((item, key) => {
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(item)) {
+      if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(item)) {
         emails.push(candidates[key]);
         candidates.splice(key, 1);
       }
@@ -976,7 +978,7 @@ app.post('/api/account/addAdmins', (req, res, next) => {
 
     let emails = [];
     admins.forEach((admin, key) => {
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(admin)) {
+      if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(admin)) {
         emails.push(admins[key]);
         admins.splice(key, 1);
       }

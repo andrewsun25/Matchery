@@ -58,7 +58,14 @@ class AdminAdmins extends React.Component {
     adminArray = adminArray.map((el) => {
       return el.trim();
     });
-    tempGroup.push.apply(tempGroup, adminArray);
+    let adminNoEmail = [];
+    adminArray.forEach((item, key) => {
+      if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(item))) {
+        adminNoEmail.push(item);
+        adminArray.splice(key, 1);
+      }
+    })
+    tempGroup.push.apply(tempGroup, adminNoEmail);
     this.setState({admins: tempGroup});
     this.adminGroupListChild.current.updateList(tempGroup);
 

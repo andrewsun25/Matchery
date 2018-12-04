@@ -19,6 +19,7 @@ class AdminResults extends React.Component {
       hideSensasians: true,
       hideAfterDark: true,
       hideUngrouped: true,
+      updated: ""
     }
   }
 
@@ -69,8 +70,9 @@ class AdminResults extends React.Component {
 
           this.setState({
             groupResults: resultsArray,
-            failedCandidates: failedCandidates
-          })
+            failedCandidates: failedCandidates,
+            updated: json.updated
+          });
         }
       });
   }
@@ -112,7 +114,7 @@ class AdminResults extends React.Component {
 				</section>
 
 				<section className="notifications u-margin-bottom-lg">
-					<p className="timestamp u-center-text">Last updated: 2.26pm, 3rd October 2018 (3 hours ago)</p>
+					<p className="timestamp u-center-text">Last published: {this.state.updated}</p>
 					<p className="timestamp u-center-text">Note: newly generated results differ from published results</p>
 				</section>
 

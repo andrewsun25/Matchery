@@ -61,6 +61,13 @@ app.post('/api/match', function(req, res) {
             });
           }
 
+          let updated = "never";
+          if (event.resultsReady == true) {
+            let date = (new Date(event.updated));
+            updated = dateFormat(date, "h:MMtt, dS mmmm yyyy ");
+            updated += `(${timeago().format(date)})`;
+          }
+
           let candidateLists = event.toObject().candidateLists;
           candidateLists.forEach((candidateObject) => {
             applicantPreferences[candidateObject.candidate] = candidateObject.list;
@@ -109,7 +116,8 @@ app.post('/api/match', function(req, res) {
                           return res.send({
                             success: true,
                             data: resultsArray,
-                            allCandidates: allCandidates
+                            allCandidates: allCandidates,
+                            updated: updated
                           });
                         }
                       });
@@ -118,7 +126,8 @@ app.post('/api/match', function(req, res) {
                     return res.send({
                       success: true,
                       data: resultsArray,
-                      allCandidates: allCandidates
+                      allCandidates: allCandidates,
+                      updated: updated
                     });
                   }
                 });
@@ -128,7 +137,7 @@ app.post('/api/match', function(req, res) {
   });
 });
 
-app.post('/api/getResults', function(req, res) {
+app.post('/api/getResultsCandidate', function(req, res) {
 
   const { body } = req;
   let {
@@ -170,6 +179,60 @@ app.post('/api/getResults', function(req, res) {
           success: true,
           published: false,
           resultGroup: "",
+          updated: dateString
+        });
+      }
+    }
+  });
+});
+
+app.post('/api/getResultsJudge', function(req, res) {
+
+  const { body } = req;
+  let {
+    eventName,
+    groupName
+  } = body;
+
+  Event.findOne({
+    name: eventName
+  }, (err, event) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    else {
+      if (event.resultsReady == true) {
+        let allCandidates = [];
+        let candidateLists = event.toObject().candidateLists;
+        candidateLists.forEach((candidateObject) => {
+          allCandidates.push(candidateObject.candidate);
+        });
+
+        let groupResults = event.matchList.find((e) => e.name == groupName).list;
+        let failedCandidates = allCandidates.filter((e) => !groupResults.includes(e));
+
+        let date = (new Date(event.updated));
+        let dateString = dateFormat(date, "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(date)})`;
+        return res.send({
+          success: true,
+          published: true,
+          groupResults: groupResults,
+          failedCandidates: failedCandidates,
+          updated: dateString
+        });
+      }
+      else {
+        let dateString = dateFormat(Date.now(), "h:MMtt, dS mmmm yyyy ");
+        dateString += `(${timeago().format(Date.now())})`;
+        return res.send({
+          success: true,
+          published: false,
+          groupResults: [],
+          failedCandidates: failedCandidates,
           updated: dateString
         });
       }

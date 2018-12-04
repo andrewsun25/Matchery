@@ -18,7 +18,7 @@ class CandidateResults extends React.Component {
   }
 
   regenerateResults = (e) => {
-    fetch('/api/getResults', {
+    fetch('/api/getResultsCandidate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
